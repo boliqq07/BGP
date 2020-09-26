@@ -7,7 +7,7 @@
 ![pypi Versions](https://badge.fury.io/py/BindingGP.svg)
 
 
-bgp
+BGP
 ----------------------
 Welcome to BGP.
 
