@@ -2,9 +2,9 @@
   <img alt="BGP" src="https://github.com/MGEdata/BGP/blob/master/img.jpg?raw=true">
 </div>
 
-[![Python Versions](https://img.shields.io/pypi/pyversions/bgp.svg)](https://pypi.org/project/bgp/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/bindinggp.svg)](https://pypi.org/project/bindinggp/)
 [![Version](https://img.shields.io/github/tag/MGEdata/BGP.svg)](https://github.com/MGEdata/BGP/releases/latest)
-![pypi Versions](https://badge.fury.io/py/bgp.svg)
+![pypi Versions](https://badge.fury.io/py/bindinggp.svg)
 
 
 BGP
