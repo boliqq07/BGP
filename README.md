@@ -4,7 +4,7 @@
 
 [![Python Versions](https://img.shields.io/pypi/pyversions/bindinggp.svg)](https://pypi.org/project/bindinggp/)
 [![Version](https://img.shields.io/github/tag/MGEdata/BGP.svg)](https://github.com/MGEdata/BGP/releases/latest)
-![pypi Versions](https://badge.fury.io/py/bindinggp.svg)
+![pypi Versions](https://badge.fury.io/py/BindingGP.svg)
 
 
 BGP
