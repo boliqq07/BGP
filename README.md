@@ -26,7 +26,7 @@ BGP inspired by:
 Quick Install
 ----------------------
 ```bash
-pip install BGP
+pip install BindingGP
 ```
 
 [Document](https://boliqq07.github.io/BGPdocument/)

@@ -16,7 +16,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
 
-    name='BGP',
+    name='BindingGP',
     version='0.0.09',
     keywords=['symbolic regression'],
     description='This is for symbolic regression.'
