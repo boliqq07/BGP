@@ -1,4 +1,4 @@
-# from BGPp.scores import CheckCoef
+# from BGP.scores import CheckCoef
 # a = time.time()
 # ass = CheckCoef(["a","b","c"],{"d":2,"e":3,"f":5})
 # e=ass.ind

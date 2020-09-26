@@ -358,13 +358,13 @@ class PreMap(numeric.ndarray):
 
 # if __name__ == "__main__":
 #    # import copy
-#    # from BGPp.gp import mutNodeReplacementVerbose, mutDifferentReplacementVerbose
+#    # from BGP.gp import mutNodeReplacementVerbose, mutDifferentReplacementVerbose
 #    # from numpy import random
 #    # from sklearn.datasets import load_boston
 #    #
-#    # from BGPp.base import SymbolSet
-#    # from BGPp.base import SymbolTree
-#    # from BGPp.dim import dless, Dim
+#    # from BGP.base import SymbolSet
+#    # from BGP.base import SymbolTree
+#    # from BGP.dim import dless, Dim
 #    #
 #    # random.seed(3)
 #    # # data

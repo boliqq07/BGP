@@ -9,7 +9,7 @@ from sklearn.metrics import check_scoring
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     """One simplify API for flow.\n
-    The detailed functions should turn to the loop of BGPp.flow.\n
+    The detailed functions should turn to the loop of BGP.flow.\n
     The SymbolLearning is time costing and are not suit for GridSearchCV, the cross_validate are builtin """
 
     def __str__(self):
@@ -22,7 +22,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         pset:SymbolSet
             the feature x and traget y and others should have been added.
         loop: str,None
-            BGPp.flow.BaseLoop
+            BGP.flow.BaseLoop
             [“BaseLoop”,”MutilMutateLoop“,“OnePointMutateLoop”, ”DimForceLoop“...]
         pop:int
             number of popolation

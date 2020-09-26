@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     height = 2
     hBGP = 1
-    # BGPp
+    # BGP
     group = 2
     pset = SymbolSet()
     pset.add_features(x, y, x_group=group, )

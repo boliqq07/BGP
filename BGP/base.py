@@ -105,7 +105,7 @@ class SymbolTerminalDetail(SymbolTerminal):
             n is number of samples, n_x is numbers of feature.
         name: str
             Represent name. Default "xi"
-        dim: BGPp.dim.Dim or None
+        dim: BGP.dim.Dim or None
             None
         prob: float or None
             None
@@ -548,7 +548,7 @@ class SymbolSet(object):
             np_func:numpy function
             dim_func:dimension function
             sym_func:NewArray function. (unpack the group,used just for shown)
-            See Also BGPp.newfunc.newfuncV
+            See Also BGP.newfunc.newfuncV
         Returns
         -------
         SymbolSet
@@ -628,7 +628,7 @@ class SymbolSet(object):
             np_func:numpy function
             dim_func:dimension function
             sym_func:NewArray function. (unpack the group,used just for shown)
-            See Also BGPp.newfunc.newfuncV
+            See Also BGP.newfunc.newfuncV
         special_prob: None or dict
             Examples: {"MAdd":0.5,"Self":0.5}
 
