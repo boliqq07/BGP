@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from BGP.functions.dimfunc import Dim, dless, dnan, dim_map
+from bgp.functions.dimfunc import Dim, dless, dnan, dim_map
 
 
 class MyTestCase(unittest.TestCase):

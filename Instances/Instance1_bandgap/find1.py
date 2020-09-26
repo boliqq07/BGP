@@ -7,10 +7,10 @@ from mgetool.show import BasePlot
 from mgetool.tool import tt
 from sympy.physics.units import eV
 
-from BGP.base import SymbolSet, SymbolTree
-from BGP.calculation.translate import compile_context, general_expr_dict
-from BGP.functions.dimfunc import Dim
-from BGP.skflow import SymbolLearning
+from bgp.base import SymbolSet, SymbolTree
+from bgp.calculation.translate import compile_context, general_expr_dict
+from bgp.functions.dimfunc import Dim
+from bgp.skflow import SymbolLearning
 
 if __name__ == "__main__":
     import os
@@ -37,17 +37,17 @@ if __name__ == "__main__":
                          self_categories=None)
 
     height = 2
-    h_BGP = 1
+    h_bgp = 1
 
     # stop = None
     # This random_state is under Linux system. For others system ,the random_state maybe different,please
     # try with different random_state.
     stop = lambda ind: ind.fitness.values[0] >= 0.897
     sl = SymbolLearning(loop="OnePointMutateLoop", pset=pset0, gen=10, pop=1000, hall=1, batch_size=40, re_hall=3,
-                        n_jobs=12, mate_prob=0.9, max_value=h_BGP, initial_min=1, initial_max=h_BGP,
+                        n_jobs=12, mate_prob=0.9, max_value=h_bgp, initial_min=1, initial_max=h_bgp,
                         mutate_prob=0.8, tq=True, dim_type="coef", stop_condition=stop,
                         re_Tree=0, store=False, random_state=1, verbose=True,
-                        stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_BGP": ["mean"]},
+                        stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_bgp": ["mean"]},
                         add_coef=True, inter_add=True, out_add=True, cal_dim=True, vector_add=True,
                         flat_add=False,
                         personal_map=False)

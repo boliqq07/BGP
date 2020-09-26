@@ -14,12 +14,12 @@ import time
 import sympy
 from deap.base import Fitness
 from deap.tools import HallOfFame, Logbook
-from BGP.base import CalculatePrecisionSet
-from BGP.base import SymbolSet
-from BGP.base import SymbolTree
-from BGP.calculation.translate import compile_context, general_expr
-from BGP.functions.dimfunc import Dim, dless
-from BGP.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
+from bgp.base import CalculatePrecisionSet
+from bgp.base import SymbolSet
+from bgp.base import SymbolTree
+from bgp.calculation.translate import compile_context, general_expr
+from bgp.functions.dimfunc import Dim, dless
+from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
     selTournament, Statis_func, mutUniform, mutShrink, varAndfus, \
     mutDifferentReplacementVerbose, mutNodeReplacementVerbose, selBest, genFull
 from mgetool import newclass

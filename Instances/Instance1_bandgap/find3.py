@@ -27,17 +27,17 @@ if __name__ == "__main__":
     #                      self_categories=None)
     #
     # total_height = 4
-    # h_BGP = 3
+    # h_bgp = 3
     #
     # # This random_state is under Linux system. For others system ,the random_state maybe different,please
     # # try with different random_state.
     # for i in range(20):
     #     stop = lambda ind: ind.fitness.values[0] >= 0.95
     #     sl = SymbolLearning(loop="MutilMutateLoop", pset=pset0, gen=30, pop=1000, hall=1, batch_size=40, re_hall=5,
-    #                         n_jobs=12, mate_prob=0.9, max_value=h_BGP, initial_min=2, initial_max=h_BGP,
+    #                         n_jobs=12, mate_prob=0.9, max_value=h_bgp, initial_min=2, initial_max=h_bgp,
     #                         mutate_prob=0.8, tq=False, dim_type="coef", stop_condition=stop,
     #                         re_Tree=0, store=False, random_state=1, verbose=True,
-    #                         stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_BGP": ["mean"]},
+    #                         stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_bgp": ["mean"]},
     #                         add_coef=True, inter_add=True, out_add=True, cal_dim=True, vector_add=True,
     #                         personal_map=False)
     #

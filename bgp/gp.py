@@ -22,7 +22,7 @@ from operator import attrgetter
 
 import numpy as np
 from deap.tools import Statistics, MultiStatistics
-from BGP.calculation.scores import score_dim
+from bgp.calculation.scores import score_dim
 from numpy import random
 
 
@@ -564,7 +564,7 @@ def Statis_func(stats=None):
 
         "length": lambda ind: len(ind),
         "height": lambda ind: ind.height,
-        "h_BGP": lambda ind: (ind.height - 1) / 2,
+        "h_bgp": lambda ind: (ind.height - 1) / 2,
 
         # mutil-target
         "weight_fitness": lambda ind: ind.fitness.wvalues,

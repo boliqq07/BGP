@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from BGP.probability.preference import PreMap
+from bgp.probability.preference import PreMap
 
 
 class MyTestCase(unittest.TestCase):

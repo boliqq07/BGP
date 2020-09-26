@@ -3,11 +3,11 @@ import time
 from sklearn import preprocessing
 from sklearn.datasets import load_boston
 
-from BGP.base import SymbolSet, SymbolTree, CalculatePrecisionSet
-from BGP.calculation.coefficient import try_add_coef
-from BGP.calculation.translate import general_expr, compile_context
-from BGP.functions.dimfunc import dless, Dim
-from BGP.functions.npfunc import np_map
+from bgp.base import SymbolSet, SymbolTree, CalculatePrecisionSet
+from bgp.calculation.coefficient import try_add_coef
+from bgp.calculation.translate import general_expr, compile_context
+from bgp.functions.dimfunc import dless, Dim
+from bgp.functions.npfunc import np_map
 
 if __name__ == "__main__":
     # data

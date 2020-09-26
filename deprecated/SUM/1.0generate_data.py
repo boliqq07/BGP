@@ -8,7 +8,7 @@
 import numpy as np
 import pandas as pd
 
-from BGP.featurizers.compositionfeaturizer import DepartElementFeaturizer
+from bgp.featurizers.compositionfeaturizer import DepartElementFeaturizer
 from mgetool.exports import Store
 
 # from pymatgen import Composition

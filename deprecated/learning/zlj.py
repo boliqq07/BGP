@@ -3,7 +3,7 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import sklearn
-from BGP.selection.backforward import BackForward
+from bgp.selection.backforward import BackForward
 from mgetool.exports import Store
 from mgetool.imports import Call
 from sklearn import svm

@@ -16,9 +16,9 @@ import warnings
 
 import numpy as np
 import sympy
-from BGP.calculation.coefficient import try_add_coef
-from BGP.calculation.translate import compile_context
-from BGP.functions.dimfunc import dim_map, dless, dnan, Dim
+from bgp.calculation.coefficient import try_add_coef
+from bgp.calculation.translate import compile_context
+from bgp.functions.dimfunc import dim_map, dless, dnan, Dim
 from sklearn import metrics
 from sklearn.exceptions import DataConversionWarning
 from sklearn.metrics import r2_score

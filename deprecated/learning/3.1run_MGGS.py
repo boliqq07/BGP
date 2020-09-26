@@ -3,7 +3,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
-from BGP.selection.ugs import UGS
+from bgp.selection.ugs import UGS
 from mgetool.exports import Store
 from mgetool.imports import Call
 from mgetool.quickmethod import dict_method_reg

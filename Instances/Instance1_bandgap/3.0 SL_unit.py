@@ -2,8 +2,8 @@ from mgetool.exports import Store
 from mgetool.imports import Call
 from sklearn.utils import shuffle
 
-from BGP.functions.dimfunc import Dim, dless
-from BGP.preprocess import MagnitudeTransformer
+from bgp.functions.dimfunc import Dim, dless
+from bgp.preprocess import MagnitudeTransformer
 
 if __name__ == "__main__":
     import os

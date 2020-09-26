@@ -1,4 +1,4 @@
-from BGP.selection.backforward import BackForward
+from bgp.selection.backforward import BackForward
 from sklearn.datasets import load_boston
 from sklearn.feature_selection import RFE
 from sklearn.preprocessing import normalize

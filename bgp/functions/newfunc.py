@@ -1,7 +1,7 @@
 import numpy as np
 import sympy
-from BGP.functions.dimfunc import Dim
-from BGP.functions.gsymfunc import NewArray
+from bgp.functions.dimfunc import Dim
+from bgp.functions.gsymfunc import NewArray
 from sympy import Function
 
 

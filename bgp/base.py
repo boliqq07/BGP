@@ -17,15 +17,15 @@ from collections.abc import Iterable
 
 import numpy as np
 import sympy
-from BGP.calculation.scores import calcualte_dim_score, \
+from bgp.calculation.scores import calcualte_dim_score, \
     calculate_collect, compile_context, calculate_cv_score, score_collection
-from BGP.calculation.translate import group_str
-from BGP.functions.dimfunc import dim_map, Dim, dnan, dless
-from BGP.functions.gsymfunc import gsym_map, NewArray
-from BGP.functions.npfunc import np_map
-from BGP.functions.symfunc import sym_vector_map, sym_dispose_map
-from BGP.gp import genGrow, genFull, depart
-from BGP.probability.preference import PreMap
+from bgp.calculation.translate import group_str
+from bgp.functions.dimfunc import dim_map, Dim, dnan, dless
+from bgp.functions.gsymfunc import gsym_map, NewArray
+from bgp.functions.npfunc import np_map
+from bgp.functions.symfunc import sym_vector_map, sym_dispose_map
+from bgp.gp import genGrow, genFull, depart
+from bgp.probability.preference import PreMap
 from mgetool.tool import parallelize
 from sklearn.metrics import r2_score
 from sklearn.utils import check_X_y, check_array
@@ -105,7 +105,7 @@ class SymbolTerminalDetail(SymbolTerminal):
             n is number of samples, n_x is numbers of feature.
         name: str
             Represent name. Default "xi"
-        dim: BGP.dim.Dim or None
+        dim: bgp.dim.Dim or None
             None
         prob: float or None
             None
@@ -548,7 +548,7 @@ class SymbolSet(object):
             np_func:numpy function
             dim_func:dimension function
             sym_func:NewArray function. (unpack the group,used just for shown)
-            See Also BGP.newfunc.newfuncV
+            See Also bgp.newfunc.newfuncV
         Returns
         -------
         SymbolSet
@@ -628,7 +628,7 @@ class SymbolSet(object):
             np_func:numpy function
             dim_func:dimension function
             sym_func:NewArray function. (unpack the group,used just for shown)
-            See Also BGP.newfunc.newfuncV
+            See Also bgp.newfunc.newfuncV
         special_prob: None or dict
             Examples: {"MAdd":0.5,"Self":0.5}
 

@@ -9,7 +9,7 @@
 import pandas as pd
 import pymatgen as mg
 
-from BGP.featurizers.voronoifeature import count_voronoinn
+from bgp.featurizers.voronoifeature import count_voronoinn
 from mgetool.exports import Store
 from mgetool.imports import Call
 

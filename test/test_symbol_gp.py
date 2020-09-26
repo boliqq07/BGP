@@ -4,11 +4,11 @@ import unittest
 from mgetool import newclass
 from mgetool.packbox import Toolbox
 
-from BGP.base import CalculatePrecisionSet
-from BGP.base import SymbolSet
-from BGP.base import SymbolTree
-from BGP.functions.dimfunc import dless
-from BGP.gp import cxOnePoint, varAnd, genGrow, staticLimit, mutShrink, selKbestDim
+from bgp.base import CalculatePrecisionSet
+from bgp.base import SymbolSet
+from bgp.base import SymbolTree
+from bgp.functions.dimfunc import dless
+from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, mutShrink, selKbestDim
 
 
 class MyTestgp(unittest.TestCase):

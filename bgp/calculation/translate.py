@@ -3,7 +3,7 @@ import sys
 
 import numpy as np
 import sympy
-from BGP.calculation.coefficient import get_args
+from bgp.calculation.coefficient import get_args
 from sympy import Number, Expr
 from sympy.core.numbers import ComplexInfinity, NumberSymbol
 

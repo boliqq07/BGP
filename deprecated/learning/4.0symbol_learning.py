@@ -9,7 +9,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
-from BGP.combination.symbolbase import getName, sympyPrimitiveSet, mainPart
+from bgp.combination.symbolbase import getName, sympyPrimitiveSet, mainPart
 from mgetool.exports import Store
 from mgetool.imports import Call
 from sklearn.metrics import explained_variance_score, r2_score

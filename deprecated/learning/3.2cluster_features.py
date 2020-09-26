@@ -2,8 +2,8 @@ import warnings
 
 import numpy as np
 import pandas as pd
-from BGP.selection.corr import Corr
-from BGP.selection.ugs import cluster_printting
+from bgp.selection.corr import Corr
+from bgp.selection.ugs import cluster_printting
 from mgetool.exports import Store
 from mgetool.imports import Call
 from scipy.spatial.distance import pdist, squareform

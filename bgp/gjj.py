@@ -8,9 +8,9 @@
 import numpy as np
 import pandas as pd
 
-from BGP.base import SymbolSet
-from BGP.functions.dimfunc import Dim, dless
-from BGP.skflow import SymbolLearning
+from bgp.base import SymbolSet
+from bgp.functions.dimfunc import Dim, dless
+from bgp.skflow import SymbolLearning
 
 
 def check_input_and_get_dim(in_table):

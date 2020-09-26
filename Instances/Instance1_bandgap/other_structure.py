@@ -16,7 +16,7 @@ if __name__ == "__main__":
     com_data = pd.read_excel(r'initial_band_gap_data.xlsx')
     #
     # """for element site"""
-    from BGP.data.impot_element_table import element_table
+    from bgp.data.impot_element_table import element_table
 
     name_and_abbr = element_table.iloc[[0, 1], :]
     element_table = element_table.iloc[2:, :]
@@ -135,19 +135,19 @@ if __name__ == "__main__":
     #                      self_categories=None)
     #
     # total_height = 4
-    # h_BGP = 2
+    # h_bgp = 2
     # This random_state is under Linux system. For others system ,the random_state maybe different,please
     # try with different random_state.
     # for i in range(1, 10):
     #     stop = lambda ind: ind.fitness.values[0] >= 0.95
     #     sl = SymbolLearning(loop="MutilMutateLoop", pset=pset0, gen=20, pop=1000, hall=1, batch_size=40, re_hall=3,
-    #                         n_jobs=4, mate_prob=0.9, max_value=h_BGP, initial_min=2, initial_max=h_BGP,
+    #                         n_jobs=4, mate_prob=0.9, max_value=h_bgp, initial_min=2, initial_max=h_bgp,
     #                         mutate_prob=0.8, dim_type="coef", stop_condition=stop,
     #                         re_Tree=0, store=False, random_state=4, verbose=True,tq=True,
     #                         # scoring=(sklearn.metrics.mean_absolute_error,),score_pen=(-1,),
-    #                         # stats={"fitness_dim_min": ["min"], "dim_is_target": ["sum"], "h_BGP": ["mean"]},
+    #                         # stats={"fitness_dim_min": ["min"], "dim_is_target": ["sum"], "h_bgp": ["mean"]},
     #                         scoring=(sklearn.metrics.r2_score,), score_pen=(1,),
-    #                         stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_BGP": ["mean"]},
+    #                         stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_bgp": ["mean"]},
     #                         add_coef=True, inter_add=True, out_add=True, cal_dim=True, vector_add=True,
     #                         personal_map=False)
     #     sl.fit()

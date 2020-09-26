@@ -1,15 +1,15 @@
-from BGP import flow
-from BGP.base import SymbolSet
-from BGP.calculation.scores import calculate_y_unpack
-from BGP.calculation.translate import general_expr
-from BGP.flow import MutilMutateLoop
+from bgp import flow
+from bgp.base import SymbolSet
+from bgp.calculation.scores import calculate_y_unpack
+from bgp.calculation.translate import general_expr
+from bgp.flow import MutilMutateLoop
 from sklearn.base import BaseEstimator, TransformerMixin, MultiOutputMixin
 from sklearn.metrics import check_scoring
 
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     """One simplify API for flow.\n
-    The detailed functions should turn to the loop of BGP.flow.\n
+    The detailed functions should turn to the loop of bgp.flow.\n
     The SymbolLearning is time costing and are not suit for GridSearchCV, the cross_validate are builtin """
 
     def __str__(self):
@@ -22,7 +22,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         pset:SymbolSet
             the feature x and traget y and others should have been added.
         loop: str,None
-            BGP.flow.BaseLoop
+            bgp.flow.BaseLoop
             [“BaseLoop”,”MutilMutateLoop“,“OnePointMutateLoop”, ”DimForceLoop“...]
         pop:int
             number of popolation

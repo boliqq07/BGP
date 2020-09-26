@@ -13,7 +13,7 @@
 import numpy as np
 import pandas as pd
 import sympy
-from BGP.combination.symbolbase import calculateExpr, getName
+from bgp.combination.symbolbase import calculateExpr, getName
 
 from mgetool.exports import Store
 from mgetool.imports import Call

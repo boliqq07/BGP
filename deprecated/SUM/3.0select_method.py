@@ -11,8 +11,8 @@ import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
-from BGP.selection.exhaustion import Exhaustion
-from BGP.selection.quickmethod import dict_method_reg
+from bgp.selection.exhaustion import Exhaustion
+from bgp.selection.quickmethod import dict_method_reg
 from mgetool.exports import Store
 from mgetool.imports import Call
 from mgetool.show import BasePlot

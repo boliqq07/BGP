@@ -4,16 +4,16 @@ import random
 import numpy as np
 import sympy
 
-from BGP.base import SymbolSet, SymbolTree
-from BGP.calculation.translate import general_expr_dict, compile_context
+from bgp.base import SymbolSet, SymbolTree
+from bgp.calculation.translate import general_expr_dict, compile_context
 
 if __name__ == "__main__":
     x = np.full((10, 4), fill_value=0.1)
     y = np.ones((10,))
 
     height = 2
-    hBGP = 1
-    # BGP
+    hbgp = 1
+    # bgp
     group = 2
     pset = SymbolSet()
     pset.add_features(x, y, x_group=group, )

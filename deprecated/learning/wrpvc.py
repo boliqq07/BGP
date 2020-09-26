@@ -1,5 +1,5 @@
 import pandas as pd
-from BGP.selection.quickmethod import method_pack
+from bgp.selection.quickmethod import method_pack
 from mgetool.exports import Store
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils import shuffle

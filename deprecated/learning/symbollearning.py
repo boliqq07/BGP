@@ -1,8 +1,8 @@
-from BGP.base import SymbolSet
-from BGP.calculation.translate import group_str
-from BGP.flow import MutilMutateLoop
-from BGP.functions.dimfunc import Dim, dless
-from BGP.preprocess import MagnitudeTransformer
+from bgp.base import SymbolSet
+from bgp.calculation.translate import group_str
+from bgp.flow import MutilMutateLoop
+from bgp.functions.dimfunc import Dim, dless
+from bgp.preprocess import MagnitudeTransformer
 from mgetool.exports import Store
 from mgetool.imports import Call
 from sklearn.utils import shuffle

@@ -2,10 +2,10 @@ import unittest
 
 import numpy
 
-from BGP.base import CalculatePrecisionSet
-from BGP.base import SymbolSet
-from BGP.base import SymbolTree
-from BGP.functions.dimfunc import dless
+from bgp.base import CalculatePrecisionSet
+from bgp.base import SymbolSet
+from bgp.base import SymbolTree
+from bgp.functions.dimfunc import dless
 
 
 class MyTestbase(unittest.TestCase):

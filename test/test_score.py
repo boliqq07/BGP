@@ -3,11 +3,11 @@ import time
 from numpy import random
 from sklearn.datasets import load_boston
 
-from BGP.base import SymbolSet, SymbolTree, CalculatePrecisionSet
-from BGP.calculation.scores import calculate_y
-from BGP.calculation.translate import compile_context
-from BGP.functions.dimfunc import dless, Dim
-from BGP.functions.npfunc import np_map
+from bgp.base import SymbolSet, SymbolTree, CalculatePrecisionSet
+from bgp.calculation.scores import calculate_y
+from bgp.calculation.translate import compile_context
+from bgp.functions.dimfunc import dless, Dim
+from bgp.functions.npfunc import np_map
 
 if __name__ == "__main__":
     # data

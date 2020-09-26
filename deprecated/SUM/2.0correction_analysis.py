@@ -12,7 +12,7 @@ this is a description
 import numpy as np
 import pandas as pd
 
-from BGP.selection.corr import Corr
+from bgp.selection.corr import Corr
 from mgetool.exports import Store
 from mgetool.imports import Call
 from mgetool.tool import name_to_name

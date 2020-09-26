@@ -4,8 +4,8 @@ import sympy
 from sympy.core.numbers import nan
 from sympy.core.numbers import oo as Inf
 
-from BGP.functions.gsymfunc import NewArray
-from BGP.functions.gsymfunc import gsym_map as sym_map
+from bgp.functions.gsymfunc import NewArray
+from bgp.functions.gsymfunc import gsym_map as sym_map
 
 
 class MyTestCase(unittest.TestCase):

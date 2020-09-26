@@ -6,10 +6,10 @@
 # @License: BSD 3-Clause
 
 import numpy as np
-from BGP.combination.common import custom_loss_func, calculateExpr
-from BGP.combination.dictbase import FixedSetFill
-from BGP.combination.dim import Dim
-from BGP.combination.symbolunit import mainPart
+from bgp.combination.common import custom_loss_func, calculateExpr
+from bgp.combination.dictbase import FixedSetFill
+from bgp.combination.dim import Dim
+from bgp.combination.symbolunit import mainPart
 from mgetool.exports import Store
 from mgetool.imports import Call
 from mgetool.show import BasePlot

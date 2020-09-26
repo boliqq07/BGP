@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from BGP.selection.quickmethod import method_pack
+from bgp.selection.quickmethod import method_pack
 from mgetool.exports import Store
 from sklearn.model_selection import cross_val_score
 # from sklearn.preprocessing import MinMaxScaler

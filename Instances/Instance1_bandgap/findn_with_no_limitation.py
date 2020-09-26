@@ -4,9 +4,9 @@ from mgetool.imports import Call
 from mgetool.show import BasePlot
 from sympy.physics.units import eV
 
-from BGP.base import SymbolSet
-from BGP.functions.dimfunc import Dim
-from BGP.skflow import SymbolLearning
+from bgp.base import SymbolSet
+from bgp.functions.dimfunc import Dim
+from bgp.skflow import SymbolLearning
 
 if __name__ == "__main__":
     import os
@@ -36,7 +36,7 @@ if __name__ == "__main__":
                         n_jobs=12, mate_prob=0.9, max_value=7, initial_min=2, initial_max=4,
                         mutate_prob=0.8, tq=False, dim_type="coef", stop_condition=stop,
                         re_Tree=0, store=False, random_state=1, verbose=True,
-                        stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_BGP": ["mean"]},
+                        stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_bgp": ["mean"]},
                         add_coef=True, inter_add=True, flat_add=True, cal_dim=True, vector_add=True,
                         personal_map=False)
 
