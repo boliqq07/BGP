@@ -34,7 +34,7 @@ if __name__ == "__main__":
     h_bgp = 2
     # This random_state is under Linux system. For others system ,the random_state maybe different,please
     # try with different random_state.
-    for i in range(1,10):
+    for i in range(1, 10):
         stop = lambda ind: ind.fitness.values[0] >= 0.95
         sl = SymbolLearning(loop="MutilMutateLoop", pset=pset0, gen=20, pop=1000, hall=1, batch_size=40, re_hall=3,
                             n_jobs=12, mate_prob=0.9, max_value=h_bgp, initial_min=2, initial_max=h_bgp,
@@ -52,6 +52,7 @@ if __name__ == "__main__":
         y_pre = sl.predict(x)
         break
 
+    # just for shown
     # y_pre = si_transformer.scale_y * y_pre
     # ssc = Dim.inverse_convert(y_dim, target_units=eV)[0]
     # y_pre = y_pre * ssc
@@ -66,7 +67,6 @@ if __name__ == "__main__":
 
     lin = LinearRegression()
 
-    # XX = np.vstack((X[:, 1] ** (-0.5) * X[:, 24], X[:, 1] ** (-0.5) * X[:, 25])).T
     XX = np.vstack((X[:, 1] ** (0.333), X[:, 24], X[:, 25])).T
     lin.fit(XX, Y)
     coef = lin.coef_

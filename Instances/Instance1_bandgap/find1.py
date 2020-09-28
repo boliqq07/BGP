@@ -40,7 +40,7 @@ if __name__ == "__main__":
     h_bgp = 1
 
     # stop = None
-    # This random_state is under Linux system. For others system ,the random_state maybe different,please
+    # This random_state is under Linux system. For others system ,the random_state maybe different。
     # try with different random_state.
     stop = lambda ind: ind.fitness.values[0] >= 0.897
     sl = SymbolLearning(loop="OnePointMutateLoop", pset=pset0, gen=10, pop=1000, hall=1, batch_size=40, re_hall=3,
