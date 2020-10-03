@@ -318,7 +318,7 @@ if __name__ == "__main__":
     sl = SymbolLearning(loop=None, pop=50, gen=9, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,store = r"/data/home/wangchangxin"
                         )
     sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
-    sl.fit(warm_start=False)
+    sl.fit(warm_start=True)
     sl.fit(warm_start=False)
     # score = sl.score(x, y, "r2")
     # print(sl.expr)
