@@ -784,6 +784,7 @@ class SymbolSet(object):
         # define terminal
         n = X.shape[1]
         self.y = y.ravel()
+
         if y_dim is 1:
             y_dim = dless
         self.y_dim = y_dim
@@ -815,7 +816,14 @@ class SymbolSet(object):
         self.premap = PreMap.from_shape(len(self.ter_con_dict))
         return self
 
-    def replace(self, X):
+    def replace(self, X, y=None):
+        X = X.astype(np.float32)
+        if y:
+            y = y.astype(np.float32)
+            X, y = check_X_y(X, y)
+
+        self.y = y.ravel()
+
         old = self.terms_count
         self.terms_count = 0
         # self.ter_con_dict={}
@@ -829,6 +837,8 @@ class SymbolSet(object):
                                         "same shape[1] with old X (fit,train)"
 
         self.register(primitives_dict=None, dispose_dict=None, ter_con_dict="all")
+        if y:
+            self.y = y
         return self
 
     def add_constants(self, c, c_dim=1, c_prob=None):

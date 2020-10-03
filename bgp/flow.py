@@ -11,23 +11,22 @@ import operator
 import os
 import time
 
-import sympy
 from deap.base import Fitness
 from deap.tools import HallOfFame, Logbook
-from bgp.base import CalculatePrecisionSet
-from bgp.base import SymbolSet
-from bgp.base import SymbolTree
-from bgp.calculation.translate import compile_context, general_expr
-from bgp.functions.dimfunc import Dim, dless
-from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
-    selTournament, Statis_func, mutUniform, mutShrink, varAndfus, \
-    mutDifferentReplacementVerbose, mutNodeReplacementVerbose, selBest, genFull
 from mgetool import newclass
 from mgetool.exports import Store
 from mgetool.packbox import Toolbox
 from numpy import random
 from sklearn.datasets import load_boston
 from sklearn.metrics import r2_score
+
+from bgp.base import CalculatePrecisionSet
+from bgp.base import SymbolSet
+from bgp.base import SymbolTree
+from bgp.functions.dimfunc import Dim, dless
+from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
+    selTournament, Statis_func, mutUniform, mutShrink, varAndfus, \
+    mutDifferentReplacementVerbose, mutNodeReplacementVerbose, selBest, genFull
 
 
 class BaseLoop(Toolbox):
@@ -155,8 +154,6 @@ class BaseLoop(Toolbox):
                 [isinstance(i, Dim) for i in pset.dim_ter_con.values()]), \
                 "all import dim of pset should be Dim object."
 
-        random.seed(random_state)
-
         self.max_value = max_value
         self.pop = pop
         self.gen = gen
@@ -171,6 +168,9 @@ class BaseLoop(Toolbox):
         self.data_all = []
         self.personal_map = personal_map
         self.stop_condition = stop_condition
+        self.population = []
+        self.rand_state = None
+        self.random_state = random_state
 
         self.cpset = CalculatePrecisionSet(pset, scoring=scoring, score_pen=score_pen,
                                            filter_warning=filter_warning, cal_dim=cal_dim,
@@ -298,11 +298,25 @@ class BaseLoop(Toolbox):
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
 
-    def run(self):
+    def run(self, warm_start=False, new_gen=None):
         # 1.generate###################################################################
-        population = [self.PTree(self.genFull()) for _ in range(self.pop)]
+        if warm_start is False:
+            random.seed(self.random_state)
+            population = [self.PTree(self.genFull()) for _ in range(self.pop)]
+            gen_i = 0
+            gen = self.gen
+        else:
+            assert self.population != []
+            random.set_state(self.rand_state)
+            population = self.population
+            gen_i = self.gen_i
+            self.re_fresh_by_name()
+            if new_gen:
+                gen = gen_i + new_gen
+            else:
+                gen = gen_i + self.gen
 
-        for gen_i in range(1, self.gen + 1):
+        for gen_i in range(gen_i + 1, gen + 1):
 
             population_old = copy.deepcopy(population)
 
@@ -345,11 +359,7 @@ class BaseLoop(Toolbox):
 
             self.re_fresh_by_name()
 
-            # 5.break#######################################################
-            if self.stop_condition is not None:
-                if self.stop_condition(self.hall.items[0]):
-                    break
-            # 6.next generation#######################################################
+            # 6.next generation ！！！！#######################################################
             # selection and mutate,mate,migration
             population = self.select(population, int((1 - self.migrate_prob) * len(population)) - len(inds_dim))
 
@@ -359,7 +369,18 @@ class BaseLoop(Toolbox):
             migrate_pop = [self.PTree(self.genFull()) for _ in range(int(self.migrate_prob * len(population)))]
             population[:] = offspring + migrate_pop
 
-        # 7.store#####################################################################
+            # 5.break#######################################################
+            if self.stop_condition is not None:
+                if self.stop_condition(self.hall.items[0]):
+                    break
+
+            # 7 freeze ###################################################
+
+            self.rand_state = random.get_state()
+            self.population = population
+            self.gen_i = gen_i
+
+        # final.store#####################################################################
 
         if self.store:
             self.to_csv(self.data_all)
@@ -476,37 +497,38 @@ if __name__ == "__main__":
                          categories=("Add", "Mul", "Sub", "Div", "exp", "Abs"))
 
     # a = time.time()
-    bl = MutilMutateLoop(pset=pset0, gen=4, pop=10, hall=2, batch_size=40, re_hall=2,
+    bl = MutilMutateLoop(pset=pset0, gen=20, pop=100, hall=2, batch_size=40, re_hall=2,
                          n_jobs=1, mate_prob=1, max_value=10, initial_max=3,
                          mutate_prob=0.8, tq=True, dim_type="coef",
-                         re_Tree=2, store=False, random_state=1,
+                         re_Tree=2, store=False, random_state=2,
                          stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "height": ["mean"]},
-                         add_coef=True, cal_dim=True, inner_add=False, vector_add=True, personal_map=False)
+                         add_coef=True, cal_dim=False, inner_add=False, vector_add=True, personal_map=False)
     # b = time.time()
     bl.run()
-    population = [bl.PTree(bl.genFull()) for _ in range(30)]
-    pset = bl.cpset
-    for i in population:
-        # i.ppprint(bl.cpset)
-        # i = "exp(gx0/gx1)"
-
-        i = compile_context(i, pset.context, pset.gro_ter_con, simplify=False)
-        # print(i)
-        # print(i)
-        # fun = Coef("V", np.array([1.4,1.3]))
-        # i = fun(i)
-        # f = Function("MAdd")
-        # i = f(i)
-        try:
-            # group_str(i,pset)
-            # i=general_expr(i, pset, simplifying=True)
-            i = general_expr(i, pset, simplifying=False)
-            # print(i)
-            # print(i)
-            # pprint(i)
-        except NotImplementedError as e:
-            print(e)
-    # c = time.time()
-    # print(c - b, b - a, a - z)
-    a, b, c = sympy.Symbol("a"), sympy.Symbol("b"), sympy.Symbol("c")
-    print(sympy.simplify((a + (b + 1)) * c) == sympy.simplify(a * c + b * c + c))
+    bl.run(warm_start=True)
+    # population = [bl.PTree(bl.genFull()) for _ in range(30)]
+    # pset = bl.cpset
+    # for i in population:
+    #     # i.ppprint(bl.cpset)
+    #     # i = "exp(gx0/gx1)"
+    #
+    #     i = compile_context(i, pset.context, pset.gro_ter_con, simplify=False)
+    #     # print(i)
+    #     # print(i)
+    #     # fun = Coef("V", np.array([1.4,1.3]))
+    #     # i = fun(i)
+    #     # f = Function("MAdd")
+    #     # i = f(i)
+    #     try:
+    #         # group_str(i,pset)
+    #         # i=general_expr(i, pset, simplifying=True)
+    #         i = general_expr(i, pset, simplifying=False)
+    #         # print(i)
+    #         # print(i)
+    #         # pprint(i)
+    #     except NotImplementedError as e:
+    #         print(e)
+    # # c = time.time()
+    # # print(c - b, b - a, a - z)
+    # a, b, c = sympy.Symbol("a"), sympy.Symbol("b"), sympy.Symbol("c")
+    # print(sympy.simplify((a + (b + 1)) * c) == sympy.simplify(a * c + b * c + c))

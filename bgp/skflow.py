@@ -137,7 +137,8 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         self.loop = loop
 
     def fit(self, X=None, y=None, c=None, x_group=None, x_dim=1, y_dim=1, c_dim=1, x_prob=None,
-            c_prob=None, pset=None, power_categories=(2, 3, 0.5), categories=("Add", "Mul", "Sub", "Div")):
+            c_prob=None, pset=None, power_categories=(2, 3, 0.5), categories=("Add", "Mul", "Sub", "Div"),
+            warm_start=False, new_gen=None):
         """
 
         If need more self-definition, use one defined SymbolSet object to pset.\n
@@ -188,7 +189,10 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
         pset:SymbolSet
             See Also SymbolSet
-
+        warm_start: bool
+            warm start or not.
+        new_gen: None,int
+            warm_start generation.
 
         """
         # try to find pest form args,kwargs
@@ -211,11 +215,29 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                                                 c_prob=c_prob, x_group=x_group, feature_name=None)
                 pset.add_operations(power_categories=power_categories,
                                     categories=categories)
+            elif warm_start:
+                pass
+
+            elif hasattr(self.loop, "gen"):
+                pass
             else:
                 raise ValueError("The pset should be defined or the X and Y should be offered.")
 
-        self.loop = self.loop(pset, *self.args, **self.kwargs)
-        hall = self.loop.run()
+        if warm_start:
+            assert hasattr(self.loop,"gen")
+            if pset:
+                self.loop.cpset = pset
+            self.loop.re_fresh_by_name()
+
+            hall = self.loop.run(warm_start=True, new_gen=new_gen)
+        else:
+            if hasattr(self.loop, "gen"):
+                loops = self.loop.__class__
+                self.loop = loops(self.loop.cpset, *self.args, **self.kwargs)
+            else:
+                self.loop = self.loop(pset, *self.args, **self.kwargs)
+            hall = self.loop.run()
+
         self.best_one = hall.items[0]
         try:
             expr = general_expr(self.best_one.coef_expr, self.loop.cpset)
@@ -293,8 +315,10 @@ if __name__ == "__main__":
     y = data["target"]
     c = [6, 3, 4]
 
-    sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=2, random_state=1,store = r"/data/home/wangchangxin"
+    sl = SymbolLearning(loop=None, pop=50, gen=9, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,store = r"/data/home/wangchangxin"
                         )
     sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
-    score = sl.score(x, y, "r2")
-    print(sl.expr)
+    sl.fit(warm_start=False)
+    sl.fit(warm_start=False)
+    # score = sl.score(x, y, "r2")
+    # print(sl.expr)
