@@ -38,7 +38,7 @@ class BaseLoop(Toolbox):
                  add_coef=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
-                 tq=True, store=False, personal_map=False, stop_condition=None):
+                 tq=True, store=False, personal_map=False, stop_condition=None,details=False):
         """
 
         Parameters
@@ -146,14 +146,18 @@ class BaseLoop(Toolbox):
                 def func(ind):\n
                     c = ind.fitness.values[0]>=0.90
                     return c
+        details:bool
+            return expr and predi_y or not.
         """
         super(BaseLoop, self).__init__()
+
         assert initial_max <= max_value, "the initial size of expression should less than max_value limitation"
         if cal_dim:
             assert all(
                 [isinstance(i, Dim) for i in pset.dim_ter_con.values()]), \
                 "all import dim of pset should be Dim object."
 
+        self.details = details
         self.max_value = max_value
         self.pop = pop
         self.gen = gen
@@ -177,7 +181,7 @@ class BaseLoop(Toolbox):
                                            add_coef=add_coef, inter_add=inter_add, inner_add=inner_add,
                                            vector_add=vector_add, out_add=out_add, flat_add=flat_add, cv=cv,
                                            n_jobs=n_jobs, batch_size=batch_size, tq=tq,
-                                           fuzzy=fuzzy, dim_type=dim_type,
+                                           fuzzy=fuzzy, dim_type=dim_type,details=details
                                            )
 
         Fitness_ = newclass.create("Fitness_", Fitness, weights=score_pen)
@@ -321,13 +325,16 @@ class BaseLoop(Toolbox):
             population_old = copy.deepcopy(population)
 
             # 2.evaluate###############################################################
+
             invalid_ind_score = self.cpset.parallelize_score(population_old)
 
             for ind, score in zip(population_old, invalid_ind_score):
                 ind.fitness.values = tuple(score[0])
                 ind.y_dim = score[1]
                 ind.dim_score = score[2]
-
+                if len(score) == 5:
+                    ind.coef_expr = score[3]
+                    ind.coef_pre_y = score[4]
             population = population_old
 
             # 3.log###################################################################
@@ -502,7 +509,7 @@ if __name__ == "__main__":
                          mutate_prob=0.8, tq=True, dim_type="coef",
                          re_Tree=2, store=False, random_state=2,
                          stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "height": ["mean"]},
-                         add_coef=True, cal_dim=False, inner_add=False, vector_add=True, personal_map=False)
+                         add_coef=False, cal_dim=False, inner_add=False, vector_add=True, personal_map=False)
     # b = time.time()
     bl.run()
     bl.run(warm_start=True)

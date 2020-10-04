@@ -1,10 +1,11 @@
+from sklearn.base import BaseEstimator, TransformerMixin, MultiOutputMixin
+from sklearn.metrics import check_scoring
+
 from bgp import flow
 from bgp.base import SymbolSet
 from bgp.calculation.scores import calculate_y_unpack
 from bgp.calculation.translate import general_expr
 from bgp.flow import MutilMutateLoop
-from sklearn.base import BaseEstimator, TransformerMixin, MultiOutputMixin
-from sklearn.metrics import check_scoring
 
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
@@ -126,6 +127,8 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                 def func(ind):\n
                     c = ind.fitness.values[0]>=0.90
                     return c
+        details:bool
+            return expr and predi_y or not.
         """
         self.args = args
         self.kwargs = kwargs
@@ -191,6 +194,11 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             See Also SymbolSet
         warm_start: bool
             warm start or not.
+            Note:
+                If you offer pset in advance by user, please check carefully the feature numbers,especially when use "re_Tree.
+                because the new fatures are add.
+            Reference:
+                CalculatePrecisionSet.update_with_X_y
         new_gen: None,int
             warm_start generation.
 
@@ -209,33 +217,40 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
         if pset is None:
             # one simple pset are generate with no dimension calculation, But just with x_group.\n
+
             if X is not None and y is not None:
                 pset = SymbolSet()
                 pset.add_features_and_constants(X, y, c, x_dim=x_dim, y_dim=y_dim, c_dim=c_dim, x_prob=x_prob,
                                                 c_prob=c_prob, x_group=x_group, feature_name=None)
                 pset.add_operations(power_categories=power_categories,
                                     categories=categories)
-            elif warm_start:
-                pass
 
             elif hasattr(self.loop, "gen"):
                 pass
             else:
                 raise ValueError("The pset should be defined or the X and Y should be offered.")
+        ####################################
 
         if warm_start:
-            assert hasattr(self.loop,"gen")
-            if pset:
-                self.loop.cpset = pset
+            assert hasattr(self.loop, "gen"), "Before the warm_start, Need fit at least one time"
+            if X is not None and y is not None:
+                self.loop.cpset.update_with_X_y(X, y)
+            elif pset:
+                # the warm_start are not compacting with "re_Tree"
+                self.loop.cpset.update(pset)
+            else:
+                raise ValueError("The pset should be defined or the X and Y should be offered.")
+
             self.loop.re_fresh_by_name()
 
             hall = self.loop.run(warm_start=True, new_gen=new_gen)
         else:
             if hasattr(self.loop, "gen"):
                 loops = self.loop.__class__
-                self.loop = loops(self.loop.cpset, *self.args, **self.kwargs)
+                self.loop = loops(pset, *self.args, **self.kwargs)
             else:
                 self.loop = self.loop(pset, *self.args, **self.kwargs)
+
             hall = self.loop.run()
 
         self.best_one = hall.items[0]
@@ -315,10 +330,11 @@ if __name__ == "__main__":
     y = data["target"]
     c = [6, 3, 4]
 
-    sl = SymbolLearning(loop=None, pop=50, gen=9, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,store = r"/data/home/wangchangxin"
+    sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,
+                        re_Tree=1, details=True,
+                        store=r"/data/home/wangchangxin"
                         )
     sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
-    sl.fit(warm_start=True)
-    sl.fit(warm_start=False)
+    sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
     # score = sl.score(x, y, "r2")
     # print(sl.expr)

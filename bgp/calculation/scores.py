@@ -16,14 +16,15 @@ import warnings
 
 import numpy as np
 import sympy
-from bgp.calculation.coefficient import try_add_coef
-from bgp.calculation.translate import compile_context
-from bgp.functions.dimfunc import dim_map, dless, dnan, Dim
 from sklearn import metrics
 from sklearn.exceptions import DataConversionWarning
 from sklearn.metrics import r2_score
 from sklearn.model_selection import KFold
 from sklearn.utils import check_array
+
+from bgp.calculation.coefficient import try_add_coef
+from bgp.calculation.translate import compile_context
+from bgp.functions.dimfunc import dim_map, dless, dnan, Dim
 
 
 def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None,
@@ -376,12 +377,12 @@ def calcualte_dim_score(expr01, terminals, dim_list, dim_type, fuzzy, dim_maps=N
     return dim_, dim_score
 
 
-def calculate_collect(ind, context, x, y, terminals_and_constants_repr, gro_ter_con,
-                      dim_ter_con_list, dim_type, fuzzy, cv=1, refit=True,
-                      scoring=None, score_pen=(1,),
-                      add_coef=True, filter_warning=True, inter_add=True, inner_add=False,
-                      vector_add=False, out_add=False, flat_add=False,
-                      np_maps=None, dim_maps=None, cal_dim=True):
+def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter_con,
+                       dim_ter_con_list, dim_type, fuzzy, cv=1, refit=True,
+                       scoring=None, score_pen=(1,),
+                       add_coef=True, filter_warning=True, inter_add=True, inner_add=False,
+                       vector_add=False, out_add=False, flat_add=False,
+                       np_maps=None, dim_maps=None, cal_dim=True):
     expr01 = compile_context(ind, context, gro_ter_con)
 
     score, expr01, pre_y = calculate_cv_score(expr01, x, y, terminals_and_constants_repr,
@@ -400,7 +401,11 @@ def calculate_collect(ind, context, x, y, terminals_and_constants_repr, gro_ter_
     else:
         dim, dim_score = dless, 1
 
-    return score, dim, dim_score
+    return score, dim, dim_score, expr01, pre_y
+
+
+def calculate_collect(*args, **kwargs):
+    return calculate_collect_(*args, **kwargs)[:-1]
 
 
 score_collection = {'explained_variance': metrics.explained_variance_score,

@@ -17,8 +17,12 @@ from collections.abc import Iterable
 
 import numpy as np
 import sympy
+from mgetool.tool import parallelize
+from sklearn.metrics import r2_score
+from sklearn.utils import check_X_y, check_array
+
 from bgp.calculation.scores import calcualte_dim_score, \
-    calculate_collect, compile_context, calculate_cv_score, score_collection
+    calculate_collect, compile_context, calculate_cv_score, score_collection, calculate_collect_
 from bgp.calculation.translate import group_str
 from bgp.functions.dimfunc import dim_map, Dim, dnan, dless
 from bgp.functions.gsymfunc import gsym_map, NewArray
@@ -26,9 +30,6 @@ from bgp.functions.npfunc import np_map
 from bgp.functions.symfunc import sym_vector_map, sym_dispose_map
 from bgp.gp import genGrow, genFull, depart
 from bgp.probability.preference import PreMap
-from mgetool.tool import parallelize
-from sklearn.metrics import r2_score
-from sklearn.utils import check_X_y, check_array
 
 
 class SymbolTerminal:
@@ -364,7 +365,7 @@ class SymbolSet(object):
         ----------
         name: str
             function name
-        value: numpy.ndarray
+        value: numpy.ndarray, ndarray
             xi value
         prob: float
             default 1
@@ -433,30 +434,28 @@ class SymbolSet(object):
 
         if ter_con_dict is not None:
             for t in ter_con_dict.values():
-                if t.name in self.data_x_dict:
-                    pass
+
+                if t.dim.ndim == 1:
+                    ng = 1
+                elif t.dim.ndim == 2:
+                    ng = t.dim.shape[0]
                 else:
-                    if t.dim.ndim == 1:
-                        ng = 1
-                    elif t.dim.ndim == 2:
-                        ng = t.dim.shape[0]
+                    ng = 1
+
+                self.gro_ter_con[t.name] = ng
+                self.dim_ter_con[t.name] = t.dim
+                self.prob_ter_con[t.name] = t.prob
+                self.data_x_dict[t.name] = t.value
+
+                self.context[t.name] = sympy.Symbol(t.name)
+
+                if t.init_name:
+                    self.terminals_init_map[t.name] = t.init_name
+                    if isinstance(t.init_sym, (np.ndarray, NewArray)):
+                        self.terminals_symbol_map[t.name] = t.init_sym
                     else:
-                        ng = 1
-
-                    self.gro_ter_con[t.name] = ng
-                    self.dim_ter_con[t.name] = t.dim
-                    self.prob_ter_con[t.name] = t.prob
-                    self.data_x_dict[t.name] = t.value
-
-                    self.context[t.name] = sympy.Symbol(t.name)
-
-                    if t.init_name:
-                        self.terminals_init_map[t.name] = t.init_name
-                        if isinstance(t.init_sym, (np.ndarray, NewArray)):
-                            self.terminals_symbol_map[t.name] = t.init_sym
-                        else:
-                            self.expr_init_map[t.name] = t.init_sym
-                    self.ter_con_dict[t.name] = self.ter_con_dict[t.name].capsule()
+                        self.expr_init_map[t.name] = t.init_sym
+                self.ter_con_dict[t.name] = self.ter_con_dict[t.name]
 
     def _group(self, x_group=None):
         if not x_group:
@@ -816,9 +815,9 @@ class SymbolSet(object):
         self.premap = PreMap.from_shape(len(self.ter_con_dict))
         return self
 
-    def replace(self, X, y=None):
+    def replace(self, X, y=None, tree_X=None):
         X = X.astype(np.float32)
-        if y:
+        if y is not None:
             y = y.astype(np.float32)
             X, y = check_X_y(X, y)
 
@@ -833,11 +832,23 @@ class SymbolSet(object):
 
         self._group(self.x_group)
 
+        if isinstance(tree_X, np.ndarray):
+            tree_X = tree_X.astype(np.float32)
+            n = tree_X.shape[1]
+            for i in range(n):
+                self._add_terminal(np.array(tree_X.T[i]), name="new%s" % i)
+
+        elif isinstance(tree_X, dict):
+            for k, v in tree_X.items():
+                v = v.astype(np.float32)
+                self._add_terminal(np.array(v), name=v)
+
         assert old == self.terms_count, "the new X (test,predict) should be with the " \
-                                        "same shape[1] with old X (fit,train)"
+                                        "same shape[1] with old X (fit,train). when use re_tree," \
+                                        "the tree_X should be offered"
 
         self.register(primitives_dict=None, dispose_dict=None, ter_con_dict="all")
-        if y:
+        if y is not None:
             self.y = y
         return self
 
@@ -1243,7 +1254,7 @@ class CalculatePrecisionSet(SymbolSet):
     def __init__(self, pset, scoring=None, score_pen=(1,), filter_warning=True, cv=1,
                  cal_dim=True, dim_type=None, fuzzy=False, add_coef=True, inter_add=True,
                  inner_add=False, vector_add=False, out_add=False, flat_add=False, n_jobs=1, batch_size=20,
-                 tq=True):
+                 tq=True, details=False):
         """
 
         Parameters
@@ -1286,6 +1297,9 @@ class CalculatePrecisionSet(SymbolSet):
             if cv and refit, all the data is refit to determination the coefficients.
             Thus the expression is not compact with the this scores, when re-calculated by this expression
 
+        details:bool
+
+
         """
         super(CalculatePrecisionSet, self).__init__()
         self.__dict__.update(copy.deepcopy(pset.__dict__))
@@ -1307,6 +1321,7 @@ class CalculatePrecisionSet(SymbolSet):
         self.dim_type = dim_type if dim_type is not None else self.y_dim
         self.refit = True
         self.cv = cv
+        self.details = details
 
         if not scoring:
             scoring = [r2_score, ]
@@ -1317,7 +1332,30 @@ class CalculatePrecisionSet(SymbolSet):
 
         self.scoring = scoring
 
+    def update(self, pset):
+        self.__dict__.update(copy.deepcopy(pset.__dict__))
+
+    def update_with_X_y(self, X, y):
+
+        if self.expr_init_map:
+            tree_x = []
+            n = len(self.expr_init_map)
+            self.replace(X, y=y, tree_X=np.zeros((2, n)))
+
+            for k, v in self.expr_init_map.items():
+                v = self.calculate_expr(v)
+                pre_y = v["pre_y"]
+                tree_x.append(pre_y)
+            lens = len(tree_x)
+            tree_x = np.array(tree_x).T
+            tree_x = tree_x.reshape(-1, lens)
+            self.replace(X, y=y, tree_X=tree_x)
+
+        else:
+            self.replace(X, y=y)
+
     def calculate_cv_score(self, ind):
+        """Haven't been used, just used for calculating single one or check."""
         if isinstance(ind, SymbolTree):
             expr = compile_context(ind.capsule, self.context, self.gro_ter_con)
         elif isinstance(ind, sympy.Expr):
@@ -1341,6 +1379,7 @@ class CalculatePrecisionSet(SymbolSet):
 
     def calculate_detail(self, ind):
         """
+        This is not used when paralleling, just used for calculated final results for showing.
 
         Parameters
         ----------
@@ -1374,6 +1413,7 @@ class CalculatePrecisionSet(SymbolSet):
 
     def calculate_simple(self, ind):
         """
+        This is not used when paralleling, just used for re_Tree, and showing
 
         Parameters
         ----------
@@ -1411,6 +1451,60 @@ class CalculatePrecisionSet(SymbolSet):
 
         return ind
 
+    def calculate_expr(self, expr):
+        """
+        This is not used when paralleling, just used for calculated final results for showing.
+
+        Parameters
+        ----------
+        ind:sympy.expr
+
+        Returns
+        -------
+        dict
+        """
+
+        if isinstance(expr, sympy.Expr):
+            pass
+        else:
+            raise TypeError("must be sympy.Expr")
+
+        score, expr01, pre_y = calculate_cv_score(expr, self.data_x, self.y,
+                                                  self.terminals_and_constants_repr,
+                                                  cv=self.cv, refit=self.refit,
+                                                  add_coef=False, inter_add=False,
+                                                  inner_add=False, vector_add=False, out_add=False, flat_add=False,
+                                                  scoring=self.scoring, score_pen=self.score_pen,
+                                                  filter_warning=self.filter_warning,
+                                                  np_maps=self.np_map)
+        if self.cal_dim:
+            dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
+                                                 self.dim_ter_con_list, self.dim_type,
+                                                 self.fuzzy, self.dim_map)
+        else:
+            dim, dim_score = dless, 1
+
+        result = {"score": score, "expr": expr01, "pre_y": pre_y, "dim": dim, "dim_score": dim_score}
+
+        return result
+
+    def parallelize_calculate_expr(self, exprs):
+
+        calls = functools.partial(calculate_cv_score, x=self.data_x, y=self.y,
+                                  terminals_and_constants_repr=self.terminals_and_constants_repr,
+                                  cv=self.cv, refit=self.refit,
+                                  add_coef=False, inter_add=False,
+                                  inner_add=False, vector_add=False, out_add=False, flat_add=False,
+                                  scoring=self.scoring, score_pen=self.score_pen,
+                                  filter_warning=self.filter_warning,
+                                  np_maps=self.np_map)
+
+        score_dim_list = parallelize(func=calls, iterable=exprs, n_jobs=self.n_jobs,
+                                     respective=False,
+                                     tq=self.tq, batch_size=self.batch_size)
+        # (sc_all, expr01, pre_y)
+        return score_dim_list
+
     def parallelize_score(self, inds):
         """
 
@@ -1421,11 +1515,17 @@ class CalculatePrecisionSet(SymbolSet):
         Returns
         -------
         list of (score,dim,dim_score)
+
         """
 
         indss = [i.capsule for i in inds]
 
-        calls = functools.partial(calculate_collect, context=self.context, x=self.data_x, y=self.y,
+        if self.details:
+            calculate_collect_use = calculate_collect_
+        else:
+            calculate_collect_use = calculate_collect
+
+        calls = functools.partial(calculate_collect_use, context=self.context, x=self.data_x, y=self.y,
                                   terminals_and_constants_repr=self.terminals_and_constants_repr,
                                   gro_ter_con=self.gro_ter_con, cv=self.cv, refit=self.refit,
                                   dim_ter_con_list=self.dim_ter_con_list, dim_type=self.dim_type,
