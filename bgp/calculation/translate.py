@@ -3,9 +3,10 @@ import sys
 
 import numpy as np
 import sympy
-from bgp.calculation.coefficient import get_args
 from sympy import Number, Expr
 from sympy.core.numbers import ComplexInfinity, NumberSymbol
+
+from bgp.calculation.coefficient import get_args
 
 """lambidfy"""
 

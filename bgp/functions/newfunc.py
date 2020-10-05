@@ -1,8 +1,9 @@
 import numpy as np
 import sympy
+from sympy import Function
+
 from bgp.functions.dimfunc import Dim
 from bgp.functions.gsymfunc import NewArray
-from sympy import Function
 
 
 def newfuncV(operation, arity=1, name="Fc"):

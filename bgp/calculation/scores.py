@@ -22,14 +22,14 @@ from sklearn.metrics import r2_score
 from sklearn.model_selection import KFold
 from sklearn.utils import check_array
 
-from bgp.calculation.coefficient import try_add_coef
+from bgp.calculation.coefficient import try_add_coef, cla
 from bgp.calculation.translate import compile_context
 from bgp.functions.dimfunc import dim_map, dless, dnan, Dim
 
 
 def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None,
                 filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
-                np_maps=None):
+                np_maps=None, classification=False):
     if filter_warning:
         warnings.filterwarnings("ignore")
     try:
@@ -37,14 +37,20 @@ def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None
             pre_y, expr01 = try_add_coef(expr01, x, y, terminals,
                                          filter_warning=filter_warning,
                                          inter_add=inter_add, inner_add=inner_add,
-                                         vector_add=vector_add, out_add=out_add, flat_add=flat_add, np_maps=np_maps)
+                                         vector_add=vector_add, out_add=out_add, flat_add=flat_add,
+                                         np_maps=np_maps, classification=classification)
         else:
             func0 = sympy.utilities.lambdify(terminals, expr01, modules=[np_maps, "numpy"])
             pre_y = func0(*x)
+            if classification:
+                pre_y = cla(pre_y)
 
         if x_test is not None and y_test is not None:
             func0 = sympy.utilities.lambdify(terminals, expr01, modules=[np_maps, "numpy"])
             pre_y = func0(*x_test)
+            if classification:
+                pre_y = cla(pre_y)
+
             pre_y = pre_y.ravel()
             assert y_test.shape == pre_y.shape
             pre_y = check_array(pre_y, ensure_2d=False)
@@ -59,10 +65,12 @@ def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None
     return pre_y, expr01
 
 
-def calculate_y_unpack(expr01, x, terminals):
+def calculate_y_unpack(expr01, x, terminals, classification=False):
     try:
         func0 = sympy.utilities.lambdify(terminals, expr01)
         pre_y = func0(*x)
+        if classification:
+            pre_y = cla(pre_y)
         pre_y = pre_y.ravel()
         pre_y = check_array(pre_y, ensure_2d=False)
 
@@ -85,7 +93,8 @@ def uniform_score(score_pen=1):
 
 def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     add_coef=True, filter_warning=True, inter_add=True,
-                    inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None):
+                    inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
+                    classification=False):
     """
 
     Parameters
@@ -139,7 +148,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
     pre_y, expr01 = calculate_y(expr01, x, y, terminals, add_coef=add_coef,
                                 filter_warning=filter_warning, inter_add=inter_add, inner_add=inner_add,
                                 vector_add=vector_add, out_add=out_add, flat_add=flat_add,
-                                np_maps=np_maps)
+                                np_maps=np_maps, classification=classification)
 
     try:
         sc_all = []
@@ -158,7 +167,8 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
 
 def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv=5, refit=True,
                        add_coef=True, filter_warning=True, inter_add=True,
-                       inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None):
+                       inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
+                       classification=False):
     """
     use cv spilt for score,return the mean_test_score.
     use cv spilt for predict,return the cv_predict_y.(not be used)
@@ -218,7 +228,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
         sc_all, expr01, pre_y = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
                                                 add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                 inner_add=inner_add, vector_add=vector_add, out_add=out_add,
-                                                flat_add=flat_add, np_maps=np_maps)
+                                                flat_add=flat_add, np_maps=np_maps, classification=classification)
         return sc_all, expr01, pre_y
 
     if isinstance(cv, int):
@@ -252,7 +262,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                     filter_warning=filter_warning, inter_add=inter_add,
                                     inner_add=inner_add,
                                     vector_add=vector_add, out_add=out_add, flat_add=flat_add,
-                                    np_maps=np_maps)
+                                    np_maps=np_maps, classification=classification)
 
         try:
             sc_all = []
@@ -281,7 +291,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
         sc_all0, expr01, pre_y0 = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
                                                   add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                   inner_add=inner_add, vector_add=vector_add, out_add=out_add,
-                                                  flat_add=flat_add, np_maps=np_maps)
+                                                  flat_add=flat_add, np_maps=np_maps, classification=classification)
 
     return sc_all, expr01, pre_y
 
@@ -382,7 +392,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                        scoring=None, score_pen=(1,),
                        add_coef=True, filter_warning=True, inter_add=True, inner_add=False,
                        vector_add=False, out_add=False, flat_add=False,
-                       np_maps=None, dim_maps=None, cal_dim=True):
+                       np_maps=None, classification=False, dim_maps=None, cal_dim=True):
     expr01 = compile_context(ind, context, gro_ter_con)
 
     score, expr01, pre_y = calculate_cv_score(expr01, x, y, terminals_and_constants_repr,
@@ -392,7 +402,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                                               flat_add=flat_add,
                                               scoring=scoring, score_pen=score_pen,
                                               filter_warning=filter_warning,
-                                              np_maps=np_maps)
+                                              np_maps=np_maps, classification=classification)
 
     if cal_dim:
         dim, dim_score = calcualte_dim_score(expr01, terminals_and_constants_repr,

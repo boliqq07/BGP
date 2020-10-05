@@ -22,8 +22,9 @@ from operator import attrgetter
 
 import numpy as np
 from deap.tools import Statistics, MultiStatistics
-from bgp.calculation.scores import score_dim
 from numpy import random
+
+from bgp.calculation.scores import score_dim
 
 
 ######################################

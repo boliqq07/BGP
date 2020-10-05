@@ -49,20 +49,20 @@ if __name__ == "__main__":
     pset.add_features(x, y)
     pset.add_operations(categories=("Add", "Mul", "Sub", "Div"))
 
-    s= pset.free_symbol[1]
-    ss=s
+    s = pset.free_symbol[1]
+    ss = s
 
-    target = (ss[0]+ss[1])*(ss[2]-ss[3])
+    target = (ss[0] + ss[1]) * (ss[2] - ss[3])
     target = sympy.simplify(target)
     # a = time.time()
     random.seed(0)
     height = int(height - 1) + math.ceil(np.log2(group))
-    population = [SymbolTree.genFull(pset, height , height+1,) for _ in range(5000)]
-    for n,i in enumerate(population):
+    population = [SymbolTree.genFull(pset, height, height + 1, ) for _ in range(5000)]
+    for n, i in enumerate(population):
         i = compile_context(i, pset.context, pset.gro_ter_con, simplify=True)
         expr = general_expr_dict(i, pset.expr_init_map, pset.free_symbol,
-                             pset.gsym_map, simplifying=True)
+                                 pset.gsym_map, simplifying=True)
         # print(expr)
-        if expr ==target:
+        if expr == target:
             print(n)
             break

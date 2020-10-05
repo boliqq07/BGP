@@ -11,7 +11,11 @@ from bgp.flow import MutilMutateLoop
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     """One simplify API for flow.\n
     The detailed functions should turn to the loop of bgp.flow.\n
-    The SymbolLearning is time costing and are not suit for GridSearchCV, the cross_validate are builtin """
+    The SymbolLearning is time costing and are not suit for GridSearchCV, the cross_validate are builtin.
+    The classification problems should using "classification"=True, and set the suit classification metrics for "scoring"
+    and "score_pen" carefully.
+    This code does not check and identity the data.
+     """
 
     def __str__(self):
         return str(self.loop)
@@ -129,6 +133,9 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                     return c
         details:bool
             return expr and predi_y or not.
+
+        classification: bool
+            classification or not.
         """
         self.args = args
         self.kwargs = kwargs
@@ -331,10 +338,8 @@ if __name__ == "__main__":
     c = [6, 3, 4]
 
     sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,
-                        re_Tree=1, details=True,
-                        store=r"/data/home/wangchangxin"
-                        )
+                        re_Tree=1, details=True, store=r"/data/home/wangchangxin")
     sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
-    sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
+    # sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
     # score = sl.score(x, y, "r2")
     # print(sl.expr)

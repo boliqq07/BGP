@@ -38,7 +38,7 @@ class BaseLoop(Toolbox):
                  add_coef=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
-                 tq=True, store=False, personal_map=False, stop_condition=None,details=False):
+                 tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False):
         """
 
         Parameters
@@ -148,6 +148,10 @@ class BaseLoop(Toolbox):
                     return c
         details:bool
             return expr and predi_y or not.
+
+        classification: bool
+            classification or not.
+
         """
         super(BaseLoop, self).__init__()
 
@@ -181,7 +185,8 @@ class BaseLoop(Toolbox):
                                            add_coef=add_coef, inter_add=inter_add, inner_add=inner_add,
                                            vector_add=vector_add, out_add=out_add, flat_add=flat_add, cv=cv,
                                            n_jobs=n_jobs, batch_size=batch_size, tq=tq,
-                                           fuzzy=fuzzy, dim_type=dim_type,details=details
+                                           fuzzy=fuzzy, dim_type=dim_type, details=details,
+                                           classification=classification
                                            )
 
         Fitness_ = newclass.create("Fitness_", Fitness, weights=score_pen)

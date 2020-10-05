@@ -119,8 +119,8 @@ if __name__ == "__main__":
     all_import = all_import.iloc[np.where(all_import['group_number'] == 225)[0]]
     all_import = all_import.drop(['group_number'], axis=1)
 
-
     store.to_csv(all_import, "all_import", transposition=False)
+
 
     def get_abbr():
         name = ["electron density", "cell density", 'cell volume', "component"]

@@ -1254,7 +1254,7 @@ class CalculatePrecisionSet(SymbolSet):
     def __init__(self, pset, scoring=None, score_pen=(1,), filter_warning=True, cv=1,
                  cal_dim=True, dim_type=None, fuzzy=False, add_coef=True, inter_add=True,
                  inner_add=False, vector_add=False, out_add=False, flat_add=False, n_jobs=1, batch_size=20,
-                 tq=True, details=False):
+                 tq=True, details=False, classification=False):
         """
 
         Parameters
@@ -1298,6 +1298,10 @@ class CalculatePrecisionSet(SymbolSet):
             Thus the expression is not compact with the this scores, when re-calculated by this expression
 
         details:bool
+            return the expr and predict y cor not.
+
+        classification: bool
+            classification or not.
 
 
         """
@@ -1322,6 +1326,7 @@ class CalculatePrecisionSet(SymbolSet):
         self.refit = True
         self.cv = cv
         self.details = details
+        self.classification = classification
 
         if not scoring:
             scoring = [r2_score, ]
@@ -1370,7 +1375,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   out_add=self.out_add, flat_add=self.flat_add,
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
-                                                  np_maps=self.np_map)
+                                                  np_maps=self.np_map, classification=self.classification)
         return score, expr01, pre_y
 
     def calculate_score(self, ind):
@@ -1399,7 +1404,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   out_add=self.out_add, flat_add=self.flat_add,
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
-                                                  np_maps=self.np_map)
+                                                  np_maps=self.np_map, classification=self.classification)
 
         # this group should be get onetime and get all.
         ind.coef_expr = expr01
@@ -1436,7 +1441,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   inner_add=False, vector_add=False, out_add=False, flat_add=False,
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
-                                                  np_maps=self.np_map)
+                                                  np_maps=self.np_map, classification=self.classification)
         if self.cal_dim:
             dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
                                                  self.dim_ter_con_list, self.dim_type,
@@ -1476,7 +1481,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   inner_add=False, vector_add=False, out_add=False, flat_add=False,
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
-                                                  np_maps=self.np_map)
+                                                  np_maps=self.np_map, classification=self.classification)
         if self.cal_dim:
             dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
                                                  self.dim_ter_con_list, self.dim_type,
@@ -1497,7 +1502,7 @@ class CalculatePrecisionSet(SymbolSet):
                                   inner_add=False, vector_add=False, out_add=False, flat_add=False,
                                   scoring=self.scoring, score_pen=self.score_pen,
                                   filter_warning=self.filter_warning,
-                                  np_maps=self.np_map)
+                                  np_maps=self.np_map, classification=self.classification)
 
         score_dim_list = parallelize(func=calls, iterable=exprs, n_jobs=self.n_jobs,
                                      respective=False,
@@ -1534,7 +1539,7 @@ class CalculatePrecisionSet(SymbolSet):
                                   vector_add=self.vector_add,
                                   add_coef=self.add_coef, inter_add=self.inter_add,
                                   out_add=self.out_add, flat_add=self.flat_add,
-                                  inner_add=self.inner_add, np_maps=self.np_map,
+                                  inner_add=self.inner_add, np_maps=self.np_map, classification=self.classification,
                                   filter_warning=self.filter_warning,
                                   dim_maps=self.dim_map, cal_dim=self.cal_dim)
 

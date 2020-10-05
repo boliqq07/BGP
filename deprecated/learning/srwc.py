@@ -5,9 +5,6 @@ from functools import partial
 
 import numpy as np
 import sympy
-from deap.base import Fitness, Toolbox
-from deap.gp import staticLimit, cxOnePoint, mutNodeReplacement, genHalfAndHalf
-from deap.tools import HallOfFame, MultiStatistics, Statistics, initIterate, initRepeat, selTournament, Logbook
 from bgp.combination import creator
 from bgp.combination.common import _compile, varAnd
 from bgp.combination.common import selKbestDim
@@ -15,6 +12,9 @@ from bgp.combination.deapbase import ExpressionSetFill
 from bgp.combination.deapbase import ExpressionTree, ExpressionSet
 from bgp.combination.dictbase import FixedSet, FixedTree, generate_index, cxOnePoint_index, mutUniForm_index
 from bgp.combination.dim import Dim, dnan, dless
+from deap.base import Fitness, Toolbox
+from deap.gp import staticLimit, cxOnePoint, mutNodeReplacement, genHalfAndHalf
+from deap.tools import HallOfFame, MultiStatistics, Statistics, initIterate, initRepeat, selTournament, Logbook
 from mgetool.exports import Store
 from mgetool.imports import Call
 from mgetool.tool import parallelize

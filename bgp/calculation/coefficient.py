@@ -458,9 +458,21 @@ class CheckCoef(object):
         return cof_
 
 
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+
+def cla(pre_y, cl=True):
+    pre_y = sigmoid(pre_y)
+    if cl:
+        pre_y[np.where(pre_y >= 0.5)] = 1
+        pre_y[np.where(pre_y < 0.5)] = 0
+    return pre_y
+
+
 def try_add_coef(expr01, x, y, terminals,
                  filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
-                 np_maps=None):
+                 np_maps=None, classification=False):
     """
     try calculate predict y by sympy expression with coef.
     if except error return expr self.
@@ -528,12 +540,28 @@ def try_add_coef(expr01, x, y, terminals,
             ress = y_ - func(x_, p)
             return ress
 
-        result = optimize.least_squares(res, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,  # long
-                                        jac='3-point', loss='linear')
+        def res2(p, x_, y_):
+            """"""
+            pre_y = func(x_, p)
+            pre_y = cla(pre_y, cl=False)
+            ress = y_ - pre_y
+
+            return ress
+
+        if not classification:
+            result = optimize.least_squares(res, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,
+                                            # long
+                                            jac='3-point', loss='linear')
+        else:
+            result = optimize.least_squares(res2, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,
+                                            # long
+                                            jac='3-point', loss='linear')
         cof = result.x
 
         cof = cc.group(cof)
         pre_y = func0(*x + cof)
+        if classification:
+            pre_y = cla(pre_y, cl=True)
         cof = cc.dec(cof)
 
         for ai, choi in zip(cc.name, cof):

@@ -1,14 +1,10 @@
-from itertools import product, chain
-
 import numpy as np
 from mgetool.exports import Store
 from mgetool.imports import Call
 from mgetool.show import BasePlot
-from mgetool.tool import tt
 from sympy.physics.units import eV
 
-from bgp.base import SymbolSet, SymbolTree
-from bgp.calculation.translate import compile_context, general_expr_dict
+from bgp.base import SymbolSet
 from bgp.functions.dimfunc import Dim
 from bgp.skflow import SymbolLearning
 
