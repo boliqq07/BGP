@@ -40,13 +40,12 @@ class BaseLoop(Toolbox):
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False):
         """
-
         Parameters
         ----------
         pset:SymbolSet
-            the feature x and traget y and others should have been added.
+            the feature x and target y and others should have been added.
         pop:int
-            number of popolation
+            number of population
         gen:int
             number of generation
         mutate_prob:float
@@ -56,32 +55,33 @@ class BaseLoop(Toolbox):
         initial_max:int
             max initial size of expression when first producing.
         initial_min : None,int
-            max initial size of expression when first producing.
+            min initial size of expression when first producing.
         max_value:int
             max size of expression
         hall:int,>=1
-            number of HallOfFame(elite) to maintain
+            number of HallOfFame (elite) to maintain
         re_hall:None or int>=2
-            Notes: only vaild when hall
+            Notes: only valid when hall
             number of HallOfFame to add to next generation.
         re_Tree: int
             number of new features to add to next generation.
             0 is false to add.
         personal_map:bool or "auto"
-            "auto" is using premap and with auto refresh the premap with individual.\n
-            True is just using constant premap.\n
+            "auto" is using 'premap' and with auto refresh the 'premap' with individual.\n
+            True is just using constant 'premap'.\n
             False is just use the prob of terminals.
-        scoring: list of Callbale, default is [sklearn.metrics.r2_score,]
+        scoring: list of Callable, default is [sklearn.metrics.r2_score,]
             See Also sklearn.metrics
         score_pen: tuple of  1, -1 or float but 0.
             >0 : max problem, best is positive, worse -np.inf
             <0 : min problem, best is negative, worse np.inf
             Notes:
-            if multiply score method, the scores must be turn to same dimension in preprocessing
+            if multiply score method, the scores must be turn to same dimension in prepossessing
             or weight by score_pen. Because the all the selection are stand on the mean(w_i*score_i)
             Examples: [r2_score] is [1],
-        cv=int,sklearn.model_selection._split._BaseKFold
-            default =1, means not cv
+        cv:sklearn.model_selection._split._BaseKFold,int
+            the shuffler must be False,
+            default=1 means no cv
         filter_warning:bool
             filter warning or not
         add_coef:bool
@@ -89,11 +89,11 @@ class BaseLoop(Toolbox):
         inter_add：bool
             add intercept constant or not
         inner_add:bool
-            add inner coeffcients or not
+            add inner coefficients or not
         out_add:bool
-            add out coeffcients or not
+            add out coefficients or not
         flat_add:bool
-            add flat coeffcients or not
+            add flat coefficients or not
         n_jobs:int
             default 1, advise 6
         batch_size:int
@@ -101,10 +101,10 @@ class BaseLoop(Toolbox):
         random_state:int
             None,int
         cal_dim:bool
-            excape the dim calculation
+            escape the dim calculation
         dim_type:Dim or None or list of Dim
             "coef": af(x)+b. a,b have dimension,f(x) is not dnan. \n
-            "integer": af(x)+b. f(x) is interger dimension. \n
+            "integer": af(x)+b. f(x) is integer dimension. \n
             [Dim1,Dim2]: f(x) in list. \n
             Dim: f(x) ~= Dim. (see fuzzy) \n
             Dim: f(x) == Dim. \n
@@ -114,7 +114,7 @@ class BaseLoop(Toolbox):
         stats:dict
             details of logbook to show. \n
             Map:\n
-            values 
+            values
                 = {"max": np.max, "mean": np.mean, "min": np.mean, "std": np.std, "sum": np.sum}
             keys
                 = {\n
@@ -122,7 +122,7 @@ class BaseLoop(Toolbox):
                    "fitness_dim_max": max problem, see fitness with demand dim,\n
                    "fitness_dim_min": min problem, see fitness with demand dim,\n
                    "dim_is_target": demand dim,\n
-                   "coef":  dim is true, coef have dim, \n
+                   "coef":  dim is True, coef have dim, \n
                    "integer":  dim is integer, \n
                    ...
                    }
@@ -147,11 +147,9 @@ class BaseLoop(Toolbox):
                     c = ind.fitness.values[0]>=0.90
                     return c
         details:bool
-            return expr and predi_y or not.
-
+            return expr and predict_y or not.
         classification: bool
             classification or not.
-
         """
         super(BaseLoop, self).__init__()
 

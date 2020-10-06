@@ -24,13 +24,11 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         """
         Parameters
         ----------
-        pset:SymbolSet
-            the feature x and traget y and others should have been added.
         loop: str,None
             bgp.flow.BaseLoop
-            [“BaseLoop”,”MutilMutateLoop“,“OnePointMutateLoop”, ”DimForceLoop“...]
+            [“BaseLoop”,”MultiMutateLoop“,“OnePointMutateLoop”, ”DimForceLoop“...]
         pop:int
-            number of popolation
+            number of population
         gen:int
             number of generation
         mutate_prob:float
@@ -40,28 +38,28 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         initial_max:int
             max initial size of expression when first producing.
         initial_min : None,int
-            max initial size of expression when first producing.
+            min initial size of expression when first producing.
         max_value:int
             max size of expression
         hall:int,>=1
-            number of HallOfFame(elite) to maintain
+            number of HallOfFame (elite) to maintain
         re_hall:None or int>=2
-            Notes: only vaild when hall
+            Notes: only valid when hall
             number of HallOfFame to add to next generation.
         re_Tree: int
             number of new features to add to next generation.
             0 is false to add.
         personal_map:bool or "auto"
-            "auto" is using premap and with auto refresh the premap with individual.\n
-            True is just using constant premap.\n
+            "auto" is using 'premap' and with auto refresh the 'premap' with individual.\n
+            True is just using constant 'premap'.\n
             False is just use the prob of terminals.
-        scoring: list of Callbale, default is [sklearn.metrics.r2_score,]
+        scoring: list of Callable, default is [sklearn.metrics.r2_score,]
             See Also sklearn.metrics
         score_pen: tuple of  1, -1 or float but 0.
             >0 : max problem, best is positive, worse -np.inf
             <0 : min problem, best is negative, worse np.inf
             Notes:
-            if multiply score method, the scores must be turn to same dimension in preprocessing
+            if multiply score method, the scores must be turn to same dimension in prepossessing
             or weight by score_pen. Because the all the selection are stand on the mean(w_i*score_i)
             Examples: [r2_score] is [1],
         cv:sklearn.model_selection._split._BaseKFold,int
@@ -74,11 +72,11 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         inter_add：bool
             add intercept constant or not
         inner_add:bool
-            add inner coeffcients or not
+            add inner coefficients or not
         out_add:bool
-            add out coeffcients or not
+            add out coefficients or not
         flat_add:bool
-            add flat coeffcients or not
+            add flat coefficients or not
         n_jobs:int
             default 1, advise 6
         batch_size:int
@@ -86,10 +84,10 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         random_state:int
             None,int
         cal_dim:bool
-            excape the dim calculation
+            escape the dim calculation
         dim_type:Dim or None or list of Dim
             "coef": af(x)+b. a,b have dimension,f(x) is not dnan. \n
-            "integer": af(x)+b. f(x) is interger dimension. \n
+            "integer": af(x)+b. f(x) is integer dimension. \n
             [Dim1,Dim2]: f(x) in list. \n
             Dim: f(x) ~= Dim. (see fuzzy) \n
             Dim: f(x) == Dim. \n
@@ -107,7 +105,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                    "fitness_dim_max": max problem, see fitness with demand dim,\n
                    "fitness_dim_min": min problem, see fitness with demand dim,\n
                    "dim_is_target": demand dim,\n
-                   "coef":  dim is true, coef have dim, \n
+                   "coef":  dim is True, coef have dim, \n
                    "integer":  dim is integer, \n
                    ...
                    }
@@ -131,9 +129,10 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                 def func(ind):\n
                     c = ind.fitness.values[0]>=0.90
                     return c
+        pset:SymbolSet
+            the feature x and target y and others should have been added.
         details:bool
-            return expr and predi_y or not.
-
+            return expr and predict_y or not.
         classification: bool
             classification or not.
         """
@@ -203,7 +202,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             warm start or not.
             Note:
                 If you offer pset in advance by user, please check carefully the feature numbers,especially when use "re_Tree.
-                because the new fatures are add.
+                because the new features are add.
             Reference:
                 CalculatePrecisionSet.update_with_X_y
         new_gen: None,int
@@ -328,18 +327,19 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             return None
 
 
-if __name__ == "__main__":
-    # data
-    from sklearn.datasets import load_boston
+# if __name__ == "__main__":
+#     # data
+#     from sklearn.datasets import load_boston
+#
+#     data = load_boston()
+#     x = data["data"]
+#     y = data["target"]
+#     c = [6, 3, 4]
+#
+#     sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,
+#                         re_Tree=1, details=True, store=r"/data/home/wangchangxin")
+#     sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
+#     # sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
+#     # score = sl.score(x, y, "r2")
+#     # print(sl.expr)
 
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
-    c = [6, 3, 4]
-
-    sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,
-                        re_Tree=1, details=True, store=r"/data/home/wangchangxin")
-    sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
-    # sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
-    # score = sl.score(x, y, "r2")
-    # print(sl.expr)
