@@ -12,6 +12,7 @@ Notes:
 """
 
 import copy
+import itertools
 import warnings
 
 import numpy as np
@@ -25,6 +26,7 @@ from sklearn.utils import check_array
 from bgp.calculation.coefficient import try_add_coef, cla
 from bgp.calculation.translate import compile_context
 from bgp.functions.dimfunc import dim_map, dless, dnan, Dim
+from bgp.functions.gsymfunc import NewArray
 
 
 def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None,
@@ -94,7 +96,7 @@ def uniform_score(score_pen=1):
 def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     add_coef=True, filter_warning=True, inter_add=True,
                     inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
-                    classification=False):
+                    classification=False, score_object="y"):
     """
 
     Parameters
@@ -149,26 +151,107 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                                 filter_warning=filter_warning, inter_add=inter_add, inner_add=inner_add,
                                 vector_add=vector_add, out_add=out_add, flat_add=flat_add,
                                 np_maps=np_maps, classification=classification)
+    if score_object == "y" or classification is True:
+        try:
+            sc_all = []
+            for si, sp in zip(scoring, score_pen):
+                sc = si(y, pre_y)
+                if np.isnan(sc):
+                    sc = uniform_score(score_pen=sp)
+                sc_all.append(sc)
 
+        except (ValueError, RuntimeWarning):
+
+            sc_all = [uniform_score(score_pen=i) for i in score_pen]
+
+    else:
+
+        ######dy under test########
+        pre_dy, dy = calculate_derivative_y(expr01, x, terminals, np_maps=np_maps)
+        if pre_dy is None:
+            sc_all = [uniform_score(score_pen=i) for i in score_pen]
+        else:
+            try:
+                sc_all = []
+                for si, sp in zip(scoring, score_pen):
+                    sc = [si(i, j) for i, j in zip(dy, pre_dy)]
+                    sc = [uniform_score(score_pen=sp) if np.isnan(i) or i is None else i for i in sc]
+                    sc = min(sc)
+                    sc_all.append(sc)
+
+            # except (RuntimeWarning):
+            except (ValueError, RuntimeWarning):
+
+                sc_all = [uniform_score(score_pen=i) for i in score_pen]
+
+    ##return sc_all, expr01, pre_y # return 0 to reduce the space
+    return sc_all, expr01, 0
+
+
+def calculate_derivative_y(expr01, x, terminals, np_maps=None):
+    """
+    Something error for reference:
+    M. Schmidt, H. Lipson, Distilling free-form natural laws from experimental data, Science, 324 (2009),
+    81–85.
+    Parameters
+    ----------
+    expr01: Expr
+        sympy expression.
+    x: list of np.ndarray
+        list of xi
+    terminals: list of sympy.Symbol
+        features and constants
+    np_maps: Callable
+        user np.ndarray function
+
+    Returns
+    -------
+    pre_dy_all:np.ndarray or float
+        pre-dy
+    dy_all: np.ndarray or float
+        dy
+    """
+    if not isinstance(expr01, (sympy.Expr, NewArray)):
+        return None, None
+    if len(expr01.free_symbols) < 2:
+        return None, None
+
+    free_symbols = list(expr01.free_symbols)[3:] if len(expr01.free_symbols) > 3 else expr01.free_symbols
+
+    par = itertools.combinations(free_symbols, 2)
     try:
-        sc_all = []
-        for si, sp in zip(scoring, score_pen):
-            sc = si(y, pre_y)
-            if np.isnan(sc):
-                sc = uniform_score(score_pen=sp)
-            sc_all.append(sc)
+        pre_dy_all = []
+        dy_all = []
+        for i, j in par:
+            fdv1 = sympy.diff(expr01, i, evaluate=False)
+            fdv2 = sympy.diff(expr01, j, evaluate=False)
+            func2 = sympy.utilities.lambdify(terminals, fdv2, modules=[np_maps, "numpy"])
+            func1 = sympy.utilities.lambdify(terminals, fdv1, modules=[np_maps, "numpy"])
+            pre_dy2 = func2(*x)
+            pre_dy1 = func1(*x)
+
+            pre_dy = pre_dy2 / pre_dy1
+
+            ff = sympy.diff(i, j, evaluate=False)
+            func0 = sympy.utilities.lambdify(terminals, ff, modules=[np_maps, "numpy"])
+            dy = func0(*x)
+
+            pre_dy_all.append(pre_dy)
+            dy_all.append(dy)
+
+        pre_dy_all = np.array(pre_dy_all)
+        dy_all = np.array(dy_all)
 
     except (ValueError, RuntimeWarning):
+        pre_dy_all, dy_all = None, None
 
-        sc_all = [uniform_score(score_pen=i) for i in score_pen]
-
-    return sc_all, expr01, pre_y
+    return pre_dy_all, dy_all
 
 
 def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv=5, refit=True,
                        add_coef=True, filter_warning=True, inter_add=True,
                        inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
-                       classification=False):
+                       classification=False, score_object="y"):
     """
     use cv spilt for score,return the mean_test_score.
     use cv spilt for predict,return the cv_predict_y.(not be used)
@@ -178,6 +261,10 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
     Parameters
     ----------
 
+    score_object:
+        score by y or delta y
+    classification:
+        classification or not
     refit: True:
         use forced, refit the coefficient use all data.
     cv:sklearn.model_selection._split._BaseKFold,int
@@ -224,11 +311,12 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
     if filter_warning:
         warnings.filterwarnings("ignore")
 
-    if cv == 1:
+    if cv == 1 or score_object == "y":
         sc_all, expr01, pre_y = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
                                                 add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                 inner_add=inner_add, vector_add=vector_add, out_add=out_add,
-                                                flat_add=flat_add, np_maps=np_maps, classification=classification)
+                                                flat_add=flat_add, np_maps=np_maps, classification=classification,
+                                                score_object=score_object)
         return sc_all, expr01, pre_y
 
     if isinstance(cv, int):
@@ -291,7 +379,8 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
         sc_all0, expr01, pre_y0 = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
                                                   add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                   inner_add=inner_add, vector_add=vector_add, out_add=out_add,
-                                                  flat_add=flat_add, np_maps=np_maps, classification=classification)
+                                                  flat_add=flat_add, np_maps=np_maps, classification=classification,
+                                                  score_object=score_object)
 
     return sc_all, expr01, pre_y
 
@@ -392,7 +481,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                        scoring=None, score_pen=(1,),
                        add_coef=True, filter_warning=True, inter_add=True, inner_add=False,
                        vector_add=False, out_add=False, flat_add=False,
-                       np_maps=None, classification=False, dim_maps=None, cal_dim=True):
+                       np_maps=None, classification=False, dim_maps=None, cal_dim=True, score_object="y"):
     expr01 = compile_context(ind, context, gro_ter_con)
 
     score, expr01, pre_y = calculate_cv_score(expr01, x, y, terminals_and_constants_repr,
@@ -402,7 +491,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                                               flat_add=flat_add,
                                               scoring=scoring, score_pen=score_pen,
                                               filter_warning=filter_warning,
-                                              np_maps=np_maps, classification=classification)
+                                              np_maps=np_maps, classification=classification, score_object=score_object)
 
     if cal_dim:
         dim, dim_score = calcualte_dim_score(expr01, terminals_and_constants_repr,
@@ -415,7 +504,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
 
 
 def calculate_collect(*args, **kwargs):
-    return calculate_collect_(*args, **kwargs)[:-1]
+    return calculate_collect_(*args, **kwargs)[:-2]
 
 
 score_collection = {'explained_variance': metrics.explained_variance_score,

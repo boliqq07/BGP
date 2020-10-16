@@ -103,9 +103,17 @@ def dim_map():
         else:
             return dim
 
+
+    def my_der(dim1, dim2):
+
+        if isinstance(dim1, Dim):
+            return dim1.__div__(dim2)
+        elif isinstance(dim2, Dim):
+            return dim2.__rdiv__(dim1)
+
     my_log = my_ln = my_cos = my_sin = my_exp
 
-    my_funcs = {"Abs": my_abs, "exp": my_exp, "ln": my_ln, 'cos': my_cos, 'sin': my_sin, "log": my_log,
+    my_funcs = {"Abs": my_abs, "exp": my_exp, "ln": my_ln, 'cos': my_cos, 'sin': my_sin, "log": my_log, "Der": my_der,
                 'sqrt': my_sqrt, "MAdd": my_flat, "MMul": my_comp, "MSub": my_diff,
                 "MDiv": my_quot, "Self": my_self, "Conv": my_conv}
     return my_funcs

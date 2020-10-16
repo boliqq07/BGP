@@ -193,8 +193,26 @@ def gsym_map():
         else:
             return sympy.cos(x)
 
+    def my_der(self, other):
+        if isinstance(self, (np.ndarray, NewArray)):
+            if isinstance(other, (np.ndarray, NewArray)):
+                if self.shape != other.shape:
+                    raise ValueError("array shape mismatch")
+                else:
+                    result_list = [sympy.diff(i, j, evaluate=False) for i, j in zip(Flatten(self), Flatten(other))]
+                    return type(self)(result_list, self.shape)
+            else:
+                result_list = [sympy.diff(i, other, evaluate=False) for i in Flatten(self)]
+                return type(self)(result_list, self.shape)
+        else:
+            if isinstance(other, (np.ndarray, NewArray)):
+                result_list = [sympy.diff(self, i, evaluate=False) for i in Flatten(other)]
+                return type(self)(result_list, other.shape)
+            else:
+                return sympy.diff(self, other, evaluate=False)
+
     return {"MAdd": Flat, "MMul": Comp, "MSub": Diff, "MDiv": Quot, "Conv": Conv,
             "Self": lambda x_: x_,
-            "Abs": my_abs, "exp": my_exp, "ln": my_ln, 'cos': my_cos, 'sin': my_sin, "log": my_log,
+            "Abs": my_abs, "exp": my_exp, "ln": my_ln, 'cos': my_cos, 'sin': my_sin, "log": my_log, "Der": my_der,
             'sqrt': my_sqrt,
             }

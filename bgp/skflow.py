@@ -327,19 +327,19 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             return None
 
 
-# if __name__ == "__main__":
-#     # data
-#     from sklearn.datasets import load_boston
-#
-#     data = load_boston()
-#     x = data["data"]
-#     y = data["target"]
-#     c = [6, 3, 4]
-#
-#     sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,
-#                         re_Tree=1, details=True, store=r"/data/home/wangchangxin")
-#     sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]])
-#     # sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
-#     # score = sl.score(x, y, "r2")
-#     # print(sl.expr)
+if __name__ == "__main__":
+    # data
+    from sklearn.datasets import load_boston
+
+    data = load_boston()
+    x = data["data"]
+    y = data["target"]
+    c = [6, 3, 4]
+
+    sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,
+                        re_Tree=0, details=True, store=r"/data/home/wangchangxin")
+    sl.fit(x, y, c=c)
+    # sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
+    # score = sl.score(x, y, "r2")
+    # print(sl.expr)
 

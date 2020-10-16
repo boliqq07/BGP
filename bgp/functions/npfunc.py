@@ -58,5 +58,16 @@ def np_map():
         else:
             return x
 
-    return {"MAdd": Flat, "MMul": Comp, "MSub": Diff, "MDiv": Quot, "Conv": Conv,
+    def Der(a, b):
+        delta_a = np.gradient(a)
+        delta_b = np.gradient(b)
+
+        return delta_a / delta_b
+        # elif a.ndim < b.dim:
+        #     return delta_a / delta_b
+        # elif a.ndim > b.dim:
+        #     return delta_a / delta_b
+        # return delta_a/delta_b
+
+    return {"MAdd": Flat, "MMul": Comp, "MSub": Diff, "MDiv": Quot, "Conv": Conv,"Der":Der, 'Derivative': Der,
             "Self": lambda x_: x_}
