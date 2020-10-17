@@ -9,10 +9,17 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="root@10.1.8.133:32866">
+      <paths name="iap13@192.9.200.238:22 password">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/iap13/datawxx" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="skk@192.9.200.240:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/share/home/skk/wcx" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
