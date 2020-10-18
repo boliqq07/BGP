@@ -4,7 +4,7 @@ from sklearn.utils import shuffle
 
 from bgp.base import SymbolSet
 from bgp.calculation.translate import group_str
-from bgp.flow import MutilMutateLoop
+from bgp.flow import MultiMutateLoop
 from bgp.functions.dimfunc import Dim, dless
 from bgp.preprocess import MagnitudeTransformer
 
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         # a = time.time()
         dicts = {}
         for i in range(12):
-            bl = MutilMutateLoop(pset=pset0, gen=20, pop=1000, hall=1, batch_size=40, re_hall=3,
+            bl = MultiMutateLoop(pset=pset0, gen=20, pop=1000, hall=1, batch_size=40, re_hall=3,
                                  n_jobs=12, mate_prob=0.9, max_value=5,
                                  mutate_prob=0.8, tq=False, dim_type="coef",
                                  re_Tree=0, store=False, random_state=12, verbose=True,

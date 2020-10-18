@@ -403,14 +403,14 @@ class BaseLoop(Toolbox):
         return self.hall
 
 
-class MutilMutateLoop(BaseLoop):
+class MultiMutateLoop(BaseLoop):
     """
     multiply mutate method.
     """
 
     def __init__(self, *args, **kwargs):
         """See also BaseLoop"""
-        super(MutilMutateLoop, self).__init__(*args, **kwargs)
+        super(MultiMutateLoop, self).__init__(*args, **kwargs)
 
         self.register("mutate0", mutNodeReplacementVerbose, pset=self.cpset, personal_map=self.personal_map)
 
@@ -472,7 +472,7 @@ class OnePointMutateLoop(BaseLoop):
         return off
 
 
-class DimForceLoop(MutilMutateLoop):
+class DimForceLoop(MultiMutateLoop):
     """Force select the individual with target dim for next generation"""
 
     def __init__(self, *args, **kwargs):
@@ -511,7 +511,7 @@ if __name__ == "__main__":
                          categories=("Add", "Mul", "Sub", "Div", "exp", "Abs"))
 
     # a = time.time()
-    bl = MutilMutateLoop(pset=pset0, gen=20, pop=100, hall=2, batch_size=40, re_hall=2,
+    bl = MultiMutateLoop(pset=pset0, gen=20, pop=100, hall=2, batch_size=40, re_hall=2,
                          n_jobs=1, mate_prob=1, max_value=10, initial_max=3,
                          mutate_prob=0.8, tq=True, dim_type="coef",
                          re_Tree=2, store=False, random_state=2,

@@ -5,7 +5,7 @@ from bgp import flow
 from bgp.base import SymbolSet
 from bgp.calculation.scores import calculate_y_unpack
 from bgp.calculation.translate import general_expr
-from bgp.flow import MutilMutateLoop
+from bgp.flow import MultiMutateLoop
 
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
@@ -139,7 +139,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         self.args = args
         self.kwargs = kwargs
         if loop is None:
-            loop = MutilMutateLoop
+            loop = MultiMutateLoop
         if isinstance(loop, str):
             loop = getattr(flow, loop)
 

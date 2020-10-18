@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" autoUpload="Always" serverName="iap13@192.9.200.238:22 password">
     <serverData>
       <paths name="gjj">
         <serverdata>
@@ -16,13 +16,7 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="skk@192.9.200.240:22">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/share/home/skk/wcx" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
