@@ -302,7 +302,6 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             return self._predict_by_single(X)
 
     def score(self, X, y, scoring):
-
         scoring = check_scoring(self, scoring=scoring)
 
         if not isinstance(scoring, (list, tuple)):
@@ -313,13 +312,14 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                 sc = si(self, X, y)
                 sc_all.append(sc)
 
-        except (ValueError, RuntimeWarning):
+        # except (ValueError, RuntimeWarning):
+        except (RuntimeWarning):
 
             sc_all = None
 
         return sc_all
 
-    def cv_result(self, refit=True):
+    def cv_result(self, refit=False):
         if self.loop.cpset.cv != 1:
             self.loop.cpset.refit = refit
             return self.loop.cpset.calculate_cv_score(self.best_one.expr)
@@ -342,4 +342,3 @@ if __name__ == "__main__":
     # sl.fit(x, y, c=c, x_group=[[1, 3], [0, 2], [4, 7]], warm_start=True)
     # score = sl.score(x, y, "r2")
     # print(sl.expr)
-

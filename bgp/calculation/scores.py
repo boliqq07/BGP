@@ -311,7 +311,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
     if filter_warning:
         warnings.filterwarnings("ignore")
 
-    if cv == 1 or score_object == "y":
+    if cv == 1:
         sc_all, expr01, pre_y = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
                                                 add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                 inner_add=inner_add, vector_add=vector_add, out_add=out_add,
@@ -319,70 +319,83 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                                 score_object=score_object)
         return sc_all, expr01, pre_y
 
-    if isinstance(cv, int):
-        cv = KFold(cv, shuffle=False)
+    else:
+        if score_object != "y":
+            raise TypeError('cv>1 and score_object !="y" are not compatible')
 
-    cv_sc_all = []
-    cv_expr01 = []
-    cv_pre_y = []
-    xx = [xi for xi in x if isinstance(xi, np.ndarray)]
-    c = [xi for xi in x if not isinstance(xi, np.ndarray)]
-    xx = [xi.reshape((-1, 1)) if xi.ndim == 1 else xi.T for xi in xx]
+        if isinstance(cv, int):
+            cv = KFold(cv, shuffle=False)
 
-    for train_index, test_index in cv.split(xx[0], y):
+        if True:
+            _, expr01, _ = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
+                                           add_coef=add_coef, filter_warning=filter_warning,
+                                           inter_add=inter_add,
+                                           inner_add=inner_add, vector_add=vector_add, out_add=out_add,
+                                           flat_add=flat_add, np_maps=np_maps, classification=classification,
+                                           score_object=score_object)
 
-        X_train = [xi[train_index] for xi in xx]
-        X_test = [xi[test_index] for xi in xx]
-        y_train, y_test = y[train_index], y[test_index]
+        cv_sc_all = []
+        cv_expr01 = []
+        cv_pre_y = []
+        xx = [xi for xi in x if isinstance(xi, np.ndarray)]
+        c = [xi for xi in x if not isinstance(xi, np.ndarray)]
+        xx = [xi.reshape((-1, 1)) if xi.ndim == 1 else xi.T for xi in xx]
 
-        X_train.reverse()
-        X_test.reverse()
-        nc = copy.deepcopy(c)
-        nc.reverse()
-        X_train = [X_train.pop() if isinstance(xi, np.ndarray) else nc.pop() for index, xi in enumerate(x)]
-        nc = copy.deepcopy(c)
-        nc.reverse()
-        X_test = [X_test.pop() if isinstance(xi, np.ndarray) else nc.pop() for index, xi in enumerate(x)]
+        for train_index, test_index in cv.split(xx[0], y):
 
-        pre_y, expr01 = calculate_y(expr01, X_train, y_train, terminals,
-                                    x_test=X_test, y_test=y_test,
-                                    add_coef=add_coef,
-                                    filter_warning=filter_warning, inter_add=inter_add,
-                                    inner_add=inner_add,
-                                    vector_add=vector_add, out_add=out_add, flat_add=flat_add,
-                                    np_maps=np_maps, classification=classification)
+            X_train = [xi[train_index] for xi in xx]
+            X_test = [xi[test_index] for xi in xx]
+            y_train, y_test = y[train_index], y[test_index]
 
+            X_train.reverse()
+            X_test.reverse()
+            nc = copy.deepcopy(c)
+            nc.reverse()
+            X_train = [X_train.pop() if isinstance(xi, np.ndarray) else nc.pop() for index, xi in enumerate(x)]
+            nc = copy.deepcopy(c)
+            nc.reverse()
+            X_test = [X_test.pop() if isinstance(xi, np.ndarray) else nc.pop() for index, xi in enumerate(x)]
+
+            pre_y, expr01 = calculate_y(expr01, X_train, y_train, terminals,
+                                        x_test=X_test, y_test=y_test,
+                                        add_coef=False,
+                                        filter_warning=filter_warning, inter_add=inter_add,
+                                        inner_add=inner_add,
+                                        vector_add=vector_add, out_add=out_add, flat_add=flat_add,
+                                        np_maps=np_maps, classification=classification)
+
+            try:
+                sc_all = []
+                for si, sp in zip(scoring, score_pen):
+                    sc = si(y_test, pre_y)
+                    if np.isnan(sc):
+                        sc = uniform_score(score_pen=sp)
+                    sc_all.append(sc)
+
+            except (ValueError, RuntimeWarning):
+
+                sc_all = [uniform_score(score_pen=i) for i in score_pen]
+
+            cv_sc_all.append(sc_all)
+            cv_expr01.append(expr01)
+            cv_pre_y.append(pre_y)
+
+        sc_all = list(np.mean(np.array(cv_sc_all), axis=0))
         try:
-            sc_all = []
-            for si, sp in zip(scoring, score_pen):
-                sc = si(y_test, pre_y)
-                if np.isnan(sc):
-                    sc = uniform_score(score_pen=sp)
-                sc_all.append(sc)
+            pre_y = np.concatenate(cv_pre_y)
+        except ValueError:
+            pre_y = None
 
-        except (ValueError, RuntimeWarning):
+        if refit is True:
+            "the refit only use for see the detial of calcualtion after loop"
+            sc_all0, expr01, pre_y0 = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
+                                                      add_coef=add_coef, filter_warning=filter_warning,
+                                                      inter_add=inter_add,
+                                                      inner_add=inner_add, vector_add=vector_add, out_add=out_add,
+                                                      flat_add=flat_add, np_maps=np_maps, classification=classification,
+                                                      score_object=score_object)
 
-            sc_all = [uniform_score(score_pen=i) for i in score_pen]
-
-        cv_sc_all.append(sc_all)
-        cv_expr01.append(expr01)
-        cv_pre_y.append(pre_y)
-
-    sc_all = list(np.mean(np.array(cv_sc_all), axis=0))
-    try:
-        pre_y = np.concatenate(cv_pre_y)
-    except ValueError:
-        pre_y = None
-
-    if refit is True:
-        "the refit only use for see the detial of calcualtion after loop"
-        sc_all0, expr01, pre_y0 = calculate_score(expr01, x, y, terminals, scoring=scoring, score_pen=score_pen,
-                                                  add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
-                                                  inner_add=inner_add, vector_add=vector_add, out_add=out_add,
-                                                  flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                                  score_object=score_object)
-
-    return sc_all, expr01, pre_y
+        return sc_all, expr01, pre_y
 
 
 def score_dim(dim_, dim_type, fuzzy=False):
