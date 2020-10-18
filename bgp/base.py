@@ -737,7 +737,7 @@ class SymbolSet(object):
             for i in t_map_va:
                 init_name1 = init_name1.subs(sympy.Symbol(i), self.expr_init_map[i])
 
-        except(AssertionError, NameError, ValueError):
+        except(AssertionError, NameError, ValueError, TypeError):
             pass
         else:
             name = "new%s" % self.new_num
