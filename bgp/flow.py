@@ -32,7 +32,7 @@ from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
 class BaseLoop(Toolbox):
     """Base loop"""
 
-    def __init__(self, pset, pop=500, gen=20, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=None,
+    def __init__(self, pset, pop=500, gen=20, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=1,
                  re_Tree=None, initial_min=None, initial_max=3, max_value=5,
                  scoring=(r2_score,), score_pen=(1,), filter_warning=True, cv=1,
                  add_coef=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
