@@ -255,11 +255,11 @@ class BaseLoop(Toolbox):
                                       str(time.time())))
             try:
                 st = Store(path)
-                st.to_csv(data_all, file_new_name)
+                st.to_csv(data_all, file_new_name, transposition=True)
                 print("store data to ", path, file_new_name)
             except (IOError, PermissionError):
                 st = Store(os.getcwd())
-                st.to_csv(data_all, file_new_name)
+                st.to_csv(data_all, file_new_name, transposition=True)
                 print("store data to ", os.getcwd(), file_new_name)
 
     def maintain_halls(self, population):
@@ -309,6 +309,35 @@ class BaseLoop(Toolbox):
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
 
+    def top_n(self, n=10, gen=-1, key="value",filter_dim=True):
+        import pandas as pd
+        data = self.data_all
+        data = pd.DataFrame(data)
+        if gen == -1:
+            gen = max(data["gen"])
+
+        data = data[data["gen"] == gen]
+
+        if filter_dim:
+            data = data[data["dim_score"] == 1]
+
+        data = data.drop_duplicates(['expr'], keep="first")
+
+
+
+        if key is not None:
+            data[key] = data[key].str.replace("(", "")
+            data[key] = data[key].str.replace(")", "")
+            data[key] = data[key].str.replace(",", "")
+            try:
+                data[key] = data[key].astype(float)
+            except ValueError:
+                raise TypeError("check this key column can be translated into float")
+
+            data = data.sort_values(by='value', ascending=False).iloc[:n, :]
+
+        return data
+
     def run(self, warm_start=False, new_gen=None):
         # 1.generate###################################################################
         if warm_start is False:
@@ -339,9 +368,8 @@ class BaseLoop(Toolbox):
                 ind.fitness.values = tuple(score[0])
                 ind.y_dim = score[1]
                 ind.dim_score = score[2]
-                if len(score) == 5:
-                    ind.coef_expr = score[3]
-                    ind.coef_pre_y = score[4]
+                ind.coef_expr = score[3]
+                ind.coef_pre_y = score[4]
             population = population_old
 
             # 3.log###################################################################
@@ -354,9 +382,10 @@ class BaseLoop(Toolbox):
 
             # 3.2.log-store##############################
             if self.store:
-                datas = [{"gen": gen_i, "name": str(gen_i), "value": str(gen_i.fitness.values),
-                          "dimension": str(gen_i.y_dim),
-                          "dim_score": str(gen_i.dim_score)} for gen_i in population]
+                datas = [{"gen": gen_i, "name": str(pop_i), "expr": str({pop_i.coef_expr}),
+                          "value": str(pop_i.fitness.values),
+                          "dimension": str(pop_i.y_dim),
+                          "dim_score": pop_i.dim_score} for pop_i in population]
                 self.data_all.extend(datas)
 
             # 3.3.log-hall###############################

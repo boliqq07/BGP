@@ -96,7 +96,7 @@ def uniform_score(score_pen=1):
 def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     add_coef=True, filter_warning=True, inter_add=True,
                     inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
-                    classification=False, score_object="y"):
+                    classification=False, score_object="y", details=False):
     """
 
     Parameters
@@ -183,9 +183,10 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
             except (ValueError, RuntimeWarning):
 
                 sc_all = [uniform_score(score_pen=i) for i in score_pen]
-
-    ##return sc_all, expr01, pre_y # return 0 to reduce the space
-    return sc_all, expr01, 0
+    if details:
+        return sc_all, expr01, pre_y
+    else:
+        return sc_all, str(expr01), 0
 
 
 def calculate_derivative_y(expr01, x, terminals, np_maps=None):
@@ -251,7 +252,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
 def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv=5, refit=True,
                        add_coef=True, filter_warning=True, inter_add=True,
                        inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
-                       classification=False, score_object="y"):
+                       classification=False, score_object="y", details=False):
     """
     use cv spilt for score,return the mean_test_score.
     use cv spilt for predict,return the cv_predict_y.(not be used)
@@ -316,7 +317,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                                 add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                 inner_add=inner_add, vector_add=vector_add, out_add=out_add,
                                                 flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                                score_object=score_object)
+                                                score_object=score_object,details=details)
         return sc_all, expr01, pre_y
 
     else:
@@ -332,10 +333,10 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                            inter_add=inter_add,
                                            inner_add=inner_add, vector_add=vector_add, out_add=out_add,
                                            flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                           score_object=score_object)
+                                           score_object=score_object,details=details)
 
         cv_sc_all = []
-        cv_expr01 = []
+        # cv_expr01 = []
         cv_pre_y = []
         xx = [xi for xi in x if isinstance(xi, np.ndarray)]
         c = [xi for xi in x if not isinstance(xi, np.ndarray)]
@@ -377,7 +378,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                 sc_all = [uniform_score(score_pen=i) for i in score_pen]
 
             cv_sc_all.append(sc_all)
-            cv_expr01.append(expr01)
+            # cv_expr01.append(expr01)
             cv_pre_y.append(pre_y)
 
         sc_all = list(np.mean(np.array(cv_sc_all), axis=0))
@@ -393,7 +394,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                                       inter_add=inter_add,
                                                       inner_add=inner_add, vector_add=vector_add, out_add=out_add,
                                                       flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                                      score_object=score_object)
+                                                      score_object=score_object,details=details)
 
         return sc_all, expr01, pre_y
 
@@ -494,7 +495,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                        scoring=None, score_pen=(1,),
                        add_coef=True, filter_warning=True, inter_add=True, inner_add=False,
                        vector_add=False, out_add=False, flat_add=False,
-                       np_maps=None, classification=False, dim_maps=None, cal_dim=True, score_object="y"):
+                       np_maps=None, classification=False, dim_maps=None, cal_dim=True, score_object="y", details=False):
     expr01 = compile_context(ind, context, gro_ter_con)
 
     score, expr01, pre_y = calculate_cv_score(expr01, x, y, terminals_and_constants_repr,
@@ -504,7 +505,9 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                                               flat_add=flat_add,
                                               scoring=scoring, score_pen=score_pen,
                                               filter_warning=filter_warning,
-                                              np_maps=np_maps, classification=classification, score_object=score_object)
+                                              np_maps=np_maps, classification=classification, score_object=score_object,
+                                              details = details
+                                              )
 
     if cal_dim:
         dim, dim_score = calcualte_dim_score(expr01, terminals_and_constants_repr,
@@ -514,10 +517,6 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
         dim, dim_score = dless, 1
 
     return score, dim, dim_score, expr01, pre_y
-
-
-def calculate_collect(*args, **kwargs):
-    return calculate_collect_(*args, **kwargs)[:-2]
 
 
 score_collection = {'explained_variance': metrics.explained_variance_score,

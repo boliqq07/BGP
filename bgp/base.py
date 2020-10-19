@@ -21,8 +21,7 @@ from mgetool.tool import parallelize
 from sklearn.metrics import r2_score
 from sklearn.utils import check_X_y, check_array
 
-from bgp.calculation.scores import calcualte_dim_score, \
-    calculate_collect, compile_context, calculate_cv_score, score_collection, calculate_collect_
+from bgp.calculation.scores import calcualte_dim_score, compile_context, calculate_cv_score, score_collection, calculate_collect_
 from bgp.calculation.translate import group_str
 from bgp.functions.dimfunc import dim_map, Dim, dnan, dless
 from bgp.functions.gsymfunc import gsym_map, NewArray
@@ -1380,7 +1379,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object)
+                                                  score_object=self.score_object,details=True)
         return score, expr01, pre_y
 
     def calculate_score(self, ind):
@@ -1410,7 +1409,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object)
+                                                  score_object=self.score_object, details=True)
 
         # this group should be get onetime and get all.
         ind.coef_expr = expr01
@@ -1448,7 +1447,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object)
+                                                  score_object=self.score_object,details=True)
         if self.cal_dim:
             dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
                                                  self.dim_ter_con_list, self.dim_type,
@@ -1489,7 +1488,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object)
+                                                  score_object=self.score_object,details=True)
         if self.cal_dim:
             dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
                                                  self.dim_ter_con_list, self.dim_type,
@@ -1511,7 +1510,7 @@ class CalculatePrecisionSet(SymbolSet):
                                   scoring=self.scoring, score_pen=self.score_pen,
                                   filter_warning=self.filter_warning,
                                   np_maps=self.np_map, classification=self.classification,
-                                  score_object=self.score_object)
+                                  score_object=self.score_object, details=self.details)
 
         score_dim_list = parallelize(func=calls, iterable=exprs, n_jobs=self.n_jobs,
                                      respective=False,
@@ -1534,10 +1533,7 @@ class CalculatePrecisionSet(SymbolSet):
 
         indss = [i.capsule for i in inds]
 
-        if self.details:
-            calculate_collect_use = calculate_collect_
-        else:
-            calculate_collect_use = calculate_collect
+        calculate_collect_use = calculate_collect_
 
         calls = functools.partial(calculate_collect_use, context=self.context, x=self.data_x, y=self.y,
                                   terminals_and_constants_repr=self.terminals_and_constants_repr,
@@ -1550,7 +1546,9 @@ class CalculatePrecisionSet(SymbolSet):
                                   out_add=self.out_add, flat_add=self.flat_add,
                                   inner_add=self.inner_add, np_maps=self.np_map, classification=self.classification,
                                   filter_warning=self.filter_warning,
-                                  dim_maps=self.dim_map, cal_dim=self.cal_dim, score_object=self.score_object)
+                                  dim_maps=self.dim_map, cal_dim=self.cal_dim, score_object=self.score_object,
+                                  details=self.details
+                                  )
 
         score_dim_list = parallelize(func=calls, iterable=indss, n_jobs=self.n_jobs,
                                      respective=False,
