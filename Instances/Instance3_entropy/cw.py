@@ -144,7 +144,7 @@ if __name__ == "__main__":
                         initial_max=3, max_value=6, store=True,
                         stats={"fitness_dim_min": ("min",), "dim_is_target": ("sum",)}
                         )
-    sl.fit(x, y, x_dim=[dless, pa_dim,dless,dless,dless,dless,], y_dim=pa_dim, power_categories=(2, 3, 0.5, 0.33),
+    sl.fit(x, y, x_dim=[dless, pa_dim, dless, dless, dless, dless, ], y_dim=pa_dim, power_categories=(2, 3, 0.5, 0.33),
            categories=("Add", "Mul", "Sub", "Div"), )
 
     print(sl.expr)

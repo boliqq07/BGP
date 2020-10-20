@@ -1,6 +1,7 @@
 import matplotlib.pyplot as pl
-from matplotlib import animation
 import numpy as np
+from matplotlib import animation
+
 
 def plot_curve(x, i, save=True, step=1):
     dt = 0.2
@@ -42,12 +43,11 @@ def plot_curve(x, i, save=True, step=1):
 
 
 def plot_point(x, i=None, save=True, step=1):
-
     fig = pl.figure(figsize=(5, 5), dpi=20)
     dt = 0.2
 
     ##########下面将我们的求解结果进行可视化
-    aa,bb = np.min((np.min(x),-5)), np.max((np.max(x),5))
+    aa, bb = np.min((np.min(x), -5)), np.max((np.max(x), 5))
     ax = fig.add_subplot(111, xlim=(aa, bb), ylim=(aa, bb))
 
     ax.grid()

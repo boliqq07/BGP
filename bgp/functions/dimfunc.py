@@ -103,7 +103,6 @@ def dim_map():
         else:
             return dim
 
-
     def my_der(dim1, dim2):
 
         if isinstance(dim1, Dim):

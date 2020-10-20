@@ -21,7 +21,8 @@ from mgetool.tool import parallelize
 from sklearn.metrics import r2_score
 from sklearn.utils import check_X_y, check_array
 
-from bgp.calculation.scores import calcualte_dim_score, compile_context, calculate_cv_score, score_collection, calculate_collect_
+from bgp.calculation.scores import calcualte_dim_score, compile_context, calculate_cv_score, score_collection, \
+    calculate_collect_
 from bgp.calculation.translate import group_str
 from bgp.functions.dimfunc import dim_map, Dim, dnan, dless
 from bgp.functions.gsymfunc import gsym_map, NewArray
@@ -1379,7 +1380,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object,details=True)
+                                                  score_object=self.score_object, details=True)
         return score, expr01, pre_y
 
     def calculate_score(self, ind):
@@ -1447,7 +1448,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object,details=True)
+                                                  score_object=self.score_object, details=True)
         if self.cal_dim:
             dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
                                                  self.dim_ter_con_list, self.dim_type,
@@ -1488,7 +1489,7 @@ class CalculatePrecisionSet(SymbolSet):
                                                   scoring=self.scoring, score_pen=self.score_pen,
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
-                                                  score_object=self.score_object,details=True)
+                                                  score_object=self.score_object, details=True)
         if self.cal_dim:
             dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
                                                  self.dim_ter_con_list, self.dim_type,

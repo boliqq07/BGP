@@ -160,7 +160,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     sc = uniform_score(score_pen=sp)
                 sc_all.append(sc)
 
-        except (ValueError, RuntimeWarning,TypeError):
+        except (ValueError, RuntimeWarning, TypeError):
 
             sc_all = [uniform_score(score_pen=i) for i in score_pen]
 
@@ -180,7 +180,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     sc_all.append(sc)
 
             # except (RuntimeWarning):
-            except (ValueError, RuntimeWarning,TypeError):
+            except (ValueError, RuntimeWarning, TypeError):
 
                 sc_all = [uniform_score(score_pen=i) for i in score_pen]
     if details:
@@ -243,7 +243,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
         pre_dy_all = np.array(pre_dy_all)
         dy_all = np.array(dy_all)
 
-    except (ValueError, RuntimeWarning,TypeError):
+    except (ValueError, RuntimeWarning, TypeError):
         pre_dy_all, dy_all = None, None
 
     return pre_dy_all, dy_all
@@ -317,7 +317,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                                 add_coef=add_coef, filter_warning=filter_warning, inter_add=inter_add,
                                                 inner_add=inner_add, vector_add=vector_add, out_add=out_add,
                                                 flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                                score_object=score_object,details=details)
+                                                score_object=score_object, details=details)
         return sc_all, expr01, pre_y
 
     else:
@@ -333,7 +333,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                            inter_add=inter_add,
                                            inner_add=inner_add, vector_add=vector_add, out_add=out_add,
                                            flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                           score_object=score_object,details=details)
+                                           score_object=score_object, details=details)
 
         cv_sc_all = []
         # cv_expr01 = []
@@ -394,7 +394,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                                                       inter_add=inter_add,
                                                       inner_add=inner_add, vector_add=vector_add, out_add=out_add,
                                                       flat_add=flat_add, np_maps=np_maps, classification=classification,
-                                                      score_object=score_object,details=details)
+                                                      score_object=score_object, details=details)
 
         return sc_all, expr01, pre_y
 
@@ -495,7 +495,8 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                        scoring=None, score_pen=(1,),
                        add_coef=True, filter_warning=True, inter_add=True, inner_add=False,
                        vector_add=False, out_add=False, flat_add=False,
-                       np_maps=None, classification=False, dim_maps=None, cal_dim=True, score_object="y", details=False):
+                       np_maps=None, classification=False, dim_maps=None, cal_dim=True, score_object="y",
+                       details=False):
     expr01 = compile_context(ind, context, gro_ter_con)
 
     score, expr01, pre_y = calculate_cv_score(expr01, x, y, terminals_and_constants_repr,
@@ -506,7 +507,7 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                                               scoring=scoring, score_pen=score_pen,
                                               filter_warning=filter_warning,
                                               np_maps=np_maps, classification=classification, score_object=score_object,
-                                              details = details
+                                              details=details
                                               )
 
     if cal_dim:

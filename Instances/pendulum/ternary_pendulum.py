@@ -134,16 +134,16 @@ class TernaryPendulum(object):
         th1, th2, th3, dth1, dth2, dth3 = init_status
 
         a1, a2, a3, a4 = l1 * (l1 * m1 + l1 * m2 + l1 * m3), l1 * (
-                    l2 * m2 * cos(th1 - th2) + l2 * m3 * cos(th1 - th2)), l1 * l3 * m3 * cos(th1 - th3), l1 * (
-                                     dth2 ** 2 * (l2 * m2 * sin(th1 - th2) + l2 * m3 * sin(
-                                 th1 - th2)) + dth3 ** 2 * l3 * m3 * sin(th1 - th3) + g * m1 * sin(th1) + g * m2 * sin(
-                                 th1) + g * m3 * sin(th1))
+                l2 * m2 * cos(th1 - th2) + l2 * m3 * cos(th1 - th2)), l1 * l3 * m3 * cos(th1 - th3), l1 * (
+                                 dth2 ** 2 * (l2 * m2 * sin(th1 - th2) + l2 * m3 * sin(
+                             th1 - th2)) + dth3 ** 2 * l3 * m3 * sin(th1 - th3) + g * m1 * sin(th1) + g * m2 * sin(
+                             th1) + g * m3 * sin(th1))
         a5, a6, a7, a8 = l2 * (l1 * m2 * cos(th1 - th2) + l1 * m3 * cos(th1 - th2)), l2 * (
-                    l2 * m2 + l2 * m3), l2 * l3 * m3 * cos(th2 - th3), l2 * (dth1 ** 2 * (
-                    -l1 * m2 * sin(th1 - th2) - l1 * m3 * sin(th1 - th2)) + dth3 ** 2 * l3 * m3 * sin(
+                l2 * m2 + l2 * m3), l2 * l3 * m3 * cos(th2 - th3), l2 * (dth1 ** 2 * (
+                -l1 * m2 * sin(th1 - th2) - l1 * m3 * sin(th1 - th2)) + dth3 ** 2 * l3 * m3 * sin(
             th2 - th3) + g * m2 * sin(th2) + g * m3 * sin(th2))
         a9, a10, a11, a12 = l3 * m3 * l1 * cos(th1 - th3), l3 * m3 * l2 * cos(th2 - th3), l3 * m3 * l3, l3 * m3 * (
-                    - dth1 ** 2 * l1 * sin(th1 - th3) - dth2 ** 2 * l2 * sin(th2 - th3) + g * sin(th3))
+                - dth1 ** 2 * l1 * sin(th1 - th3) - dth2 ** 2 * l2 * sin(th2 - th3) + g * sin(th3))
 
         #######这里注意一下，因为我们的方程里面含有两个二次导数项，这里是为了把每个方程变为只含有一个二次倒数项的形式
         ddth1, ddth2, ddth3 = np.linalg.solve(
