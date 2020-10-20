@@ -7,7 +7,7 @@
 import pandas as pd
 
 
-def top_n(loop, n=10, gen=-1, key="value"):
+def top_n(loop, n=10, gen=-1, key="value", ascending=False):
     data = loop.data_all
     data = pd.DataFrame(data)
     if gen == -1:
@@ -26,6 +26,6 @@ def top_n(loop, n=10, gen=-1, key="value"):
         except ValueError:
             raise TypeError("check this key column can be translated into float")
 
-        data = data.sort_values(by='value', ascending=False).iloc[:n, :]
+        data = data.sort_values(by='value', ascending=ascending).iloc[:n, :]
 
     return data

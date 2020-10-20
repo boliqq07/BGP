@@ -309,7 +309,7 @@ class BaseLoop(Toolbox):
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
 
-    def top_n(self, n=10, gen=-1, key="value", filter_dim=True):
+    def top_n(self, n=10, gen=-1, key="value", filter_dim=True,ascending=False):
         import pandas as pd
         data = self.data_all
         data = pd.DataFrame(data)
@@ -332,7 +332,7 @@ class BaseLoop(Toolbox):
             except ValueError:
                 raise TypeError("check this key column can be translated into float")
 
-            data = data.sort_values(by='value', ascending=False).iloc[:n, :]
+            data = data.sort_values(by='value', ascending=ascending).iloc[:n, :]
 
         return data
 

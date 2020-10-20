@@ -10,7 +10,7 @@ twine upload dist/*
 
 rd /s /Q dist
 
-rd /s /Q gvp.egg-info
+rd /s /Q BindingGP.egg-info
 
 pause
 
