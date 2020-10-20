@@ -160,7 +160,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     sc = uniform_score(score_pen=sp)
                 sc_all.append(sc)
 
-        except (ValueError, RuntimeWarning):
+        except (ValueError, RuntimeWarning,TypeError):
 
             sc_all = [uniform_score(score_pen=i) for i in score_pen]
 
@@ -180,7 +180,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                     sc_all.append(sc)
 
             # except (RuntimeWarning):
-            except (ValueError, RuntimeWarning):
+            except (ValueError, RuntimeWarning,TypeError):
 
                 sc_all = [uniform_score(score_pen=i) for i in score_pen]
     if details:
@@ -243,7 +243,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
         pre_dy_all = np.array(pre_dy_all)
         dy_all = np.array(dy_all)
 
-    except (ValueError, RuntimeWarning):
+    except (ValueError, RuntimeWarning,TypeError):
         pre_dy_all, dy_all = None, None
 
     return pre_dy_all, dy_all
@@ -373,7 +373,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                         sc = uniform_score(score_pen=sp)
                     sc_all.append(sc)
 
-            except (ValueError, RuntimeWarning):
+            except (ValueError, RuntimeWarning, TypeError):
 
                 sc_all = [uniform_score(score_pen=i) for i in score_pen]
 
