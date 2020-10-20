@@ -584,3 +584,108 @@ def try_add_coef(expr01, x, y, terminals,
         pre_y = None
 
     return pre_y, expr01
+
+
+def try_add_coef_times(expr01, x, y, terminals,
+                       filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False,
+                       flat_add=False,
+                       np_maps=None, classification=False, random_state=0, return_expr=False):
+    if filter_warning:
+        warnings.filterwarnings("ignore")
+
+    # expr00 = copy.deepcopy(expr01)
+
+    expr01, a_list, a_dict = add_coefficient(expr01, inter_add=inter_add, inner_add=inner_add, vector_add=vector_add,
+                                             out_add=out_add, flat_add=flat_add)
+
+    cc = CheckCoef(a_list, a_dict)
+
+    ter = []
+    ter.extend(terminals)
+    ter.extend(cc.name)
+
+    func0 = sympy.utilities.lambdify(ter, expr01, modules=[np_maps, "numpy", "math"])
+
+    def func(x_, p):
+        """"""
+        num_list = []
+        num_list.extend(x_)
+
+        p = cc.group(p)
+        num_list.extend(p)
+
+        return func0(*num_list)
+
+    def res(p, x_, y_):
+        """"""
+        ress = y_ - func(x_, p)
+        return ress
+
+    def res2(p, x_, y_):
+        """"""
+        pre_y = func(x_, p)
+        pre_y = cla(pre_y, cl=False)
+        ress = y_ - pre_y
+
+        return ress
+
+    if not classification:
+        result = optimize.least_squares(res, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,
+                                        # long
+                                        jac='3-point', loss='linear')
+    else:
+        result = optimize.least_squares(res2, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,
+                                        # long
+                                        jac='3-point', loss='linear')
+    cof = result.x
+
+    l = len(cof)
+    pre_y_all = []
+    expr_all = []
+    for times in range(1000):
+        from numpy import random
+        random.seed(random_state)
+
+        ranss = np.random.random((l,))
+        cof = [cofi * ((ranss - 1) * 0.01 + 1) for cofi in cof]
+        cof = cc.group(cof)
+
+        try:
+
+            pre_y = func0(*x + cof)
+
+            if classification:
+                pre_y = cla(pre_y, cl=True)
+
+            if return_expr:
+                cof = cc.dec(cof)
+                for ai, choi in zip(cc.name, cof):
+                    if ai in cc.cof_dict_keys:
+
+                        fun = Coef(ai.name, choi)
+                        # replace the Vi to Vi()
+                        olds0 = find_args(expr01, ai)
+                        if olds0 is None:
+                            raise KeyError("0*wi is 0,and make the placeholder fade out")
+                        olds = [old for old in olds0 if old is not ai]
+                        olds = sympy.Mul(*olds)
+                        expr01 = expr01.xreplace({sympy.Mul(ai, olds): fun(olds)})
+                    else:
+                        expr01 = expr01.xreplace({ai: choi})
+            else:
+                pass
+
+        except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError):
+            pre_y = None
+
+        if isinstance(pre_y, np.ndarray):
+            if pre_y.shape == y.shape:
+                if np.all(np.isfinite(pre_y)):
+                    pre_y_all.append(pre_y)
+
+                    if return_expr:
+                        expr_all.append(expr01)
+
+    pre_y_all = np.array(pre_y_all)
+
+    return pre_y_all, expr01

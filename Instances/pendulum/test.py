@@ -4,11 +4,15 @@
 # @Email   : 986798607@qq.com
 # @Software: PyCharm
 # @License: BSD 3-Clause
+import sympy
 from mgetool.exports import Store
 from mgetool.imports import Call
+from mgetool.tool import tt
+from numpy import random
 from sklearn.metrics import r2_score
 
 from Instances.pendulum.ternary_pendulum import TernaryPendulum
+from bgp.calculation.translate import compile_context
 from bgp.skflow import SymbolLearning
 
 if __name__ == "__main__":
@@ -39,13 +43,18 @@ if __name__ == "__main__":
                         add_coef=True, inter_add=False, inner_add=False, vector_add=False, out_add=True,
                         flat_add=False,
                         cal_dim=False, dim_type=None, fuzzy=False, n_jobs=12, batch_size=40,
-                        random_state=3,
+                        random_state=3,store=True,
                         stats={"h_bgp": ("mean",), "fitness": ("max",)},
                         verbose=True, migrate_prob=0,
-                        tq=True, store=False, personal_map="auto", stop_condition=func, details=False,
+                        tq=True, personal_map="auto", stop_condition=func, details=False,
                         classification=False,
                         score_object="y", sub_mu_max=2)
-    x = np.vstack((th1_array, th2_array, th3_array)).T
+    random.seed(1)
+    th3_array = (0.001*random.random(th3_array.shape)+1)*th3_array
+    x = np.vstack((th1_array, th2_array, th3_array, y1, y2, y3)).T
     y = x3
     sl.fit(x, y, power_categories=(2, 3, 0.5, 0.333),
-           categories=("Add", "Sub", "sin", "Self"), )
+           categories=("Add", "Sub", "sin", "cos", "Self"), )
+    data = sl.loop.top_n(10)
+    expr_str = data.iloc[0,1]
+    expr01 = compile_context(expr_str, sl.loop.cpset.context, gro_ter_con=None, simplify=False)

@@ -383,7 +383,7 @@ class BaseLoop(Toolbox):
 
             # 3.2.log-store##############################
             if self.store:
-                datas = [{"gen": gen_i, "name": str(pop_i), "expr": str({pop_i.coef_expr}),
+                datas = [{"gen": gen_i, "name": str(pop_i), "expr": str([pop_i.coef_expr]),
                           "value": str(pop_i.fitness.values),
                           "dimension": str(pop_i.y_dim),
                           "dim_score": pop_i.dim_score} for pop_i in population]
