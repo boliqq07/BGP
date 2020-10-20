@@ -29,23 +29,23 @@ if __name__ == "__main__":
 
 
     def func(ind):
-        c = ind.fitness.values[0] >= 0.999
+        c = ind.fitness.values[0] >= 0.999999
         return c
 
 
-    sl = SymbolLearning(loop='MultiMutateLoop', pop=3000, gen=20, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=1,
+    sl = SymbolLearning(loop='MultiMutateLoop', pop=1000, gen=20, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=1,
                         re_Tree=None, initial_min=None, initial_max=2, max_value=3,
                         scoring=(r2_score,), score_pen=(1,), filter_warning=True, cv=1,
-                        add_coef=True, inter_add=False, inner_add=False, vector_add=False, out_add=False,
+                        add_coef=True, inter_add=False, inner_add=False, vector_add=False, out_add=True,
                         flat_add=False,
-                        cal_dim=False, dim_type=None, fuzzy=False, n_jobs=30, batch_size=40,
+                        cal_dim=False, dim_type=None, fuzzy=False, n_jobs=12, batch_size=40,
                         random_state=3,
                         stats={"h_bgp": ("mean",), "fitness": ("max",)},
                         verbose=True, migrate_prob=0,
                         tq=True, store=False, personal_map="auto", stop_condition=func, details=False,
                         classification=False,
-                        score_object="y", sub_mu=2)
+                        score_object="y", sub_mu_max=2)
     x = np.vstack((th1_array, th2_array, th3_array)).T
     y = x3
-    sl.fit(x, y, power_categories=None,
-           categories=("Add", "sin", "Self"), )
+    sl.fit(x, y, power_categories=(2, 3, 0.5, 0.333),
+           categories=("Add", "Sub", "sin", "Self"), )

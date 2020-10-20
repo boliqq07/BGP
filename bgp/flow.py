@@ -39,7 +39,7 @@ class BaseLoop(Toolbox):
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False,
-                 score_object="y", sub_mu=1):
+                 score_object="y", sub_mu_max=1):
         """
         Parameters
         ----------
@@ -181,7 +181,7 @@ class BaseLoop(Toolbox):
         self.population = []
         self.rand_state = None
         self.random_state = random_state
-        self.sub_mu = sub_mu
+        self.sub_mu_max = sub_mu_max
 
         self.cpset = CalculatePrecisionSet(pset, scoring=scoring, score_pen=score_pen,
                                            filter_warning=filter_warning, cal_dim=cal_dim,
@@ -203,7 +203,7 @@ class BaseLoop(Toolbox):
                       personal_map=self.personal_map)
         self.register("genHalf", genFull, pset=self.cpset, min_=initial_min, max_=initial_max + 1,
                       personal_map=self.personal_map)
-        self.register("gen_mu", genGrow, min_=1, max_=self.sub_mu + 1, personal_map=self.personal_map)
+        self.register("gen_mu", genGrow, min_=1, max_=self.sub_mu_max + 1, personal_map=self.personal_map)
         # def selection
 
         self.register("select", selTournament, tournsize=2)
