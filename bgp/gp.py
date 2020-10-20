@@ -206,6 +206,14 @@ def genFull(pset, min_, max_, personal_map=False):
     return generate(pset, min_, max_, condition, personal_map=personal_map)
 
 
+def genHalf(pset, min_, max_, personal_map=False):
+    a = random.rand()
+    if a > 0.5:
+        return genFull(pset, min_, max_, personal_map=personal_map)
+    else:
+        return genGrow(pset, min_, max_, personal_map=personal_map)
+
+
 ######################################
 # crossover                        #
 ######################################
@@ -693,7 +701,22 @@ def varAnd(population, toolbox, cxpb, mutpb):
     return offspring
 
 
-def varAndfus(population, toolbox, cxpb, mutpb, fus):
+def varAndfus(population, toolbox, cxpb, mutpb, fus, mutpb_list=1.0):
+    """
+
+    Parameters
+    ----------
+    population
+    toolbox
+    cxpb
+    mutpb
+    fus
+    mutpb_list:float,list,None
+
+    Returns
+    -------
+
+    """
     offspring = copy.deepcopy(population)
 
     # Apply crossover and mutation on the offspring
@@ -702,14 +725,23 @@ def varAndfus(population, toolbox, cxpb, mutpb, fus):
             offspring[i - 1], offspring[i] = toolbox.mate(offspring[i - 1],
                                                           offspring[i])
             del offspring[i - 1].fitness.values, offspring[i].fitness.values
+    if isinstance(mutpb_list, float) or mutpb_list is None:
 
-    mutpb /= len(fus)
-
-    for j in fus:
-        for i in range(len(offspring)):
-            if random.random() < mutpb:
-                # print(random.random(), i)
-                offspring[i], = j(offspring[i])
-                del offspring[i].fitness.values
+        mutpb /= len(fus)
+        for j in fus:
+            for i in range(len(offspring)):
+                if random.random() < mutpb:
+                    # print(random.random(), i)
+                    offspring[i], = j(offspring[i])
+                    del offspring[i].fitness.values
+    else:
+        assert len(fus) == len(mutpb_list)
+        mutpb_list = [i * mutpb for i in mutpb_list]
+        for j, m in zip(fus, mutpb_list):
+            for i in range(len(offspring)):
+                if random.random() < m:
+                    # print(random.random(), i)
+                    offspring[i], = j(offspring[i])
+                    del offspring[i].fitness.values
 
     return offspring

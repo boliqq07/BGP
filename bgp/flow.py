@@ -39,7 +39,7 @@ class BaseLoop(Toolbox):
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False,
-                 score_object="y"):
+                 score_object="y", sub_mu=1):
         """
         Parameters
         ----------
@@ -181,6 +181,7 @@ class BaseLoop(Toolbox):
         self.population = []
         self.rand_state = None
         self.random_state = random_state
+        self.sub_mu = sub_mu
 
         self.cpset = CalculatePrecisionSet(pset, scoring=scoring, score_pen=score_pen,
                                            filter_warning=filter_warning, cal_dim=cal_dim,
@@ -200,7 +201,9 @@ class BaseLoop(Toolbox):
                       personal_map=self.personal_map)
         self.register("genFull", genFull, pset=self.cpset, min_=initial_min, max_=initial_max + 1,
                       personal_map=self.personal_map)
-        self.register("gen_mu", genGrow, min_=1, max_=1 + 1, personal_map=self.personal_map)
+        self.register("genHalf", genFull, pset=self.cpset, min_=initial_min, max_=initial_max + 1,
+                      personal_map=self.personal_map)
+        self.register("gen_mu", genGrow, min_=1, max_=self.sub_mu + 1, personal_map=self.personal_map)
         # def selection
 
         self.register("select", selTournament, tournsize=2)
@@ -304,12 +307,12 @@ class BaseLoop(Toolbox):
                 self.cpset.add_tree_to_features(indi)
 
     def re_fresh_by_name(self, *arr):
-        re_name = ["mutate", "genGrow", "genFull"]
+        re_name = ["mutate", "genGrow", "genFull", "genHalf"]
         if len(arr) > 0:
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
 
-    def top_n(self, n=10, gen=-1, key="value", filter_dim=True,ascending=False):
+    def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
         import pandas as pd
         data = self.data_all
         data = pd.DataFrame(data)
@@ -340,7 +343,7 @@ class BaseLoop(Toolbox):
         # 1.generate###################################################################
         if warm_start is False:
             random.seed(self.random_state)
-            population = [self.PTree(self.genFull()) for _ in range(self.pop)]
+            population = [self.PTree(self.genHalf()) for _ in range(self.pop)]
             gen_i = 0
             gen = self.gen
         else:
@@ -448,6 +451,8 @@ class MultiMutateLoop(BaseLoop):
 
         self.register("mutate3", mutDifferentReplacementVerbose, pset=self.cpset, personal_map=self.personal_map)
 
+        self.mutpb_list = [0.2, 0.4, 0.2, 0.2]
+
     def varAnd(self, population, toolbox, cxpb, mutpb):
         names = self.__dict__.keys()
         import re
@@ -462,7 +467,7 @@ class MultiMutateLoop(BaseLoop):
 
         fus = [getattr(self, i) for i in att_name]
 
-        off = varAndfus(population, toolbox, cxpb, mutpb, fus)
+        off = varAndfus(population, toolbox, cxpb, mutpb, fus, self.mutpb_list)
 
         return off
 
