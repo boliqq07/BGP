@@ -257,9 +257,9 @@ def staticLimit(key, max_value):
             new_inds = list(func(*args, **kwargs))
             for i, ind in enumerate(new_inds):
 
-                if key(ind) == key(keep_inds[i]):
-                    pass
-                elif key(ind) > max_value:
+                # if key(ind) == key(keep_inds[i]): I just forget why to add this?
+                #     pass
+                if key(ind) > max_value:
                     new_inds[i] = keep_inds[random.choice(len(keep_inds))]
 
             return new_inds

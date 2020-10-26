@@ -311,6 +311,8 @@ class BaseLoop(Toolbox):
         if len(arr) > 0:
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
+        for i in re_name+["mate"]:  # don‘t del this
+            self.decorate(i, staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value + 1)))
 
     def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
         import pandas as pd
@@ -451,7 +453,7 @@ class MultiMutateLoop(BaseLoop):
 
         self.register("mutate3", mutDifferentReplacementVerbose, pset=self.cpset, personal_map=self.personal_map)
 
-        self.mutpb_list = [0.2, 0.4, 0.2, 0.2]
+        self.mutpb_list = [0.2, 0.3, 0.3, 0.2]
 
     def varAnd(self, population, toolbox, cxpb, mutpb):
         names = self.__dict__.keys()
