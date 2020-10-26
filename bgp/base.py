@@ -21,6 +21,7 @@ from mgetool.tool import parallelize
 from sklearn.metrics import r2_score
 from sklearn.utils import check_X_y, check_array
 
+from bgp.calculation.coefficient import try_add_coef_times
 from bgp.calculation.scores import calcualte_dim_score, compile_context, calculate_cv_score, score_collection, \
     calculate_collect_
 from bgp.calculation.translate import group_str
@@ -1363,6 +1364,13 @@ class CalculatePrecisionSet(SymbolSet):
         else:
             self.replace(X, y=y)
 
+    def compile_context(self, ind):
+        if isinstance(ind, SymbolTree):
+            expr = compile_context(ind.capsule, self.context, self.gro_ter_con)
+        else:
+            expr = compile_context(ind, self.context, self.gro_ter_con)
+        return expr
+
     def calculate_cv_score(self, ind):
         """Haven't been used, just used for calculating single one or check."""
         if isinstance(ind, SymbolTree):
@@ -1518,6 +1526,40 @@ class CalculatePrecisionSet(SymbolSet):
                                      tq=self.tq, batch_size=self.batch_size)
         # (sc_all, expr01, pre_y)
         return score_dim_list
+
+    def try_add_coef_times(self, expr, grid_x=None):
+
+        pre_y_all_expr01 = try_add_coef_times(expr, self.data_x, self.y, self.terminals_and_constants_repr, grid_x,
+                                               filter_warning=self.filter_warning, inter_add=self.inter_add,
+                                               inner_add=self.inner_add, vector_add=self.vector_add,
+                                               out_add=self.out_add,
+                                               flat_add=self.flat_add,
+                                               np_maps=self.np_map, classification=self.classification,
+                                               random_state=0,
+                                               return_expr=False
+                                               )
+
+        return pre_y_all_expr01
+
+    def parallelize_try_add_coef_times(self, exprs, grid_x=None):
+        if isinstance(grid_x, np.ndarray):
+            grid_x = list(grid_x.T)
+        calls = functools.partial(try_add_coef_times, x=self.data_x, y=self.y,
+                                  terminals=self.terminals_and_constants_repr,
+                                  grid_x=grid_x,
+                                  filter_warning=self.filter_warning, inter_add=self.inter_add,
+                                  inner_add=self.inner_add, vector_add=self.vector_add,
+                                  out_add=self.out_add,
+                                  flat_add=self.flat_add,
+                                  np_maps=self.np_map, classification=self.classification,
+                                  random_state=0,
+                                  return_expr=False
+                                  )
+
+        pre_y_all_list = parallelize(func=calls, iterable=exprs, n_jobs=1, respective=False,
+                                     tq=self.tq)
+
+        return pre_y_all_list
 
     def parallelize_score(self, inds):
         """

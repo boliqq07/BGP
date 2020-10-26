@@ -103,6 +103,15 @@ class DoublePendulum(object):
         self.init_status = track[-1, :].copy()  # 将最后的状态赋给pendulum
         return x1, y1, x2, y2, th1_array, th2_array, dth1_array, dth2_array
 
+    def odeint_x(self, th1_array, th2_array):
+
+        l1, l2 = self.l1, self.l2
+        x1 = l1 * np.sin(th1_array)
+        y1 = -l1 * np.cos(th1_array)
+        x2 = x1 + l2 * np.sin(th2_array)
+        y2 = y1 - l2 * np.cos(th2_array)
+        return x1, y1, x2, y2, th1_array, th2_array
+
 
 if __name__ == "__main__":
     pendulum = DoublePendulum(1.0, 2.0, 1.0, 2.0, 0, 0, 1, 2)

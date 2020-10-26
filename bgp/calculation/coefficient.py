@@ -8,6 +8,7 @@ from collections import Counter
 import numpy as np
 import sympy
 from scipy import optimize
+from sklearn.utils import resample
 from sympy import Function
 from sympy.core.function import UndefinedFunction
 from sympy.core.numbers import NegativeOne
@@ -470,7 +471,7 @@ def cla(pre_y, cl=True):
     return pre_y
 
 
-def try_add_coef(expr01, x, y, terminals,
+def try_add_coef(expr01, x, y, terminals, grid_x=None,
                  filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
                  np_maps=None, classification=False):
     """
@@ -490,6 +491,9 @@ def try_add_coef(expr01, x, y, terminals,
         list of xi
     y: np.ndarray
         y value
+
+    grid_x:
+        new x to predict
     terminals: list of sympy.Symbol
         features and constants
     filter_warning: bool
@@ -559,7 +563,11 @@ def try_add_coef(expr01, x, y, terminals,
         cof = result.x
 
         cof = cc.group(cof)
-        pre_y = func0(*x + cof)
+
+        if grid_x is None:
+            grid_x=x
+
+        pre_y = func0(*grid_x + cof)
         if classification:
             pre_y = cla(pre_y, cl=True)
         cof = cc.dec(cof)
@@ -586,14 +594,15 @@ def try_add_coef(expr01, x, y, terminals,
     return pre_y, expr01
 
 
-def try_add_coef_times(expr01, x, y, terminals,
+def try_add_coef_times(expr01, x, y, terminals, grid_x=None,
                        filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False,
                        flat_add=False,
                        np_maps=None, classification=False, random_state=0, return_expr=False):
     if filter_warning:
         warnings.filterwarnings("ignore")
 
-    # expr00 = copy.deepcopy(expr01)
+    if grid_x is None:
+        grid_x = x
 
     expr01, a_list, a_dict = add_coefficient(expr01, inter_add=inter_add, inner_add=inner_add, vector_add=vector_add,
                                              out_add=out_add, flat_add=flat_add)
@@ -629,63 +638,67 @@ def try_add_coef_times(expr01, x, y, terminals,
 
         return ress
 
-    if not classification:
-        result = optimize.least_squares(res, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,
-                                        # long
-                                        jac='3-point', loss='linear')
-    else:
-        result = optimize.least_squares(res2, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-5, gtol=1e-5,
-                                        # long
-                                        jac='3-point', loss='linear')
-    cof = result.x
-
-    l = len(cof)
     pre_y_all = []
     expr_all = []
-    for times in range(1000):
-        from numpy import random
-        random.seed(random_state)
+    for times in range(500):
+        *x, y = resample(*x,  y, replace=True, random_state=times)
 
-        ranss = np.random.random((l,))
-        cof = [cofi * ((ranss - 1) * 0.01 + 1) for cofi in cof]
+        if not classification:
+            result = optimize.least_squares(res, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-4, gtol=1e-4,
+                                            # max_nfev=200,
+                                            jac='3-point', loss='linear')
+        else:
+            result = optimize.least_squares(res2, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-4, gtol=1e-4,
+                                            # max_nfev=200,
+                                            jac='3-point', loss='linear')
+        cof = result.x
         cof = cc.group(cof)
 
         try:
 
-            pre_y = func0(*x + cof)
+            pre_y = func0(*grid_x + cof)
 
             if classification:
                 pre_y = cla(pre_y, cl=True)
 
+                expr00 = expr01
             if return_expr:
+
+                expr00 = copy.deepcopy(expr01)
+
                 cof = cc.dec(cof)
                 for ai, choi in zip(cc.name, cof):
                     if ai in cc.cof_dict_keys:
 
                         fun = Coef(ai.name, choi)
                         # replace the Vi to Vi()
-                        olds0 = find_args(expr01, ai)
+                        olds0 = find_args(expr00, ai)
                         if olds0 is None:
                             raise KeyError("0*wi is 0,and make the placeholder fade out")
                         olds = [old for old in olds0 if old is not ai]
                         olds = sympy.Mul(*olds)
-                        expr01 = expr01.xreplace({sympy.Mul(ai, olds): fun(olds)})
+                        expr00 = expr00.xreplace({sympy.Mul(ai, olds): fun(olds)})
                     else:
-                        expr01 = expr01.xreplace({ai: choi})
+                        expr00 = expr00.xreplace({ai: choi})
             else:
                 pass
 
         except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError):
+
             pre_y = None
 
         if isinstance(pre_y, np.ndarray):
-            if pre_y.shape == y.shape:
-                if np.all(np.isfinite(pre_y)):
-                    pre_y_all.append(pre_y)
 
-                    if return_expr:
-                        expr_all.append(expr01)
+            if np.all(np.isfinite(pre_y)):
+                pre_y_all.append(pre_y)
+
+                if return_expr:
+                    expr_all.append(expr00)
 
     pre_y_all = np.array(pre_y_all)
 
-    return pre_y_all, expr01
+    if return_expr:
+        return pre_y_all, expr_all
+    else:
+
+        return pre_y_all
