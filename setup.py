@@ -28,6 +28,7 @@ setup(
     author='wangchangxin',
     author_email='986798607@qq.com',
     python_requires='>=3.6',
+    url='https://github.com/boliqq07/bgp',
     maintainer='wangchangxin',
     platforms=[
         "Windows",
