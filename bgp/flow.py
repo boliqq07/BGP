@@ -447,7 +447,7 @@ class MultiMutateLoop(BaseLoop):
         self.register("mutate0", mutNodeReplacementVerbose, pset=self.cpset, personal_map=self.personal_map)
 
         self.register("mutate1", mutUniform, expr=self.gen_mu, pset=self.cpset)
-        self.decorate("mutate1", staticLimit(key=operator.attrgetter("height"), max_value=2 * self.max_value))
+        self.decorate("mutate1", staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value+1)))
 
         self.register("mutate2", mutShrink, pset=self.cpset)
 
