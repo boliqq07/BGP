@@ -453,7 +453,7 @@ class MultiMutateLoop(BaseLoop):
 
         self.register("mutate3", mutDifferentReplacementVerbose, pset=self.cpset, personal_map=self.personal_map)
 
-        self.mutpb_list = [0.2, 0.3, 0.3, 0.2]
+        self.mutpb_list = [0.1, 0.5, 0.2, 0.2]
 
     def varAnd(self, population, toolbox, cxpb, mutpb):
         names = self.__dict__.keys()

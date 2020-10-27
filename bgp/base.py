@@ -1149,11 +1149,17 @@ class _ExprTree(list):
 
     def top(self):
         """accumulative operation"""
-        return self[1::2]
+        return self[::2]
 
     def bot(self):
         """operation and terminals"""
-        return self[::2]
+        return self[1::2]
+
+    def cut(self, index=2):
+        slice_ = self.searchSubtree(index)
+        new_inds = self[slice_]
+        self.clear()
+        self.extend(new_inds)
 
 
 class SymbolTree(_ExprTree):
@@ -1541,7 +1547,7 @@ class CalculatePrecisionSet(SymbolSet):
 
         return pre_y_all_expr01
 
-    def parallelize_try_add_coef_times(self, exprs, grid_x=None):
+    def parallelize_try_add_coef_times(self, exprs, grid_x=None,resample_number=500):
         if isinstance(grid_x, np.ndarray):
             grid_x = list(grid_x.T)
         calls = functools.partial(try_add_coef_times, x=self.data_x, y=self.y,
@@ -1553,7 +1559,8 @@ class CalculatePrecisionSet(SymbolSet):
                                   flat_add=self.flat_add,
                                   np_maps=self.np_map, classification=self.classification,
                                   random_state=0,
-                                  return_expr=False
+                                  return_expr=False,
+                                  resample_number=resample_number,
                                   )
 
         pre_y_all_list = parallelize(func=calls, iterable=exprs, n_jobs=1, respective=False,

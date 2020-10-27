@@ -1,59 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
 # @Time    : 2020/10/4 19:30
 # @Email   : 986798607@qq.com
 # @Software: PyCharm
 # @License: BSD 3-Clause
-import featurebox
-from mgetool.exports import Store
-from mgetool.imports import Call
-from numpy import random
 from scipy import stats
-from sklearn.metrics import r2_score
-import numpy as np
-from bgp.skflow import SymbolLearning
-
-
-def get_max_sd(grid_x, curves, n=1):
-    stdd = np.std(curves, axis=0)
-    meann = np.mean(curves, axis=0)
-    top = np.argmax(stdd)
-    return grid_x[top], meann[top]
-
-
-def get_max_std(grid_x, curves, n=1):
-    new_xs = []
-    new_ys = []
-    for i in curves:
-        new_x, new_y = _get_max_stdi(grid_x, i, n=n)
-        new_xs.append(new_x)
-        new_ys.append(new_y)
-
-    new_xs = np.array(new_xs)
-    new_ys = np.array(new_xs)
-    return new_xs, new_ys
-
-
-def _get_max_stdi(grid_x, curve, n=1):
-    stdd = np.std(curve, axis=0)
-    meann = np.mean(curve, axis=0)
-    top = np.argmax(stdd)
-    return grid_x[top], meann[top]
-
-
-def new_points(loop, grid_x, method="get_max_std"):
-
-    methods = {"get_max_std": get_max_std,}
-    method = methods[method]
-    self = loop.cpset
-    data = loop.top_n(10)
-
-    exprs = [self.compile_context(i) for i in data.iloc[:, 1]]
-    pre_y_all_list = self.parallelize_try_add_coef_times(exprs, grid_x=grid_x)
-
-    new_xs, new_ys = method(grid_x, pre_y_all_list)
-
-    return new_xs, new_ys
 
 
 def search_space(*arg):
@@ -61,6 +13,53 @@ def search_space(*arg):
     meshes = [_.ravel() for _ in meshes]
     meshes = np.array(meshes).T
     return meshes
+
+
+def get_max_std(grid_x, curves, n=1):
+    new_xs = []
+    new_ys = []
+    stdd_list = []
+    for curve in curves:
+        stdd = np.std(curve, axis=0)
+        meann = np.mean(curve, axis=0)
+        top = np.argmax(stdd)
+
+        new_x, new_y = grid_x[top], meann[top]
+        new_xs.append(new_x)
+        new_ys.append(new_y)
+        stdd_list.append(stdd[top])
+
+    stdd_list = np.array(stdd_list)
+    stdd_list = stdd_list.argsort()
+    top_n = list(stdd_list[:n])
+    new_xs = np.array([new_xs[top_i] for top_i in top_n])
+    new_ys = np.array([new_ys[top_i] for top_i in top_n])
+
+    return new_xs, new_ys
+
+
+def get_max_diff(grid_x, curves, n=1):
+    meann = [np.mean(curve, axis=0) for curve in curves]
+    meann = np.array(meann)
+    stdd = np.std(meann, axis=0)
+    temp = np.argpartition(-stdd, n)
+    top_n = temp[:n]
+
+    return grid_x[top_n, :], meann[:, top_n]
+
+
+def new_points(loop, grid_x, method="get_max_std", resample_number=500, n=1):
+    methods = {"get_max_std": get_max_std, "get_max_diff": get_max_diff}
+    method = methods[method]
+    self = loop.cpset
+    data = loop.top_n(10)
+
+    exprs = [self.compile_context(i) for i in data.iloc[:, 1]]
+    pre_y_all_list = self.parallelize_try_add_coef_times(exprs, grid_x=grid_x, resample_number=resample_number)
+
+    new_xs, new_ys = method(grid_x, pre_y_all_list, n=n)
+
+    return new_xs, new_ys
 
 
 def meanandstd(predict_dataj):
@@ -80,4 +79,3 @@ def CalculateEi(y, meanstd0):
     ei = np.column_stack((meanstd0, ei_ego, ei_kg, max_P))
     print('ego is done')
     return ei
-

@@ -38,9 +38,9 @@ def checkss(func):
         result = func(*args, **kwargs)
 
         pset = kwargs["pset"]
-        for i in result[0].bot():
-            assert i in pset.dispose
         for i in result[0].top():
+            assert i in pset.dispose
+        for i in result[0].bot():
             assert i in pset.primitives + pset.terminals_and_constants
 
         return result
@@ -257,10 +257,10 @@ def staticLimit(key, max_value):
             new_inds = list(func(*args, **kwargs))
             for i, ind in enumerate(new_inds):
 
-                # if key(ind) == key(keep_inds[i]): I just forget why to add this?
-                #     pass
                 if key(ind) > max_value:
                     new_inds[i] = keep_inds[random.choice(len(keep_inds))]
+                if key(new_inds[i]) > max_value:
+                    new_inds[i].cut()
 
             return new_inds
 
@@ -307,7 +307,7 @@ def mutShrink(individual, pset=None):
     """
     _ = pset
     # We don't want to "shrink" the root
-    if len(individual) < 4 or individual.height <= 4:
+    if len(individual) < 4 or individual.height < 4:
         return individual,
 
     index = random.randint(0, len(individual))

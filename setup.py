@@ -17,7 +17,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
 
     name='BindingGP',
-    version='0.0.17',
+    version='0.0.19',
     keywords=['symbolic regression'],
     description='This is for symbolic regression.'
                 'Some of code are non-originality, just copy for use. All the referenced code are marked,'
@@ -28,7 +28,6 @@ setup(
     author='wangchangxin',
     author_email='986798607@qq.com',
     python_requires='>=3.6',
-    url='https://github.com/boliqq07/gvp',
     maintainer='wangchangxin',
     platforms=[
         "Windows",
