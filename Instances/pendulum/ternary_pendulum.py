@@ -182,7 +182,6 @@ class TernaryPendulum(object):
         return x1, y1, x2, y2, x3, y3, th1_array, th2_array, th3_array, dth1_array, dth2_array, dth3_array
 
     def odeint_x(self, th1_array, th2_array, th3_array):
-
         l1, l2, l3, = self.l1, self.l2, self.l3
         x1 = l1 * np.sin(th1_array)
         y1 = -l1 * np.cos(th1_array)

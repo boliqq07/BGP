@@ -1536,18 +1536,18 @@ class CalculatePrecisionSet(SymbolSet):
     def try_add_coef_times(self, expr, grid_x=None):
 
         pre_y_all_expr01 = try_add_coef_times(expr, self.data_x, self.y, self.terminals_and_constants_repr, grid_x,
-                                               filter_warning=self.filter_warning, inter_add=self.inter_add,
-                                               inner_add=self.inner_add, vector_add=self.vector_add,
-                                               out_add=self.out_add,
-                                               flat_add=self.flat_add,
-                                               np_maps=self.np_map, classification=self.classification,
-                                               random_state=0,
-                                               return_expr=False
-                                               )
+                                              filter_warning=self.filter_warning, inter_add=self.inter_add,
+                                              inner_add=self.inner_add, vector_add=self.vector_add,
+                                              out_add=self.out_add,
+                                              flat_add=self.flat_add,
+                                              np_maps=self.np_map, classification=self.classification,
+                                              random_state=0,
+                                              return_expr=False
+                                              )
 
         return pre_y_all_expr01
 
-    def parallelize_try_add_coef_times(self, exprs, grid_x=None,resample_number=500):
+    def parallelize_try_add_coef_times(self, exprs, grid_x=None, resample_number=500):
         if isinstance(grid_x, np.ndarray):
             grid_x = list(grid_x.T)
         calls = functools.partial(try_add_coef_times, x=self.data_x, y=self.y,

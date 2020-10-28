@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     sl.fit(x, y, power_categories=(2, 3, 0.5, 0.333),
            categories=("Add", "Sub", "sin", "cos", "Self"), )
-    for _ in range(10):
+    for _ in range(2):
         xx = search_space(np.arange(0, 1, 0.1), np.arange(0, 1, 0.01), np.arange(0, 1, 0.01), )
         x1, y1, x2, y2, x3, y3, th1_array, th2_array, th3_array = tpen.odeint_x(*xx.T)
         xx = np.vstack((xx[:, 0], xx[:, 1], xx[:, 2], y1, y2, y3)).T

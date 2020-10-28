@@ -87,7 +87,7 @@ if __name__ == "__main__":
     r2_cv = sl.cv_result(refit=False)
     print("r:{},error:{},r2:{},MAE:{},r2_cv:{}".format(r, error, r2, mae, r2_cv[0]))
 
-    data = sl.loop.top_n(20,ascending=True)
+    data = sl.loop.top_n(20, ascending=True)
     st.end()
     st.to_csv(data, file_new_name="top_n")
 

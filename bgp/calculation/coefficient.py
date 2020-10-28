@@ -565,7 +565,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
         cof = cc.group(cof)
 
         if grid_x is None:
-            grid_x=x
+            grid_x = x
 
         pre_y = func0(*grid_x + cof)
         if classification:
@@ -598,7 +598,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
 def try_add_coef_times(expr01, x, y, terminals, grid_x=None,
                        filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False,
                        flat_add=False,
-                       np_maps=None, classification=False, random_state=0, return_expr=False,resample_number=500):
+                       np_maps=None, classification=False, random_state=0, return_expr=False, resample_number=500):
     if filter_warning:
         warnings.filterwarnings("ignore")
 
@@ -642,7 +642,7 @@ def try_add_coef_times(expr01, x, y, terminals, grid_x=None,
     pre_y_all = []
     expr_all = []
     for times in range(resample_number):
-        *x, y = resample(*x,  y, replace=True, random_state=times)
+        *x, y = resample(*x, y, replace=True, random_state=times)
 
         if not classification:
             result = optimize.least_squares(res, x0=[1.0] * cc.num, args=(x, y), xtol=1e-4, ftol=1e-4, gtol=1e-4,

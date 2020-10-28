@@ -182,6 +182,7 @@ class BaseLoop(Toolbox):
         self.rand_state = None
         self.random_state = random_state
         self.sub_mu_max = sub_mu_max
+        self.population_next = []
 
         self.cpset = CalculatePrecisionSet(pset, scoring=scoring, score_pen=score_pen,
                                            filter_warning=filter_warning, cal_dim=cal_dim,
@@ -311,7 +312,7 @@ class BaseLoop(Toolbox):
         if len(arr) > 0:
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
-        for i in re_name+["mate"]:  # don‘t del this
+        for i in re_name + ["mate"]:  # don‘t del this
             self.decorate(i, staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value + 1)))
 
     def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
@@ -341,6 +342,17 @@ class BaseLoop(Toolbox):
 
         return data
 
+    def check_height(self, pop):
+        old = len(pop)
+        pop = [i for i in pop if i.height <= 2 * (self.max_value + 1)]
+        new = len(pop)
+        if old == new:
+            pass
+        else:
+            index = random.randint(0, new, old - new)
+            pop.extend([pop[i] for i in index])
+        return pop
+
     def run(self, warm_start=False, new_gen=None):
         # 1.generate###################################################################
         if warm_start is False:
@@ -349,9 +361,9 @@ class BaseLoop(Toolbox):
             gen_i = 0
             gen = self.gen
         else:
-            assert self.population != []
+            assert self.population_next != []
             random.set_state(self.rand_state)
-            population = self.population
+            population = self.population_next
             gen_i = self.gen_i
             self.re_fresh_by_name()
             if new_gen:
@@ -391,6 +403,8 @@ class BaseLoop(Toolbox):
                           "dim_score": pop_i.dim_score} for pop_i in population]
                 self.data_all.extend(datas)
 
+            self.population = copy.deepcopy(population)
+
             # 3.3.log-hall###############################
             inds_dim = self.maintain_halls(population)
 
@@ -405,6 +419,8 @@ class BaseLoop(Toolbox):
 
             self.re_fresh_by_name()
 
+            self.population = copy.deepcopy(population)
+
             # 6.next generation ！！！！#######################################################
             # selection and mutate,mate,migration
             population = self.select(population, int((1 - self.migrate_prob) * len(population)) - len(inds_dim))
@@ -415,6 +431,8 @@ class BaseLoop(Toolbox):
             migrate_pop = [self.PTree(self.genFull()) for _ in range(int(self.migrate_prob * len(population)))]
             population[:] = offspring + migrate_pop
 
+            population = self.check_height(population)
+
             # 5.break#######################################################
             if self.stop_condition is not None:
                 if self.stop_condition(self.hall.items[0]):
@@ -423,7 +441,7 @@ class BaseLoop(Toolbox):
             # 7 freeze ###################################################
 
             self.rand_state = random.get_state()
-            self.population = population
+            self.population_next = population
             self.gen_i = gen_i
 
         # final.store#####################################################################
@@ -447,7 +465,7 @@ class MultiMutateLoop(BaseLoop):
         self.register("mutate0", mutNodeReplacementVerbose, pset=self.cpset, personal_map=self.personal_map)
 
         self.register("mutate1", mutUniform, expr=self.gen_mu, pset=self.cpset)
-        self.decorate("mutate1", staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value+1)))
+        self.decorate("mutate1", staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value + 1)))
 
         self.register("mutate2", mutShrink, pset=self.cpset)
 
