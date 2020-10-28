@@ -16,6 +16,7 @@ from deap.tools import HallOfFame, Logbook
 from mgetool import newclass
 from mgetool.exports import Store
 from mgetool.packbox import Toolbox
+from mgetool.tool import tt
 from numpy import random
 from sklearn.datasets import load_boston
 from sklearn.metrics import r2_score
@@ -312,8 +313,8 @@ class BaseLoop(Toolbox):
         if len(arr) > 0:
             re_name.extend(arr)
         self.refresh(re_name, pset=self.cpset)
-        for i in re_name + ["mate"]:  # don‘t del this
-            self.decorate(i, staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value + 1)))
+        # for i in re_name + ["mate"]:  # don‘t del this
+        #     self.decorate(i, staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value + 1)))
 
     def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
         import pandas as pd
@@ -342,13 +343,16 @@ class BaseLoop(Toolbox):
 
         return data
 
-    def check_height(self, pop):
+    def check_height(self, pop, site=""):
         old = len(pop)
         pop = [i for i in pop if i.height <= 2 * (self.max_value + 1)]
         new = len(pop)
         if old == new:
             pass
         else:
+            if site != "":
+                print(site)
+            # raise TypeError
             index = random.randint(0, new, old - new)
             pop.extend([pop[i] for i in index])
         return pop
@@ -379,6 +383,7 @@ class BaseLoop(Toolbox):
 
             invalid_ind_score = self.cpset.parallelize_score(population_old)
 
+
             for ind, score in zip(population_old, invalid_ind_score):
                 ind.fitness.values = tuple(score[0])
                 ind.y_dim = score[1]
@@ -386,7 +391,6 @@ class BaseLoop(Toolbox):
                 ind.coef_expr = score[3]
                 ind.coef_pre_y = score[4]
             population = population_old
-
             # 3.log###################################################################
             # 3.1.log-print##############################
 
@@ -394,7 +398,6 @@ class BaseLoop(Toolbox):
             self.logbook.record(gen=gen_i, **record)
             if self.verbose:
                 print(self.logbook.stream)
-
             # 3.2.log-store##############################
             if self.store:
                 datas = [{"gen": gen_i, "name": str(pop_i), "expr": str([pop_i.coef_expr]),
@@ -419,14 +422,11 @@ class BaseLoop(Toolbox):
 
             self.re_fresh_by_name()
 
-            self.population = copy.deepcopy(population)
-
             # 6.next generation ！！！！#######################################################
             # selection and mutate,mate,migration
             population = self.select(population, int((1 - self.migrate_prob) * len(population)) - len(inds_dim))
 
             offspring = self.varAnd(population, self, self.mate_prob, self.mutate_prob)
-
             offspring.extend(inds_dim)
             migrate_pop = [self.PTree(self.genFull()) for _ in range(int(self.migrate_prob * len(population)))]
             population[:] = offspring + migrate_pop
@@ -563,15 +563,17 @@ if __name__ == "__main__":
                          categories=("Add", "Mul", "Sub", "Div", "exp", "Abs"))
 
     # a = time.time()
-    bl = MultiMutateLoop(pset=pset0, gen=20, pop=100, hall=2, batch_size=40, re_hall=2,
-                         n_jobs=1, mate_prob=1, max_value=10, initial_max=3,
+
+    bl = MultiMutateLoop(pset=pset0, gen=20, pop=2000, hall=2, batch_size=60, re_hall=2,
+                         n_jobs=1, mate_prob=1, max_value=3, initial_max=1, initial_min=1,
                          mutate_prob=0.8, tq=True, dim_type="coef",
-                         re_Tree=2, store=False, random_state=2,
-                         stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "height": ["mean"]},
-                         add_coef=False, cal_dim=False, inner_add=False, vector_add=True, personal_map=False)
+                         re_Tree=None, store=False, random_state=2,
+                         stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_bgp": ["max"]},
+                         add_coef=True, cal_dim=False, inner_add=False, vector_add=True, personal_map=False)
     # b = time.time()
     bl.run()
     bl.run(warm_start=True)
+
     # population = [bl.PTree(bl.genFull()) for _ in range(30)]
     # pset = bl.cpset
     # for i in population:

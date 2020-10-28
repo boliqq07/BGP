@@ -259,9 +259,6 @@ def staticLimit(key, max_value):
 
                 if key(ind) > max_value:
                     new_inds[i] = keep_inds[random.choice(len(keep_inds))]
-                if key(new_inds[i]) > max_value:
-                    new_inds[i].cut()
-
             return new_inds
 
         return wrapper
@@ -286,12 +283,15 @@ def mutUniform(individual, expr, pset):
     :returns: A tuple of one tree.
 
     """
+    individual = copy.copy(individual)
+
     index = random.choice(len(individual))
     if index % 2 == 1:
         index -= 1
     slice_ = individual.searchSubtree(index)
 
     individual[slice_] = expr(pset=pset)
+
     return individual,
 
 
@@ -310,6 +310,7 @@ def mutShrink(individual, pset=None):
     if len(individual) < 4 or individual.height < 4:
         return individual,
 
+    individual = copy.copy(individual)
     index = random.randint(0, len(individual))
 
     if index % 2 == 1:
@@ -323,7 +324,6 @@ def mutShrink(individual, pset=None):
     del individual[slice_]
     individual.insert(index, left)
     individual.insert(index, hat)
-
     return individual,
 
 
@@ -345,6 +345,7 @@ def mutNodeReplacementVerbose(individual, pset, personal_map=False):
     if len(individual) < 4:
         return individual,
 
+    individual = copy.copy(individual)
     if pset.types > 1:
         if random.random() <= 0.8:
             index = random.choice(np.arange(1, len(individual), step=2))
@@ -404,8 +405,11 @@ def mutDifferentReplacementVerbose(individual, pset, personal_map=False):
 
     :returns: A tuple of one tree.
     """
+
     if len(individual) < 4:
         return individual,
+
+    individual = copy.copy(individual)
     ters = [repr(i) for i in individual.terminals()]
     pset_ters = [repr(i) for i in pset.terminals_and_constants]
     cou = Counter(ters)
@@ -725,6 +729,7 @@ def varAndfus(population, toolbox, cxpb, mutpb, fus, mutpb_list=1.0):
             offspring[i - 1], offspring[i] = toolbox.mate(offspring[i - 1],
                                                           offspring[i])
             del offspring[i - 1].fitness.values, offspring[i].fitness.values
+
     if isinstance(mutpb_list, float) or mutpb_list is None:
 
         mutpb /= len(fus)
@@ -737,11 +742,16 @@ def varAndfus(population, toolbox, cxpb, mutpb, fus, mutpb_list=1.0):
     else:
         assert len(fus) == len(mutpb_list)
         mutpb_list = [i * mutpb for i in mutpb_list]
+
         for j, m in zip(fus, mutpb_list):
-            for i in range(len(offspring)):
+            for n, i in enumerate(offspring):
+
                 if random.random() < m:
-                    # print(random.random(), i)
-                    offspring[i], = j(offspring[i])
-                    del offspring[i].fitness.values
+                    k, = j(i)
+                else:
+                    k = i
+
+                del k.fitness.values
+                offspring[n] = k
 
     return offspring

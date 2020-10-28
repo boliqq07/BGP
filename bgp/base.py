@@ -1033,7 +1033,6 @@ class _ExprTree(list):
     """
     Tree of expression
     """
-    hasher = repr
 
     def __init__(self, content):
         list.__init__(self, content)
@@ -1141,12 +1140,6 @@ class _ExprTree(list):
             end += 1
         return slice(begin, end)
 
-    def __hash__(self):
-        return hash(repr(self))
-
-    def __eq__(self, other):
-        return hash(self) == hash(other)
-
     def top(self):
         """accumulative operation"""
         return self[::2]
@@ -1192,7 +1185,10 @@ class SymbolTree(_ExprTree):
         return _ExprTree.__str__(self)
 
     def __hash__(self):
-        return hash(self.hasher(self))
+        return hash(tuple(self))
+
+    def __eq__(self, other):
+        return repr(self) == repr(other)
 
     def compress(self):
 

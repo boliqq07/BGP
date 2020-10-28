@@ -7,6 +7,7 @@
 
 from mgetool.exports import Store
 from mgetool.imports import Call
+from mgetool.tool import tt
 from numpy import random
 from sklearn.metrics import r2_score
 
@@ -42,19 +43,19 @@ if __name__ == "__main__":
         return c
 
 
-    sl = SymbolLearning(loop='MultiMutateLoop', pop=500, gen=10, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=1,
+    sl = SymbolLearning(loop='MultiMutateLoop', pop=1000, gen=10, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=1,
                         re_Tree=None, initial_min=1, initial_max=2, max_value=3,
                         scoring=(r2_score,), score_pen=(1,), filter_warning=True, cv=1,
-                        add_coef=True, inter_add=False, inner_add=False, vector_add=False, out_add=True,
+                        add_coef=False, inter_add=False, inner_add=False, vector_add=False, out_add=True,
                         flat_add=False,
-                        cal_dim=False, dim_type=None, fuzzy=False, n_jobs=6, batch_size=40,
-                        random_state=4, store=True,
-                        stats={"h_bgp": ("mean",), "fitness": ("max",)},
+                        cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
+                        random_state=1, store=True,
+                        stats={"h_bgp": ("max",), "fitness": ("max",)},
                         verbose=True, migrate_prob=0,
                         tq=True, personal_map="auto", stop_condition=func, details=False,
                         classification=False,
                         score_object="y", sub_mu_max=1)
-
+    tt.t
     sl.fit(x, y, power_categories=(2, 3, 0.5, 0.333),
            categories=("Add", "Sub", "sin", "cos", "Self"), )
     for _ in range(2):
@@ -75,3 +76,5 @@ if __name__ == "__main__":
                categories=("Add", "Sub", "sin", "cos", "Self"), warm_start=True)
 
         datas = sl.loop.top_n(10)
+    tt.t
+    tt.p
