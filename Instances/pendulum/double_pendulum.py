@@ -10,7 +10,11 @@
 from math import sin, cos
 
 import numpy as np
+import sympy
+from bgp.calculation.scores import calculate_score
 from scipy.integrate import odeint
+
+from bgp.base import SymbolSet, CalculatePrecisionSet
 
 g = 9.8
 
@@ -116,4 +120,30 @@ if __name__ == "__main__":
     pendulum = DoublePendulum(1.0, 2.0, 1.0, 2.0, 0, 0, 1, 2)
     ########初始角度theta1=1 theta2=2 这里的单位为弧度
     #####定义初始条件，这里认为初始两个球的角速度为零，时间60秒，步长0.02
-    x1, y1, x2, y2, th1_array, th2_array, v1_array, v2_array = pendulum.odeint(0, 60, 0.2)
+    _,_,_, y2, th1_array, th2_array, v1_array, v2_array = pendulum.odeint(0, 60, 0.2)
+
+    x=np.vstack((th1_array, th2_array, y2)).T
+
+    pset = SymbolSet()
+
+    pset.add_features(x, y2)
+    pset.add_operations(
+        categories=("Add", "Mul", "Self", "Abs"),
+        self_categories=None)
+    #
+    from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
+
+    cp = CalculatePrecisionSet(pset, scoring=[r2_score, mean_squared_error],
+                               score_pen=[1, -1],
+                               filter_warning=True)
+
+    x0, x1, x2 = sympy.symbols("x0, x1, x2")
+    expr01 = x2 -(- 1 * sympy.cos(x0) - 2 * sympy.cos(x1))-x2
+
+    func0 = sympy.utilities.lambdify(cp.terminals_and_constants_repr, expr01, modules=[cp.np_map, "numpy"])
+    pre_y = func0(*x.T)
+
+    score = calculate_score(expr01, x.T, y2, cp.terminals_and_constants_repr, scoring=[mean_absolute_error],score_pen=(-1,),
+                    add_coef=False, filter_warning=True, inter_add=True,
+                    inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=cp.np_map,
+                    classification=False, score_object="dy", details=False)

@@ -22,6 +22,7 @@ from sklearn.exceptions import DataConversionWarning
 from sklearn.metrics import r2_score
 from sklearn.model_selection import KFold
 from sklearn.utils import check_array
+from sympy import Function
 
 from bgp.calculation.coefficient import try_add_coef, cla
 from bgp.calculation.translate import compile_context
@@ -151,6 +152,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
                                 filter_warning=filter_warning, inter_add=inter_add, inner_add=inner_add,
                                 vector_add=vector_add, out_add=out_add, flat_add=flat_add,
                                 np_maps=np_maps, classification=classification)
+
     if score_object == "y" or classification is True:
         try:
             sc_all = []
@@ -174,12 +176,15 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
             try:
                 sc_all = []
                 for si, sp in zip(scoring, score_pen):
-                    sc = [si(i, j) for i, j in zip(dy, pre_dy)]
+                    sc =[]
+                    for i, j in zip(dy, pre_dy):
+                        index = np.isfinite(i)*np.isfinite(j)
+                        sci = si(i[index], j[index])
+                        sc.append(sci)
                     sc = [uniform_score(score_pen=sp) if np.isnan(i) or i is None else i for i in sc]
-                    sc = min(sc)
+                    sc = sum(sc)/len(sc)
                     sc_all.append(sc)
 
-            # except (RuntimeWarning):
             except (ValueError, RuntimeWarning, TypeError):
 
                 sc_all = [uniform_score(score_pen=i) for i in score_pen]
@@ -212,26 +217,50 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
     dy_all: np.ndarray or float
         dy
     """
+    warnings.filterwarnings("ignore")
     if not isinstance(expr01, (sympy.Expr, NewArray)):
         return None, None
     if len(expr01.free_symbols) < 2:
         return None, None
 
-    free_symbols = list(expr01.free_symbols)[3:] if len(expr01.free_symbols) > 3 else expr01.free_symbols
+    free_symbols = list(expr01.free_symbols)[:4] if len(expr01.free_symbols) > 4 else list(expr01.free_symbols)
 
-    par = itertools.combinations(free_symbols, 2)
+    free_symbols.sort(key=lambda x: x.name)
+    par = list(itertools.combinations(free_symbols, 2))
+
+    # free_symbols = [] # no dependence
+    free_symbols = par #all denpendence
+    # free_symbols = [par[0]]
+    # free_symbols = par[-1:]
+    # free_symbols = par[1:]
+
     try:
         pre_dy_all = []
         dy_all = []
-        for i, j in par:
-            fdv1 = sympy.diff(expr01, i, evaluate=False)
-            fdv2 = sympy.diff(expr01, j, evaluate=False)
-            func2 = sympy.utilities.lambdify(terminals, fdv2, modules=[np_maps, "numpy"])
-            func1 = sympy.utilities.lambdify(terminals, fdv1, modules=[np_maps, "numpy"])
-            pre_dy2 = func2(*x)
-            pre_dy1 = func1(*x)
+        for pari in par:
+            pari = list(pari)
+            pari.sort(key=lambda x: x.name)
+            i, j = pari
+            subbb = {}
+            subbb1 = {k: Function("{}f".format(k.name))(v) for k, v in free_symbols if k is not i and v is i}
+            subbb2 = {k: Function("{}f".format(k.name))(v) for v, k in free_symbols if k is not i and v is i}
+            subbb.update(subbb1)
+            subbb.update(subbb2)
+            subb_re = dict(zip(subbb.values(), subbb.keys()))
 
-            pre_dy = pre_dy2 / pre_dy1
+            fdv1 = sympy.diff(expr01.subs(subbb), i, evaluate=True)
+            fdv1 = fdv1.subs(subb_re)
+            subbb={}
+            subbb3 = {k: Function("{}f".format(k.name))(v) for k, v in free_symbols if k is not j and v is j}
+            subbb4 = {k: Function("{}f".format(k.name))(v) for v, k in free_symbols if k is not j and v is j}
+            subbb.update(subbb3)
+            subbb.update(subbb4)
+            subb_re = dict(zip(subbb.values(), subbb.keys()))
+            fdv2 = sympy.diff(expr01.subs(subbb), j, evaluate=True).subs(subb_re)
+            fdv = fdv2 / fdv1
+
+            func0 = sympy.utilities.lambdify(terminals, fdv, modules=[np_maps, "numpy"])
+            pre_dy = func0(*x)
 
             ff = sympy.diff(i, j, evaluate=False)
             func0 = sympy.utilities.lambdify(terminals, ff, modules=[np_maps, "numpy"])
@@ -245,6 +274,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
 
     except (ValueError, RuntimeWarning, TypeError):
         pre_dy_all, dy_all = None, None
+
 
     return pre_dy_all, dy_all
 
