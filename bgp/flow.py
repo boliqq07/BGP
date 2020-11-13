@@ -240,7 +240,7 @@ class BaseLoop(Toolbox):
         if re_hall is None:
             self.re_hall = None
         else:
-            if re_hall is 1 or re_hall is 0:
+            if re_hall == 1 or re_hall == 0:
                 print("re_hall should more than 1")
                 re_hall = 2
             assert re_hall >= hall, "re_hall should more than hall"
