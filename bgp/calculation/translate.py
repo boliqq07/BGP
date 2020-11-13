@@ -140,15 +140,19 @@ def simple(expr01, groups):
     def max_method(expr):
 
         new = [calculate_number(i) for i in expr.args]
-        exprarg_new = list(zip(*new))[0]
-        n = list(list(zip(*new))[1])
-        expr = expr.func(*exprarg_new)
-        n.append(1)
-        le = len(set(n))
-        if le >= 3:
+        try:
+            exprarg_new = list(zip(*new))[0]
+            n = list(list(zip(*new))[1])
+            expr = expr.func(*exprarg_new)
+            n.append(1)
+            le = len(set(n))
+            if le >= 3:
+                return expr, np.nan
+            else:
+                return expr, max(n)
+        except IndexError:
+            print(expr)
             return expr, np.nan
-        else:
-            return expr, max(n)
 
     def calculate_number(expr):
 
