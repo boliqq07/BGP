@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     st = Store("FCC_result_error_no_intercept")
     st.start()
-    sl = SymbolLearning(loop=r'MultiMutateLoop', cal_dim=True, dim_type=pa_dim, pop=5000,
+    sl = SymbolLearning(loop=r'MultiMutateLoop', cal_dim=False, dim_type=pa_dim, pop=5000,
                         gen=50, add_coef=True, re_hall=2,
                         inter_add=False,
                         random_state=2, n_jobs=16,

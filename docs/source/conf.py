@@ -21,9 +21,6 @@ project = 'BGP-doc'
 copyright = '2020, boliqq07'
 author = 'boliqq07'
 
-# The full version, including alpha/beta/rc tags
-release = '0.0.1'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -53,7 +50,6 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
 
 import sphinx_rtd_theme
 html_theme = "sphinx_rtd_theme"

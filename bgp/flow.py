@@ -203,7 +203,7 @@ class BaseLoop(Toolbox):
                       personal_map=self.personal_map)
         self.register("genFull", genFull, pset=self.cpset, min_=initial_min, max_=initial_max + 1,
                       personal_map=self.personal_map)
-        self.register("genHalf", genFull, pset=self.cpset, min_=initial_min, max_=initial_max + 1,
+        self.register("genHalf", genGrow, pset=self.cpset, min_=initial_min, max_=initial_max + 1,
                       personal_map=self.personal_map)
         self.register("gen_mu", genGrow, min_=1, max_=self.sub_mu_max + 1, personal_map=self.personal_map)
         # def selection
