@@ -15,7 +15,7 @@ Welcome to BGP's documentation!
    Install
    Quick start
    Guide/index
-   /modules/modules
+   /src/modules
    Chinese doc/index
    Examples/index
    contact
