@@ -47,3 +47,7 @@ Links
 
 `BGP source code <https://github.com/MGEdata/BGP/>`_
 
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
