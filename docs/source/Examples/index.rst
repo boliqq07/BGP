@@ -1,4 +1,4 @@
-Chinese doc
+Examples
 ================
 
 .. toctree::
