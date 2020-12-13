@@ -19,7 +19,7 @@
 #     ]
 # }
 # r = requests.post('https://materialsproject.org/rest/v2/query',
-#                  headers={'X-API-KEY': "Di2IZMunaeR8vr9w"},
+#                  headers={'X-Guide-KEY': "Di2IZMunaeR8vr9w"},
 #                  datamnist={k: json.dumps(v) for k,v in datamnist.items()})
 # response_content = r.json() # a dict
 #

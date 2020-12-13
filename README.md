@@ -29,11 +29,11 @@ Quick Install
 pip install BindingGP
 ```
 
-[Document](https://boliqq07.github.io/BGPdocument/)
+Document
 ----------------------
 The usage of this package and **install** deatils are collected in BGP document.
 
-Turn to [BGP document](https://boliqq07.github.io/BGPdocument/) for more details.
+Turn to [BGP document](https://bgp.readthedocs.io/en/latest/) for more details.
 
 License
 ----------------------

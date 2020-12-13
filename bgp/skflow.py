@@ -9,13 +9,13 @@ from bgp.flow import MultiMutateLoop
 
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
-    """One simplify API for flow.\n
-    The detailed functions should turn to the loop of bgp.flow.\n
-    The SymbolLearning is time costing and are not suit for GridSearchCV, the cross_validate are builtin.
-    The classification problems should using "classification"=True, and set the suit classification metrics for "scoring"
-    and "score_pen" carefully.
-    This code does not check and identity the data.
-     """
+    """One simplify Guide for flow.\n
+    The SymbolLearning is time-costing and not suit for GridSearchCV,
+    (the cross_validate are embedded).\n
+    For The classification problems, please using "classification"=True,
+    and set the suit classification metrics for "scoring" and "score_pen" carefully.\n
+    This code does not check and identity the certainty of data.
+    """
 
     def __str__(self):
         return str(self.loop)
@@ -320,6 +320,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         return sc_all
 
     def cv_result(self, refit=False):
+        """return the cv_result of best expression"""
         if self.loop.cpset.cv != 1:
             self.loop.cpset.refit = refit
             return self.loop.cpset.calculate_cv_score(self.best_one.expr)

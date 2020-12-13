@@ -10,9 +10,9 @@ Packages:
  Dependence   Name          Version
 ------------- ------------  ------------
  necessary    sympy         >=1.6
- necessary    deap          1.3.1
- necessary    scikit-learn  ~=0.22.1
- recommend    torch         ~=1.5.0
+ necessary    deap          >=1.3.1
+ necessary    scikit-learn  >=0.22.1
+ recommend    torch         >=1.5.0
  recommend    pymatgen      \
  recommend    scikit-image  \
  recommend    minepy        \
@@ -27,9 +27,9 @@ Install with pip ::
 
 :Note:
 
-If VC++ needed for windows, please download the dependent packages from
-`Python Extension Packages <https://www.lfd.uci.edu/~gohlke/pythonlibs/>`_ and install offline.
-please reference to Method 2.
+    If VC++ needed for windows, Please download the dependent packages from
+    `Python Extension Packages <https://www.lfd.uci.edu/~gohlke/pythonlibs/>`_ and install offline.
+    please reference to Method 2.
 
 Method 2
 ::::::::::::

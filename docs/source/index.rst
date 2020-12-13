@@ -14,7 +14,7 @@ Welcome to BGP's documentation!
    Introduction
    Install
    Quick start
-   API/index
+   Guide/index
    /modules/modules
    contact
 
@@ -23,8 +23,6 @@ Welcome to BGP's documentation!
 
 This tool is a symbol regression tool with dimension calculation,
 which is aimed to establish expressions with physical limitation.
-Some helpful code can be copied from others package and adapt to new environment.
-Infringement contents would be removed.
 
 
 Features:
@@ -45,4 +43,4 @@ Links
 
 `BGP homepage <https://boliqq07.github.io/BGP/>`_
 
-`BGP document <https://boliqq07.github.io/BGPdocument/>`_
+`BGP source code <https://mgedata.github.io/BGP/>`_
