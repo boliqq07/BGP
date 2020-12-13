@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to BGP-doc's documentation!
+Welcome to BGP's documentation!
 ===================================
 
 .. toctree::
@@ -15,6 +15,7 @@ Welcome to BGP-doc's documentation!
    Install
    Quick start
    API/index
+   /modules/modules
    contact
 
 .. image:: img.jpg
@@ -42,13 +43,6 @@ Features:
 Links
 >>>>>>>
 
-`BGP homepage <https://mgedata.github.io/BGP/>`_
+`BGP homepage <https://boliqq07.github.io/BGP/>`_
 
 `BGP document <https://boliqq07.github.io/BGPdocument/>`_
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
