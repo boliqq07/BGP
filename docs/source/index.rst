@@ -16,6 +16,8 @@ Welcome to BGP's documentation!
    Quick start
    Guide/index
    /modules/modules
+   Chinese doc/index
+   Examples/index
    contact
 
 .. image:: img.jpg

@@ -10,10 +10,10 @@ from bgp.flow import MultiMutateLoop
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     """One simplify Guide for flow.\n
-    The SymbolLearning is time-costing and not suit for GridSearchCV,
-    (the cross_validate are embedded).\n
-    For The classification problems, please using "classification"=True,
-    and set the suit classification metrics for "scoring" and "score_pen" carefully.\n
+    1. The SymbolLearning is time-costing and not suit for ``GridSearchCV``,
+    the cross_validate are embedded.\n
+    2. For the classification problems, please using ``classification`` =True,
+    and set the suit classification metrics for ``scoring`` and ``score_pen`` carefully.\n
     This code does not check and identity the certainty of data.
     """
 
@@ -26,23 +26,24 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         ----------
         loop: str,None
             bgp.flow.BaseLoop
-            [“BaseLoop”,”MultiMutateLoop“,“OnePointMutateLoop”, ”DimForceLoop“...]
-        pop:int
-            number of population
-        gen:int
-            number of generation
+
+            ['BaseLoop', 'MultiMutateLoop', 'OnePointMutateLoop', 'DimForceLoop' ...].
+        pop: int
+            number of population.
+        gen: int
+            number of generation.
         mutate_prob:float
-            probability of mutate
+            probability of mutate.
         mate_prob:float
-            probability of mate(crossover)
+            probability of mate(crossover).
         initial_max:int
             max initial size of expression when first producing.
         initial_min : None,int
             min initial size of expression when first producing.
         max_value:int
-            max size of expression
+            max size of expression.
         hall:int,>=1
-            number of HallOfFame (elite) to maintain
+            number of HallOfFame (elite) to maintain.
         re_hall:None or int>=2
             Notes: only valid when hall
             number of HallOfFame to add to next generation.
@@ -54,46 +55,52 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             True is just using constant 'premap'.\n
             False is just use the prob of terminals.
         scoring: list of Callable, default is [sklearn.metrics.r2_score,]
-            See Also sklearn.metrics
+            See Also ``sklearn.metrics``
         score_pen: tuple of  1, -1 or float but 0.
-            >0 : max problem, best is positive, worse -np.inf
-            <0 : min problem, best is negative, worse np.inf
+            >0 : max problem, best is positive, worse -np.inf.
+            <0 : min problem, best is negative, worse np.inf.
+
             Notes:
             if multiply score method, the scores must be turn to same dimension in prepossessing
             or weight by score_pen. Because the all the selection are stand on the mean(w_i*score_i)
-            Examples: [r2_score] is [1],
+
+            Examples::
+
+                scoring = [r2_score,]
+                score_pen= [1,]
+
         cv:sklearn.model_selection._split._BaseKFold,int
             the shuffler must be False,
-            default=1 means no cv
+            default=1 means no cv.
         filter_warning:bool
-            filter warning or not
+            filter warning or not.
         add_coef:bool
             add coef in expression or not.
         inter_add：bool
-            add intercept constant or not
+            add intercept constant or not.
         inner_add:bool
-            add inner coefficients or not
+            add inner coefficients or not.
         out_add:bool
-            add out coefficients or not
+            add out coefficients or not.
         flat_add:bool
-            add flat coefficients or not
+            add flat coefficients or not.
         n_jobs:int
-            default 1, advise 6
+            default 1, advise 6.
         batch_size:int
-            default 40, depend of machine
+            default 40, depend of machine.
         random_state:int
-            None,int
+            None,int.
         cal_dim:bool
-            escape the dim calculation
+            escape the dim calculation.
         dim_type:Dim or None or list of Dim
-            "coef": af(x)+b. a,b have dimension,f(x) is not dnan. \n
-            "integer": af(x)+b. f(x) is integer dimension. \n
-            [Dim1,Dim2]: f(x) in list. \n
+            "coef": af(x)+b. a,b have dimension,f(x)'s dimension is not dnan. \n
+            "integer": af(x)+b. f(x) is with integer dimension. \n
+            [Dim1,Dim2]: f(x)'s dimension in list. \n
             Dim: f(x) ~= Dim. (see fuzzy) \n
             Dim: f(x) == Dim. \n
             None: f(x) == pset.y_dim
         fuzzy:bool
-            choose the dim with same base with dim_type,such as m,m^2,m^3.
+            choose the dim with same base with dim_type, such as m,m^2,m^3.
         stats:dict
             details of logbook to show. \n
             Map:\n
@@ -110,25 +117,37 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                    ...
                    }
             if stats is None, default is :\n
-                stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}   for cal_dim=True
-                stats = {"fitness": ("max",)}                                      for cal_dim=False
-            if self-definition, the key is func to get attribute of each ind./n
-            Examples:
-                def func(ind):\n
+
+                for cal_dim=True:
+                    stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+
+                for cal_dim=False:
+                    stats = {"fitness": ("max",)}
+
+
+            if self-definition, the key is func to get attribute of each ind.
+
+            Examples::
+
+                def func(ind):
                     return ind.fitness[0]
                 stats = {func: ("mean",), "dim_is_target": ("sum",)}
+
         verbose:bool
-            print verbose logbook or not
+            print verbose logbook or not.
         tq:bool
-            print progress bar or not
+            print progress bar or not.
         store:bool or path
-            bool or path
+            bool or path.
         stop_condition:callable
             stop condition on the best ind of hall, which return bool,the true means stop loop.
-            Examples:
-                def func(ind):\n
+
+            Examples::
+
+                def func(ind):
                     c = ind.fitness.values[0]>=0.90
                     return c
+
         pset:SymbolSet
             the feature x and target y and others should have been added.
         details:bool
@@ -149,47 +168,55 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             c_prob=None, pset=None, power_categories=(2, 3, 0.5), categories=("Add", "Mul", "Sub", "Div"),
             warm_start=False, new_gen=None):
         """
+        Method 1. fit with x, y.
 
-        If need more self-definition, use one defined SymbolSet object to pset.\n
-        Examples:
-            pset = SymbolSet()\n
-            pset.add_features_and_constants(...)\n
-            pset.add_operations(...)\n
-            ...\n
-            ...SymbolLearning().fit(pset=pset)\n
+        Examples::
+
+            sl = SymbolLearning()
+            sl..fit(x,y,...)
+
+        Method 2. fit with customized pset. If need more self-definition, use one defined SymbolSet object to ``pset``.
+
+        Examples::
+
+            pset = SymbolSet()
+            pset.add_features_and_constants(...)
+            pset.add_operations(...)
+            ...
+            sl = SymbolLearning()
+            sl..fit(pset=pset)
 
         Parameters
         ----------
         X:np.ndarray
-
+            data.
         y:np.ndarray
-
+            y.
         c:list of float, None
-
+            constants.
         x_dim: 1 or list of Dim
-            the same size wih x.shape[1], default 1 is dless for all x
+            the same size wih x.shape[1], default 1 is dless for all x.
         y_dim: 1,Dim
-            dim of y
+            dim of y.
         c_dim: 1,list of Dim
-            the same size wih c.shape, default 1 is dless for all c
+            the same size wih c.shape, default 1 is dless for all c.
 
         x_prob: None,list of float
-            the same size wih x.shape[1]
+            the same size wih x.shape[1].
         c_prob: None,list of float
-            the same size wih c
+            the same size wih c.
         x_group:list of list
-            Group of x.\n
+            Group of x.
+
             See Also pset.add_features_and_constants
+
         power_categories: Sized,tuple, None
             Examples:(0.5,2,3)
         categories: tuple of str
             map table:
                     {"Add": sympy.Add, 'Sub': Sub, 'Mul': sympy.Mul, 'Div': Div}
-
                     {"sin": sympy.sin, 'cos': sympy.cos, 'exp': sympy.exp, 'ln': sympy.ln,
-
                     {'Abs': sympy.Abs, "Neg": functools.partial(sympy.Mul, -1.0),
-
                     "Rec": functools.partial(sympy.Pow, e=-1.0)}
 
                     Others:  \n
@@ -197,14 +224,15 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                     "Self":  f(x)=x,if x true \n
 
         pset:SymbolSet
-            See Also SymbolSet
+            See Also SymbolSet.
         warm_start: bool
             warm start or not.
+
             Note:
-                If you offer pset in advance by user, please check carefully the feature numbers,especially when use "re_Tree.
+                If you offer pset in advance by user, please check carefully the feature numbers,especially when use ``re_Tree``.
                 because the new features are add.
             Reference:
-                CalculatePrecisionSet.update_with_X_y
+                CalculatePrecisionSet.update_with_X_y.
         new_gen: None,int
             warm_start generation.
 
@@ -296,12 +324,34 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         return pre_y
 
     def predict(self, X):
+        """
+        predict y from X.
+
+        Parameters
+        ----------
+        X: np.ndarray
+            data.
+
+        """
         if self.expr_type == "group":
             return self._predict_by_group(X)
         else:
             return self._predict_by_single(X)
 
     def score(self, X, y, scoring):
+        """
+        score
+
+        Parameters
+        ----------
+        X: np.ndarray
+            data.
+        y: np.ndarray
+            true y.
+        scoring: str
+            scoring method,default is "r2"
+
+        """
         scoring = check_scoring(self, scoring=scoring)
 
         if not isinstance(scoring, (list, tuple)):
@@ -320,7 +370,16 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         return sc_all
 
     def cv_result(self, refit=False):
-        """return the cv_result of best expression"""
+        """
+        return the cv_result of best expression.
+        Only valid when ``cv`` !=1.
+
+        Parameters
+        ----------
+        refit: bool
+            re-fit the data or not. If true, use all the data on the best expression.
+        """
+
         if self.loop.cpset.cv != 1:
             self.loop.cpset.refit = refit
             return self.loop.cpset.calculate_cv_score(self.best_one.expr)

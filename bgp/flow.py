@@ -5,7 +5,29 @@
 # # @Email   : 986798607@qq.com
 # # @Software: PyCharm
 # # @License: GNU Lesser General Public License v3.0
+"""
+Some definition loop for genetic algorithm.
+All the loop is with same run method.
 
+Contains:
+
+-Class: ``BaseLoop``
+
+    one node mate and one tree mutate.
+
+-Class: ``MultiMutateLoop``
+
+    one node mate and (one tree mutate, one node Replacement mutate, shrink mutate, difference mutate).
+
+-Class: ``OnePointMutateLoop``
+
+    one node Replacement mutate: (keep height of tree)
+
+-Class: ``DimForceLoop``
+
+    Select with dimension : (keep dimension of tree)
+
+"""
 import copy
 import operator
 import os
@@ -31,7 +53,26 @@ from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
 
 
 class BaseLoop(Toolbox):
-    """Base loop"""
+    """
+    Base loop for BGP
+
+    Examples::
+
+        if __name__ == "__main__":
+            pset = SymbolSet()
+            stop = lambda ind: ind.fitness.values[0] >= 0.880963
+
+            bl = BaseLoop(pset=pset, gen=10, pop=1000, hall=1, batch_size=40, re_hall=3, \n
+            n_jobs=12, mate_prob=0.9, max_value=5, initial_min=1, initial_max=2, \n
+            mutate_prob=0.8, tq=True, dim_type="coef", stop_condition=stop,\n
+            re_Tree=0, store=False, random_state=1, verbose=True,\n
+            stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"]},\n
+            add_coef=True, inter_add=True, inner_add=False, cal_dim=True, vector_add=False,\n
+            personal_map=False)
+
+            bl.run()
+
+    """
 
     def __init__(self, pset, pop=500, gen=20, mutate_prob=0.5, mate_prob=0.8, hall=1, re_hall=1,
                  re_Tree=None, initial_min=None, initial_max=3, max_value=5,
@@ -42,26 +83,27 @@ class BaseLoop(Toolbox):
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False,
                  score_object="y", sub_mu_max=1):
         """
+
         Parameters
         ----------
         pset:SymbolSet
             the feature x and target y and others should have been added.
-        pop:int
-            number of population
-        gen:int
-            number of generation
+        pop: int
+            number of population.
+        gen: int
+            number of generation.
         mutate_prob:float
-            probability of mutate
+            probability of mutate.
         mate_prob:float
-            probability of mate(crossover)
+            probability of mate(crossover).
         initial_max:int
             max initial size of expression when first producing.
         initial_min : None,int
             min initial size of expression when first producing.
         max_value:int
-            max size of expression
+            max size of expression.
         hall:int,>=1
-            number of HallOfFame (elite) to maintain
+            number of HallOfFame (elite) to maintain.
         re_hall:None or int>=2
             Notes: only valid when hall
             number of HallOfFame to add to next generation.
@@ -73,46 +115,52 @@ class BaseLoop(Toolbox):
             True is just using constant 'premap'.\n
             False is just use the prob of terminals.
         scoring: list of Callable, default is [sklearn.metrics.r2_score,]
-            See Also sklearn.metrics
+            See Also ``sklearn.metrics``
         score_pen: tuple of  1, -1 or float but 0.
-            >0 : max problem, best is positive, worse -np.inf
-            <0 : min problem, best is negative, worse np.inf
+            >0 : max problem, best is positive, worse -np.inf.
+            <0 : min problem, best is negative, worse np.inf.
+
             Notes:
-            if multiply score method, the scores must be turn to same dimension in prepossessing
-            or weight by score_pen. Because the all the selection are stand on the mean(w_i*score_i)
-            Examples: [r2_score] is [1],
+                if multiply score method, the scores must be turn to same dimension in prepossessing
+                or weight by score_pen. Because the all the selection are stand on the mean(w_i*score_i)
+
+            Examples::
+
+                scoring = [r2_score,]
+                score_pen= [1,]
+
         cv:sklearn.model_selection._split._BaseKFold,int
             the shuffler must be False,
-            default=1 means no cv
+            default=1 means no cv.
         filter_warning:bool
-            filter warning or not
+            filter warning or not.
         add_coef:bool
             add coef in expression or not.
         inter_add：bool
-            add intercept constant or not
+            add intercept constant or not.
         inner_add:bool
-            add inner coefficients or not
+            add inner coefficients or not.
         out_add:bool
-            add out coefficients or not
+            add out coefficients or not.
         flat_add:bool
-            add flat coefficients or not
+            add flat coefficients or not.
         n_jobs:int
-            default 1, advise 6
+            default 1, advise 6.
         batch_size:int
-            default 40, depend of machine
+            default 40, depend of machine.
         random_state:int
-            None,int
+            None,int.
         cal_dim:bool
-            escape the dim calculation
+            escape the dim calculation.
         dim_type:Dim or None or list of Dim
-            "coef": af(x)+b. a,b have dimension,f(x) is not dnan. \n
-            "integer": af(x)+b. f(x) is integer dimension. \n
-            [Dim1,Dim2]: f(x) in list. \n
+            "coef": af(x)+b. a,b have dimension,f(x)'s dimension is not dnan. \n
+            "integer": af(x)+b. f(x) is with integer dimension. \n
+            [Dim1,Dim2]: f(x)'s dimension in list. \n
             Dim: f(x) ~= Dim. (see fuzzy) \n
             Dim: f(x) == Dim. \n
             None: f(x) == pset.y_dim
         fuzzy:bool
-            choose the dim with same base with dim_type,such as m,m^2,m^3.
+            choose the dim with same base with dim_type, such as m,m^2,m^3.
         stats:dict
             details of logbook to show. \n
             Map:\n
@@ -128,28 +176,39 @@ class BaseLoop(Toolbox):
                    "integer":  dim is integer, \n
                    ...
                    }
-            if stats is None, default is :\n
-                stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}   for cal_dim=True
-                stats = {"fitness": ("max",)}                                      for cal_dim=False
-            if self-definition, the key is func to get attribute of each ind./n
-            Examples:
-                def func(ind):\n
+            if stats is None, default is:\n
+
+                for cal_dim=True:
+                    stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+
+                for cal_dim=False
+                    stats = {"fitness": ("max",)}
+
+            if self-definition, the key is func to get attribute of each ind.
+
+            Examples::
+
+                def func(ind):
                     return ind.fitness[0]
                 stats = {func: ("mean",), "dim_is_target": ("sum",)}
+
         verbose:bool
-            print verbose logbook or not
+            print verbose logbook or not.
         tq:bool
-            print progress bar or not
+            print progress bar or not.
         store:bool or path
-            bool or path
+            bool or path.
         stop_condition:callable
             stop condition on the best ind of hall, which return bool,the true means stop loop.
-            Examples:
-                def func(ind):\n
+
+            Examples::
+
+                def func(ind):
                     c = ind.fitness.values[0]>=0.90
                     return c
         details:bool
             return expr and predict_y or not.
+
         classification: bool
             classification or not.
 
@@ -250,6 +309,7 @@ class BaseLoop(Toolbox):
         return varAnd(*arg, **kwargs)
 
     def to_csv(self, data_all):
+        """store to csv"""
         if self.store:
             if isinstance(self.store, str):
                 path = self.store
@@ -268,7 +328,7 @@ class BaseLoop(Toolbox):
                 print("store data to ", os.getcwd(), file_new_name)
 
     def maintain_halls(self, population):
-
+        """maintain the best p expression"""
         if self.re_hall is not None:
             maxsize = max(self.hall.maxsize, self.re_hall.maxsize)
 
@@ -295,6 +355,7 @@ class BaseLoop(Toolbox):
         return inds_dim
 
     def re_add(self):
+        """add the expression as a feature"""
         if self.hall.items and self.re_Tree:
             it = self.hall.items
             indo = it[random.choice(len(it))]
@@ -317,6 +378,26 @@ class BaseLoop(Toolbox):
         #     self.decorate(i, staticLimit(key=operator.attrgetter("height"), max_value=2 * (self.max_value + 1)))
 
     def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
+        """
+
+        Parameters
+        ----------
+        n:int
+            n.
+        gen:
+            the generation, default is -1.
+        key: str
+            sort keys, default is "values".
+        filter_dim:
+            filter no-dim expressions or not.
+        ascending:
+            reverse.
+
+        Returns
+        -------
+        pd.DataFrame
+
+        """
         import pandas as pd
         data = self.data_all
         data = pd.DataFrame(data)
@@ -358,6 +439,16 @@ class BaseLoop(Toolbox):
         return pop
 
     def run(self, warm_start=False, new_gen=None):
+        """
+
+        Parameters
+        ----------
+        warm_start:bool
+            warm_start from last result.
+        new_gen:
+            new generations for warm_startm, default is the initial generations.
+
+        """
         # 1.generate###################################################################
         if warm_start is False:
             random.seed(self.random_state)

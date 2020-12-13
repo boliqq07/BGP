@@ -8,7 +8,7 @@
 
 """
 Notes:
-    this some of this part are a copy from sympy
+    this some of this part are a copy from sympy.
 """
 
 from __future__ import division

@@ -8,8 +8,8 @@
 
 """
 Notes:
-    this part are one copy from deap,
-    change the random to numpy.random
+    This part are one copy from deap,
+    change the random to numpy.random.
 """
 
 import copy
@@ -68,6 +68,7 @@ def checks_number(func):
 
 def generate(pset, min_, max_, condition, personal_map=False, *kwargs):
     """
+    generate expression.
 
     Parameters
     ----------
@@ -85,9 +86,6 @@ def generate(pset, min_, max_, condition, personal_map=False, *kwargs):
         placeholder for future
     personal_map:bool
         premap
-
-    Returns
-    -------
 
     """
     _ = kwargs
@@ -172,6 +170,7 @@ def genGrow(pset, min_, max_, personal_map=False, ):
 
 
 def depart(individual):
+    """take part expression."""
     if len(individual) <= 10 or individual.height <= 8:
         return [individual, ]
     else:
@@ -331,7 +330,7 @@ def mutShrink(individual, pset=None):
 # @checkss
 def mutNodeReplacementVerbose(individual, pset, personal_map=False):
     """
-    # choice terminals_and_constants verbose
+    choice terminals_and_constants verbose
     Replaces a randomly chosen primitive from *individual* by a randomly
     chosen primitive with the same number of arguments from the :attr:`pset`
     attribute of the individual.
@@ -393,7 +392,7 @@ def mutNodeReplacementVerbose(individual, pset, personal_map=False):
 # @checkss
 def mutDifferentReplacementVerbose(individual, pset, personal_map=False):
     """
-    # choice terminals_and_constants verbose
+    choice terminals_and_constants verbose
     Replaces a randomly chosen primitive from *individual* by a randomly
     chosen primitive with the same number of arguments from the :attr:`pset`
     attribute of the individual.
@@ -513,8 +512,8 @@ def selTournament(individuals, k, tournsize, fit_attr="fitness"):
 def selKbestDim(pop, K_best=10, dim_type=None, fuzzy=False, fit_attr="fitness", force_number=False):
     """
     Select the individual with dim limitation.
+
     Parameters
-    
     ----------
     pop: SymbolTree
         A list of individuals to select from.
@@ -614,7 +613,7 @@ def Statis_func(stats=None):
 # shown                      #
 ######################################
 
-def graph(expr):
+def _graph(expr):
     """Construct the graph of a tree expression. The tree expression must be
     valid. It returns in order a node list, an edge list, and a dictionary of
     the per node labels. The node are represented by numbers, the edges are

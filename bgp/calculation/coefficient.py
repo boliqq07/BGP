@@ -16,7 +16,7 @@ from sympy.core.numbers import NegativeOne
 
 class Coef(UndefinedFunction):
     """
-    generate metaclass, the type of identity is .arr,.tp ,rather isinstance
+    generate metaclass, the type of identity is .arr,.tp ,rather isinstance.
     """
 
     def __new__(mcs, name, arr):

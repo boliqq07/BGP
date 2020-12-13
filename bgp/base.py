@@ -7,8 +7,16 @@
 # @License: GNU Lesser General Public License v3.0
 
 """
-Notes:
-    this part is a customization from deap.
+Base objects for to symbolic regression.
+
+Contains:
+  - Class: ``SymbolSet``
+
+  - Class: ``CalculatePrecisionSet``
+
+  - Class: ``SymbolTree``
+
+  - others
 """
 
 import copy
@@ -34,7 +42,7 @@ from bgp.probability.preference import PreMap
 
 
 class SymbolTerminal:
-    """General feature type.\n
+    """General feature type, do not use directly.\n
     The name for show (str) and calculation (repr) are set to different string for
     avoiding repeated calculations.
     """
@@ -49,8 +57,8 @@ class SymbolTerminal:
         init_name: str
             Just for show, rather than calculate.\n
             Examples:\n
-            init_name=[x1,x2] , if is compact features, need[]\n
-            init_name=(x1*x4-x3), if is expr, need ()
+            init_name=[x1,x2] , if is compact features, need[].\n
+            init_name=(x1*x4-x3), if is expr, need ().
         """
         self.name = str(name)
         self.conv_fct = str
@@ -108,16 +116,16 @@ class SymbolTerminalDetail(SymbolTerminal):
         name: str
             Represent name. Default "xi"
         dim: bgp.dim.Dim or None
-            None
+            None.
         prob: float or None
-            None
+            None.
         init_sym: list, sympy.Expr
-            list
+            list.
         init_name: str or None 
             Just for show, rather than calculate.\n
             Examples:\n
-            init_name="[x1,x2]" , if is compact features, need[]\n
-            init_name="(x1*x4-x3)", if is expr, need ()
+            init_name="[x1,x2]" , if is compact features, need[].\n
+            init_name="(x1*x4-x3)", if is expr, need ().
         """
         super(SymbolTerminalDetail, self).__init__(name, init_name)
         if prob is None:
@@ -134,7 +142,7 @@ class SymbolTerminalDetail(SymbolTerminal):
         return SymbolTerminal(self.name, self.init_name)
 
 
-def tsum(*ters, name="gx0"):
+def _tsum(*ters, name="gx0"):
     """
 
     Parameters
@@ -142,7 +150,7 @@ def tsum(*ters, name="gx0"):
     ters: tuple of SymbolTerminalDetail
         SymbolTerminalDetail
     name: str
-        sepcific the name of results.
+        specific the name of results.
 
     Returns
     -------
@@ -163,16 +171,19 @@ def tsum(*ters, name="gx0"):
 
 
 class SymbolPrimitive:
-    """General operation type"""
+    """General operator type, do not use directly,but use SymbolPrimitiveDetail"""
 
     def __init__(self, name, arity):
         """
+
         Parameters
         ----------
         name: str
-            function name
+            function name.
         arity: int
-            function input numbers
+            input parameters numbers of function.
+            such as ``+`` with 2, ``ln` with 1.
+
         """
         self.name = str(name)
         self.arity = arity
@@ -199,21 +210,25 @@ class SymbolPrimitive:
 
 
 class SymbolPrimitiveDetail(SymbolPrimitive):
+    """
+    General operator type with more details.
+    """
     def __init__(self, name, arity, func, prob, np_func=None, dim_func=None, sym_func=None):
         """
         Parameters
         ----------
         func: Callable
-            function. Better for sympy.Function Type.\n
+            function. better using sympy.Function Type.\n
+
             For Maintainer:
-            If self function and can not be simplified to sympy.Function or elementary function,
-            the function for function.np_map() and dim.dim_map() should be defined.
+                If self function and can not be simplified to sympy.Function or elementary function,
+                the function for function.np_map() and dim.dim_map() should be defined.
         name: str
-            function name
+            function name.
         arity: int
-            function input numbers
+            function input numbers.
         prob: float
-            default 1
+            default 1.
         """
         super(SymbolPrimitiveDetail, self).__init__(name, arity)
 
@@ -226,16 +241,24 @@ class SymbolPrimitiveDetail(SymbolPrimitive):
         self.sym_func = sym_func
 
     def capsule(self):
+        """return short one."""
         return SymbolPrimitive(self.name, self.arity)
 
 
 class SymbolSet(object):
     """
-    Definite the operations, features, and fixed constants.
+    Definite the preparation set of operations, features, and fixed constants.
     """
 
     def __init__(self, name="PSet"):
-        """Definite the preparation set of operations, features, and fixed constants."""
+        """
+
+        Parameters
+        ----------
+        name: str
+            name.
+
+        """
         self.arguments = []  # for translate
         self.name = name
         self.y = None  # data y
@@ -474,7 +497,7 @@ class SymbolSet(object):
                 init_ter_name = ["x%s" % j for j in gi]
                 init_ter = [self.ter_con_dict.pop(i) for i in init_ter_name]
                 name = "gx%s" % i
-                ter = tsum(*init_ter, name=name)
+                ter = _tsum(*init_ter, name=name)
                 self.ter_con_dict[name] = ter
 
                 self.terms_count -= (len(init_ter) - 1)
@@ -518,11 +541,8 @@ class SymbolSet(object):
         categories: tuple of str
             map table:
                     {"Add": sympy.Add, 'Sub': Sub, 'Mul': sympy.Mul, 'Div': Div}
-
-                    {"sin": sympy.sin, 'cos': sympy.cos, 'exp': sympy.exp, 'ln': sympy.ln,
-
-                    {'Abs': sympy.Abs, "Neg": functools.partial(sympy.Mul, -1.0),
-                    
+                    {"sin": sympy.sin, 'cos': sympy.cos, 'exp': sympy.exp, 'ln': sympy.ln,}
+                    {'Abs': sympy.Abs, "Neg": functools.partial(sympy.Mul, -1.0),}
                     "Rec": functools.partial(sympy.Pow, e=-1.0)}
 
                     Others:  \n
@@ -531,27 +551,38 @@ class SymbolSet(object):
 
         power_categories_prob:"balance", float
             float in (0,1]
-            probability of power categories, "balance" is 1/n_power_cat
+
+            probability of power categories, "balance" is 1/n_power_cat.
+
         categories_prob: "balance", float
             float in (0,1]
-            probabilityty of categories, except (+,-*,/), "balance" is 1/n_categories.\n
+
+            probabilityty of categories, except (+,-*,/), "balance" is 1/n_categories.
+
             Notes: the  (+,-*,/) are set as 1 to be a standard.
         special_prob: None or dict
             Examples: {"Mul":0.6,"Add":0.4,"exp":0.1}
         self_categories:list of dict,None
             the dict can be generate from newfuncV or defination self.
+
             the function at least containing:
+
             {"func": func, "name": name, "arity":2,"np_func": npf, "dim_func": dimf, "sym_func": gsymf}
+
             func:sympy.Function(name) object
+
             name:name
+
             arity:int,the number of parameter
+
             np_func:numpy function
+
             dim_func:dimension function
+
             sym_func:NewArray function. (unpack the group,used just for shown)
+
             See Also bgp.newfunc.newfuncV
-        Returns
-        -------
-        SymbolSet
+
         """
         if categories is None:
             categories = ("Add", "Mul", "Self", "exp")
@@ -609,6 +640,7 @@ class SymbolSet(object):
     def add_accumulative_operation(self, categories=None, categories_prob="balance",
                                    self_categories=None, special_prob=None):
         """
+        add accumulative operation.
 
         Parameters
         ----------
@@ -616,25 +648,33 @@ class SymbolSet(object):
             categories=("Self","MAdd","MSub", "MMul","MDiv")
         categories_prob: None, "balance" or float.
             probility of categories  (0,1], except ("Self","MAdd", "MSub", "MMul", "MDiv"),
+
             "balance" is 1/n_categories.
+
             "MSub", "MMul", "MDiv" only work on the size of group is 2, else work like "Self".
+
             Notes: the  ("Self","MAdd","MSub", "MMul", "MDiv") are set as 1 and 0.1 to be a standard.
         self_categories:list of dict,None
             the dict can be generate from newfuncD or defination self.
+
             the function at least containing:
+
             {"func": func, "name": name, "np_func": npf, "dim_func": dimf, "sym_func": gsymf}
+
             func:sympy.Function(name) object,which need add attributes: is_jump,keep.
+
             name:name
+
             np_func:numpy function
+
             dim_func:dimension function
+
             sym_func:NewArray function. (unpack the group,used just for shown)
+
             See Also bgp.newfunc.newfuncV
+
         special_prob: None or dict
             Examples: {"MAdd":0.5,"Self":0.5}
-
-        Returns
-        -------
-        SymbolSet
         """
 
         def change(n, pp):
@@ -704,10 +744,6 @@ class SymbolSet(object):
             individual or expression
         prob: int
             probability of this individual
-
-        Returns
-        -------
-        SymbolSet
         """
         try:
             value = Tree.pre_y
@@ -759,23 +795,20 @@ class SymbolSet(object):
         Parameters
         ----------
         X: np.ndarray
-            2D data
+            2D data.
         y: np.ndarray
-            1D data
+            1D data.
         feature_name: None, list of str
-            the same size wih x.shape[1]
+            the same size wih x.shape[1].
         x_dim: 1 or list of Dim
-            the same size wih x.shape[1], default 1 is dless for all x
+            the same size wih x.shape[1], default 1 is dless for all x.
         y_dim: 1,Dim
-            dim of y
+            dim of y.
         x_prob: None,list of float
-            the same size wih x.shape[1]
+            the same size wih x.shape[1].
         x_group: None or list of list, int
-            features group
+            features group.
 
-        Returns
-        -------
-        SymbolSet
         """
         X = X.astype(np.float32)
         y = y.astype(np.float32)
@@ -860,15 +893,11 @@ class SymbolSet(object):
         Parameters
         ----------
         c_dim: 1, list of Dim
-            the same size wih c
+            the same size wih c.
         c: float,list
-            list of float
+            list of float.
         c_prob: None, float, list of float
-            the same size wih c
-
-        Returns
-        -------
-        SymbolSet
+            the same size wih c.
         """
         if isinstance(c, float):
             c = [c, ]
@@ -895,6 +924,7 @@ class SymbolSet(object):
 
     def add_features_and_constants(self, X, y, c=None, x_dim=1, y_dim=1, c_dim=1, x_prob=None,
                                    c_prob=None, x_group=None, feature_name=None):
+        """combination of add_constant and add_features."""
         self.add_features(X, y, x_dim=x_dim, y_dim=y_dim, x_prob=x_prob, x_group=x_group,
                           feature_name=feature_name, )
         if c is not None:
@@ -902,7 +932,7 @@ class SymbolSet(object):
 
     def set_personal_maps(self, pers):
         """
-        Personal preference add to permap. more control can be found by pset.premap.***\n
+        personal preference add to permap. more control can be found by pset.premap.***\n
         Just set couples of points and don't chang others.
 
         Parameters
@@ -967,6 +997,7 @@ class SymbolSet(object):
 
     @property
     def primitives(self):
+        """operators"""
         return self.get_values(self.primitives_dict, mean=False)
 
     @property
@@ -990,10 +1021,12 @@ class SymbolSet(object):
 
     @property
     def dispose(self):
+        """accumulate operators"""
         return self.get_values(self.dispose_dict, mean=False)
 
     @property
     def terminals_and_constants(self):
+        """terminals_and_constants"""
         return self.get_values(self.ter_con_dict, mean=False)
 
     @property
@@ -1191,6 +1224,7 @@ class SymbolTree(_ExprTree):
         return repr(self) == repr(other)
 
     def compress(self):
+        """drop unnecessary attributes"""
 
         [_ExprTree.__delattr__(self, i) for i in ("coef_expr", "coef_pre_y",
                                                   "coef_score", "pure_expr", "pure_pre_y")
@@ -1201,13 +1235,16 @@ class SymbolTree(_ExprTree):
         return [primitive for primitive in self if primitive.arity == 0]
 
     def ter_site(self):
+        """site for feature and constants node"""
         return [i for i, primitive in enumerate(self) if primitive.arity == 0]
 
     def depart(self):
+        """take part the expression"""
         return depart(self)
 
     @property
     def capsule(self):
+        """return the short one"""
         return ShortStr(self)
 
     @classmethod
@@ -1221,9 +1258,11 @@ class SymbolTree(_ExprTree):
         return cls(genFull(pset, min_, max_, per, ))
 
     def to_expr(self, pset):
+        """transformed to sympy.Expr"""
         return compile_context(self, pset.context, pset.gro_ter_con)
 
     def ppprint(self, pset, feature_name=False):
+        """get a user friendly version"""
         return group_str(self, pset, feature_name=feature_name)
 
 
@@ -1247,7 +1286,7 @@ class ShortStr:
 class CalculatePrecisionSet(SymbolSet):
     """
     Add score method to SymbolSet.
-    The object can get from a worked symbolset object.
+    The object can get from a worked SymbolSet object.
     """
     hasher = str
 
@@ -1263,23 +1302,23 @@ class CalculatePrecisionSet(SymbolSet):
         Parameters
         ----------
         fuzzy : bool
-            fuzzy or not
+            fuzzy or not.
         dim_type : object
-            if None, use the y_dim
+            if None, use the y_dim.
         pset:SymbolSet
-            SymbolSet
-        scoring: Callbale, default is sklearn.metrics.r2_score
+            SymbolSet.
+        scoring: Callbale, default is sklearn.metrics.r2_score.
             See Also sklearn.metrics
-        score_pen: tuple, default is sklearn.metrics.r2_score
-            See Also sklearn.metrics
+        score_pen: tuple, default is sklearn.metrics.r2_score.
+            See Also sklearn.metrics.
         filter_warning:bool
-            bool
+            bool.
         score_pen: tuple of 1 or -1
             1 : best is positive, worse -np.inf \n
             -1 : best is negative, worse np.inf \n
             0 : best is positive , worse 0 \n
         cal_dim: bool
-            calculate dim or not, if not return dimless
+            calculate dim or not, if not return dimless.
         add_coef: bool
             bool
         inter_add: bool
@@ -1289,16 +1328,19 @@ class CalculatePrecisionSet(SymbolSet):
         n_jobs:int
             running core
         batch_size:int
-            batch size, advice batch_size*n_jobs = inds/n
+            batch size, advice batch_size*n_jobs = inds.
         tq:bool
             bool
         cv:sklearn.model_selection._split._BaseKFold,int
-            the shuffler must be False
+            the shuffler must be False.
+
             use cv spilt for score,return the mean_test_score.
+
             use cv spilt for predict,return the cv_predict_y.(not be used)
+
             Notes:
-            if cv and refit, all the data is refit to determination the coefficients.
-            Thus the expression is not compact with the this scores, when re-calculated by this expression
+                if cv and refit, all the data is refit to determination the coefficients.
+                Thus the expression is not compact with the this scores, when re-calculated by this expression
 
         details:bool
             return the expr and predict y cor not.
@@ -1308,7 +1350,6 @@ class CalculatePrecisionSet(SymbolSet):
 
         score_object:
             score by y or delta y (for implicit function).
-
 
         """
         super(CalculatePrecisionSet, self).__init__()
@@ -1345,10 +1386,11 @@ class CalculatePrecisionSet(SymbolSet):
         self.scoring = scoring
 
     def update(self, pset):
+        """updata self by input pset."""
         self.__dict__.update(copy.deepcopy(pset.__dict__))
 
     def update_with_X_y(self, X, y):
-
+        """replace x,y data."""
         if self.expr_init_map:
             tree_x = []
             n = len(self.expr_init_map)
@@ -1367,6 +1409,7 @@ class CalculatePrecisionSet(SymbolSet):
             self.replace(X, y=y)
 
     def compile_context(self, ind):
+        """transform SymbolTree to sympy.Expr."""
         if isinstance(ind, SymbolTree):
             expr = compile_context(ind.capsule, self.context, self.gro_ter_con)
         else:
@@ -1374,7 +1417,7 @@ class CalculatePrecisionSet(SymbolSet):
         return expr
 
     def calculate_cv_score(self, ind):
-        """Haven't been used, just used for calculating single one or check."""
+        """just used for calculating single one or check."""
         if isinstance(ind, SymbolTree):
             expr = compile_context(ind.capsule, self.context, self.gro_ter_con)
         elif isinstance(ind, sympy.Expr):
@@ -1394,20 +1437,20 @@ class CalculatePrecisionSet(SymbolSet):
         return score, expr01, pre_y
 
     def calculate_score(self, ind):
+        """just used for calculating single one or check with cv=1."""
         self.cv = 1
         return self.calculate_cv_score(ind)
 
     def calculate_detail(self, ind):
         """
-        This is not used when paralleling, just used for calculated final results for showing.
+        just used for calculated final best one result for showing.
+
+        calculate the best expression.
 
         Parameters
         ----------
         ind: SymbolTree
-
-        Returns
-        -------
-        SymbolTree
+            best expression.
         """
         ind = self.calculate_simple(ind)
 
@@ -1434,15 +1477,13 @@ class CalculatePrecisionSet(SymbolSet):
 
     def calculate_simple(self, ind):
         """
-        This is not used when paralleling, just used for re_Tree, and showing
+        just used for re_Tree, and showing.
+
+        calculate the best expression.
 
         Parameters
         ----------
         ind:SymbolTree
-
-        Returns
-        -------
-        SymbolTree
         """
         if isinstance(ind, SymbolTree):
             expr = compile_context(ind.capsule, self.context, self.gro_ter_con)
@@ -1475,15 +1516,12 @@ class CalculatePrecisionSet(SymbolSet):
 
     def calculate_expr(self, expr):
         """
-        This is not used when paralleling, just used for calculated final results for showing.
+        just used for calculated final result for showing.
 
         Parameters
         ----------
         ind:sympy.expr
 
-        Returns
-        -------
-        dict
         """
 
         if isinstance(expr, sympy.Expr):
@@ -1512,6 +1550,7 @@ class CalculatePrecisionSet(SymbolSet):
         return result
 
     def parallelize_calculate_expr(self, exprs):
+        """just used for final results, calculate exprs."""
 
         calls = functools.partial(calculate_cv_score, x=self.data_x, y=self.y,
                                   terminals_and_constants_repr=self.terminals_and_constants_repr,
@@ -1530,6 +1569,7 @@ class CalculatePrecisionSet(SymbolSet):
         return score_dim_list
 
     def try_add_coef_times(self, expr, grid_x=None):
+        """just used for best result,try add coefficient to expr."""
 
         pre_y_all_expr01 = try_add_coef_times(expr, self.data_x, self.y, self.terminals_and_constants_repr, grid_x,
                                               filter_warning=self.filter_warning, inter_add=self.inter_add,
@@ -1544,6 +1584,7 @@ class CalculatePrecisionSet(SymbolSet):
         return pre_y_all_expr01
 
     def parallelize_try_add_coef_times(self, exprs, grid_x=None, resample_number=500):
+        """to be continued"""
         if isinstance(grid_x, np.ndarray):
             grid_x = list(grid_x.T)
         calls = functools.partial(try_add_coef_times, x=self.data_x, y=self.y,
@@ -1566,14 +1607,12 @@ class CalculatePrecisionSet(SymbolSet):
 
     def parallelize_score(self, inds):
         """
+        The main score in each generation of GP!
 
         Parameters
         ----------
         inds:list of SymbolTree
-
-        Returns
-        -------
-        list of (score,dim,dim_score)
+            list of expressions
 
         """
 

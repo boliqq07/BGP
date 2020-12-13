@@ -6,17 +6,17 @@ flow
 Some definition loop for genetic algorithm.
 
 contains:
-  - name: BaseLoop
+  - Class: ``BaseLoop``
 
     one node mate and one tree mutate.
 
-  - name: MultiMutateLoop
+  - Class: ``MultiMutateLoop``
 
     one node mate and (one tree mutate, one node Replacement mutate, shrink mutate, difference mutate).
-  - name: OnePointMutateLoop
+  - Class: ``OnePointMutateLoop``
 
     one node Replacement mutate: (keep height of tree)
-  - name: DimForceLoop
+  - Class: ``DimForceLoop``
 
     Select with dimension : (keep dimension of tree)
 
@@ -42,13 +42,11 @@ The **Parameters**, **Methods**, and **Attributes** for all loop is same.
 
 * Methods
 
-    run
-
-        run the loop.
-        The ``flow.BaseLoop.run`` is the base of  ``skflow.SymbolicLearning.fit``
+run
+    run the loop.
+    The ``flow.BaseLoop.run`` is the base of  ``skflow.SymbolicLearning.fit``
 
 * Attributes
-
     None
 
 

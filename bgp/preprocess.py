@@ -3,7 +3,7 @@ from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.utils import check_array
 
 
-def ger_magnitude(a):
+def _ger_magnitude(a):
     c = 0
     if abs(a) > 1:
         while a >= 1:
@@ -19,7 +19,7 @@ def ger_magnitude(a):
 
 
 def _scale(a):
-    return 10 ** ger_magnitude(a)
+    return 10 ** _ger_magnitude(a)
 
 
 class MagnitudeTransformer(TransformerMixin, BaseEstimator):
@@ -40,13 +40,14 @@ class MagnitudeTransformer(TransformerMixin, BaseEstimator):
         Parameters
         ----------
         X: np.ndarray
-        y: np.ndarray
-        group:group index of x
-        apply: specific which index of x to transform
-        keep: specific which index of x to not transform
 
-        Returns
-        -------
+        y: np.ndarray
+
+        group: group index of x
+
+        apply: specific which index of x to transform
+
+        keep: specific which index of x to not transform
 
         """
 

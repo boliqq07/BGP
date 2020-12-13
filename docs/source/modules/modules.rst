@@ -1,5 +1,5 @@
-bgp
-===
+API
+=========
 
 .. toctree::
    :maxdepth: 4

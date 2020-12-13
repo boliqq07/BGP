@@ -10,7 +10,6 @@ from bgp.calculation.coefficient import get_args
 
 """lambidfy"""
 
-
 def general_expr_dict(self, expr_init_map, free_symbol, gsym_map, simplifying=False):
     """gen expr"""
 
