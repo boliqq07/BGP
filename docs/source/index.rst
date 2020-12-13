@@ -45,4 +45,5 @@ Links
 
 `BGP homepage <https://boliqq07.github.io/BGP/>`_
 
-`BGP source code <https://mgedata.github.io/BGP/>`_
+`BGP source code <https://github.com/MGEdata/BGP/>`_
+
