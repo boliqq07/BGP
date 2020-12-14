@@ -15,7 +15,7 @@ Welcome to BGP's documentation!
    Install
    Quick start
    Guide/index
-   /src/modules
+   src/modules
    Chinese doc/index
    Examples/index
    contact
@@ -47,7 +47,8 @@ Links
 
 `BGP source code <https://github.com/MGEdata/BGP/>`_
 
+Index
+>>>>>>>
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
