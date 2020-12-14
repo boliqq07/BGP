@@ -64,6 +64,5 @@ def np_map():
 
         return delta_a / delta_b
 
-
     return {"MAdd": Flat, "MMul": Comp, "MSub": Diff, "MDiv": Quot, "Conv": Conv, "Der": Der, 'Derivative': Der,
             "Self": lambda x_: x_}

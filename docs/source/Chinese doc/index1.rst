@@ -206,25 +206,23 @@ fuzzy:bool
 
 stats:dict
     显示信息。
-    可选内容:
-    values
-        = {"max": np.max, "mean": np.mean, "min": np.mean, "std": np.std, "sum": np.sum}
-    keys
-        = {
-           "fitness": just see fitness[0],
-           "fitness_dim_max": max problem, see fitness with demand dim,
-           "fitness_dim_min": min problem, see fitness with demand dim,
-           "dim_is_target": demand dim,
-           "coef":  dim is True, coef have dim,
-           "integer":  dim is integer,
-           ...
-           }
-    默认为 :
-        stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}   当 cal_dim=True
-        stats = {"fitness": ("max",)}                                      当 cal_dim=False
+
+    values= {"max": np.max, "mean": np.mean, "min": np.mean, "std": np.std, "sum": np.sum}
+    keys= {
+    "fitness": just see fitness[0],
+    "fitness_dim_max": max problem, see fitness with demand dim,
+    "fitness_dim_min": min problem, see fitness with demand dim,
+    "dim_is_target": demand dim,
+    "coef":  dim is True, coef have dim,
+    "integer":  dim is integer,}
+
+     当 cal_dim=True,stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+
+     当 cal_dim=False,stats = {"fitness": ("max",)}
 
     keys可以被自定义，创建处理单个个体的函数。
-    例如:
+    例如::
+
         def func(ind):
             return ind.fitness[0]
         stats = {func: ("mean",), "dim_is_target": ("sum",)}
@@ -240,7 +238,8 @@ store:bool or path
 
 stop_condition:callable
     终止条件，可以被自定义，创建处理单个个体的函数。
-    例如:
+    例如::
+
         def func(ind):
             c = ind.fitness.values[0]>=0.90
             return c
@@ -261,57 +260,57 @@ pset:SymbolSet
 SL方法
 :::::::::::
 
-如果给定pset，**fit**方法的其他参数无效。由于这些参数已经预先在pset中定义。
-
-
 **fit**
 
-    Parameters
-    ----------
-    X:np.ndarray
-        输入数据。
+X:np.ndarray
+    输入数据。
 
-    y:np.ndarray
-        目标值。
+y:np.ndarray
+    目标值。
 
-    c:list of float
-        常数项。
+c:list of float
+    常数项。
 
-    x_dim: 1 or list of Dim
-        输入数据量纲。
+x_dim: 1 or list of Dim
+    输入数据量纲。
 
-    y_dim: 1,Dim
-        目标值量纲。
+y_dim: 1,Dim
+    目标值量纲。
 
-    c_dim: 1,Dim
-        常数量纲。
+c_dim: 1,Dim
+    常数量纲。
 
-    x_prob: None,list of float
-        每个特征概率。
+x_prob: None,list of float
+    每个特征概率。
 
-    c_prob: None,list of float
-        每个常数概率。
+c_prob: None,list of float
+    每个常数概率。
 
-    x_group:int, list of list
-        绑定条件，默认不绑定，退化为普通GP问题。
-        绑定方式可以直接定义分组大小：
-        如：x_group=2
-        绑定方式可以自定义分组：
-        如：x_group=[[1,2][3,4]],为x1，x2绑定，为x3，x4绑定。
-        See Also pset.add_features_and_constants
+x_group:int, list of list
+    绑定条件，默认不绑定，退化为普通GP问题。
+    绑定方式可以直接定义分组大小：
+    如：x_group=2
+    绑定方式可以自定义分组：
+    如：x_group=[[1,2][3,4]],为x1，x2绑定，为x3，x4绑定。
+    See Also pset.add_features_and_constants
 
-    pset:SymbolSet
-       （默认为None）
-        准备序列，同初始化参数中的pset，并将其覆盖, 这里的再次输入可以用来做自定义的功能调整工作。
-        若两处的pset均为None, 默认使用fit方法中的其他参数自动建立简单的pset。
-    warm_start: bool
-        是否热启动
-        Note:
-            如果用户预先提供pset，请仔细检查特性数目，特别是在使用“re_Tree”=True时。因为新的特征出现。
-        参考:
-            CalculatePrecisionSet.update_with_X_y
-    new_gen: None,int
-        热启动迭代数.
+pset:SymbolSet
+   （默认为None）
+    准备序列，同初始化参数中的pset，并将其覆盖, 这里的再次输入可以用来做自定义的功能调整工作。
+    若两处的pset均为None, 默认使用fit方法中的其他参数自动建立简单的pset。
+
+    Note:
+        如果给定pset，fit方法的其他参数无效，因为这些参数已经预先在pset中定义。
+warm_start: bool
+    是否热启动
+
+    Note:
+        如果用户预先提供pset，请仔细检查特性数目，特别是在使用“re_Tree”=True时。因为新的特征出现。
+
+    参考:
+        CalculatePrecisionSet.update_with_X_y
+new_gen: None,int
+    热启动迭代数.
 
 SL属性
 ::::::::::::

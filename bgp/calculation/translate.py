@@ -10,6 +10,7 @@ from bgp.calculation.coefficient import get_args
 
 """lambidfy"""
 
+
 def general_expr_dict(self, expr_init_map, free_symbol, gsym_map, simplifying=False):
     """gen expr"""
 
@@ -129,11 +130,12 @@ def group_str(self, pset, feature_name=False):
 
 
 def simple(expr01, groups):
-    """str to sympy.Expr function.
+    """
+    str to sympy.Expr function.
     add conv to MMdd and MMul.
-    !!!!!!! the calcualte conv need conform with np_func().
-        is_jump: jump the calculate >= 3 (group_size).
-        keep: the calculate is return then input group_size or 1.
+    the calcualte conv need conform with np_func()!!
+    is_jump: jump the calculate >= 3 (group_size).
+    keep: the calculate is return then input group_size or 1.
     """
 
     def max_method(expr):

@@ -38,7 +38,6 @@ from deap.tools import HallOfFame, Logbook
 from mgetool import newclass
 from mgetool.exports import Store
 from mgetool.packbox import Toolbox
-from mgetool.tool import tt
 from numpy import random
 from sklearn.datasets import load_boston
 from sklearn.metrics import r2_score
@@ -381,6 +380,7 @@ class BaseLoop(Toolbox):
 
     def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
         """
+        return the best n results.
 
         Parameters
         ----------
@@ -397,6 +397,7 @@ class BaseLoop(Toolbox):
 
         Returns
         -------
+        top n results.
         pd.DataFrame
 
         """
@@ -475,7 +476,6 @@ class BaseLoop(Toolbox):
             # 2.evaluate###############################################################
 
             invalid_ind_score = self.cpset.parallelize_score(population_old)
-
 
             for ind, score in zip(population_old, invalid_ind_score):
                 ind.fitness.values = tuple(score[0])

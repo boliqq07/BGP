@@ -33,5 +33,4 @@ def top_n(loop, n=10, gen=-1, key="value", ascending=False):
 
         data = data.sort_values(by='value', ascending=ascending).iloc[:n, :]
 
-
     return data

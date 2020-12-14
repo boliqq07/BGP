@@ -10,6 +10,8 @@ from bgp.skflow import SymbolLearning
 
 def error(y, pre_y):
     return np.mean(np.abs((y - pre_y) / y))
+
+
 import os
 
 os.chdir("/home/iap13/wcx/BGP/Instances/Instance3_entropy/first")
@@ -229,7 +231,8 @@ if __name__ == "__main__":
                         initial_max=3, max_value=6, store=True,
                         stats={"fitness_dim_min": ("min",), "dim_is_target": ("sum",)}
                         )
-    sl.fit(x, y, x_dim=[dless, pa_dim, dless, dless, dless, dless, dless, dless], y_dim=pa_dim, power_categories=(2, 3, 0.5, 0.33),
+    sl.fit(x, y, x_dim=[dless, pa_dim, dless, dless, dless, dless, dless, dless], y_dim=pa_dim,
+           power_categories=(2, 3, 0.5, 0.33),
            categories=("Add", "Mul", "Sub", "Div"), )
 
     print(sl.expr)
@@ -247,6 +250,6 @@ if __name__ == "__main__":
     r2_cv = sl.cv_result(refit=False)
     print("r:{},error:{},r2:{},MAE:{},r2_cv:{}".format(r, error, r2, mae, r2_cv[0]))
 
-    data = sl.loop.top_n(20,ascending=True)
+    data = sl.loop.top_n(20, ascending=True)
     st.end()
     st.to_csv(data, file_new_name="top_n")

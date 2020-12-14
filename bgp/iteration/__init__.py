@@ -1,1 +1,1 @@
-__all__=["newpoints", "nonewpoints"]
+__all__ = ["newpoints", "nonewpoints"]

@@ -15,6 +15,7 @@ from numpy.core import numeric
 
 
 class PreMap(numeric.ndarray):
+    """2D probability map"""
 
     def __new__(cls, data):
 
@@ -30,11 +31,12 @@ class PreMap(numeric.ndarray):
     @classmethod
     def from_shape(cls, shape):
         """
+        Generation.
 
         Parameters
         ----------
         shape:int
-            shape of premap
+            shape of premap.
 
         Returns
         -------
@@ -52,7 +54,7 @@ class PreMap(numeric.ndarray):
 
         """
         Use for binding.rate the others and add the subbed value to the [index1,index2]
-        the rate are [0,1)
+        the rate are [0,1).
             
         Parameters
         ----------
@@ -110,11 +112,11 @@ class PreMap(numeric.ndarray):
         """
         Rate the [index1,index2] to sum and add the subbed value to the others.
         under check.
+
         Parameters
-        
         ----------
         sv:[index1,index2,rate]
-            rate in [0,n), if [0,1) down, if [1,n) up
+            rate in [0,n), if [0,1) down, if [1,n) up.
         """
 
         a = sv[0]
@@ -142,13 +144,13 @@ class PreMap(numeric.ndarray):
         """
         Rate the [index1,index2] to self and add the subbed value to the others.
         under check.
+
         Parameters
-        
         ----------
-        sv:[index1,index2,rate]
-            [0,n)
-            [0,1) down,
-            [1,n) up
+        sv:[index1,index2,rate]\n
+            in [0,n)\n
+            [0,1) down,\n
+            [1,n) up\n
         """
 
         a = sv[0]

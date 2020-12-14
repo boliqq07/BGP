@@ -176,13 +176,13 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
             try:
                 sc_all = []
                 for si, sp in zip(scoring, score_pen):
-                    sc =[]
+                    sc = []
                     for i, j in zip(dy, pre_dy):
-                        index = np.isfinite(i)*np.isfinite(j)
+                        index = np.isfinite(i) * np.isfinite(j)
                         sci = si(i[index], j[index])
                         sc.append(sci)
                     sc = [uniform_score(score_pen=sp) if np.isnan(i) or i is None else i for i in sc]
-                    sc = sum(sc)/len(sc)
+                    sc = sum(sc) / len(sc)
                     sc_all.append(sc)
 
             except (ValueError, RuntimeWarning, TypeError):
@@ -229,7 +229,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
     par = list(itertools.combinations(free_symbols, 2))
 
     # free_symbols = [] # no dependence
-    free_symbols = par #all denpendence
+    free_symbols = par  # all denpendence
     # free_symbols = [par[0]]
     # free_symbols = par[-1:]
     # free_symbols = par[1:]
@@ -250,7 +250,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
 
             fdv1 = sympy.diff(expr01.subs(subbb), i, evaluate=True)
             fdv1 = fdv1.subs(subb_re)
-            subbb={}
+            subbb = {}
             subbb3 = {k: Function("{}f".format(k.name))(v) for k, v in free_symbols if k is not j and v is j}
             subbb4 = {k: Function("{}f".format(k.name))(v) for v, k in free_symbols if k is not j and v is j}
             subbb.update(subbb3)
@@ -274,7 +274,6 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
 
     except (ValueError, RuntimeWarning, TypeError):
         pre_dy_all, dy_all = None, None
-
 
     return pre_dy_all, dy_all
 

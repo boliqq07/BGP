@@ -11,6 +11,7 @@ from bgp.skflow import SymbolLearning
 def error(y, pre_y):
     return np.mean(np.abs((y - pre_y) / y))
 
+
 # if __name__ == "__main__":
 #     pa_factor, pa_dim = Dim.convert_to(10 * 6 * pa)
 #     ###########第一个###########
@@ -69,7 +70,8 @@ if __name__ == "__main__":
                         initial_max=2, max_value=4, store=True,
                         stats={"fitness_dim_max": ("max",)}
                         )
-    sl.fit(x, y,x_dim = [pa_dim,dless,dless,dless,dless,dless,dless], y_dim=pa_dim, power_categories=(2, 3, 0.5, 0.33),
+    sl.fit(x, y, x_dim=[pa_dim, dless, dless, dless, dless, dless, dless], y_dim=pa_dim,
+           power_categories=(2, 3, 0.5, 0.33),
            categories=("Add", "Mul", "Sub", "Div"), )
 
     print(sl.expr)

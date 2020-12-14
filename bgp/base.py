@@ -56,9 +56,9 @@ class SymbolTerminal:
             Represent name. Default "xi".
         init_name: str
             Just for show, rather than calculate.\n
-            Examples:\n
-            init_name=[x1, x2] , if is compact features, need[].\n
-            init_name=(x1*x4-x3), if is expr, need ().
+            Examples:
+                init_name=[x1, x2] , if is compact features, need[].\n
+                init_name=(x1*x4-x3), if is expr, need ().
         """
         self.name = str(name)
         self.conv_fct = str
@@ -123,9 +123,9 @@ class SymbolTerminalDetail(SymbolTerminal):
             list.
         init_name: str or None 
             Just for show, rather than calculate.\n
-            Examples:\n
-            init_name="[x1, x2]" , if is compact features, need[].\n
-            init_name="(x1*x4-x3)", if is expr, need ().
+            Examples:
+                init_name="[x1, x2]" , if is compact features, need[].\n
+                init_name="(x1*x4-x3)", if is expr, need ().
         """
         super(SymbolTerminalDetail, self).__init__(name, init_name)
         if prob is None:
@@ -171,7 +171,8 @@ def _tsum(*ters, name="gx0"):
 
 
 class SymbolPrimitive:
-    """General operator type, do not use directly, but use SymbolPrimitiveDetail"""
+    """General operator type, do not use directly,
+    but use SymbolPrimitiveDetail."""
 
     def __init__(self, name, arity):
         """
@@ -182,7 +183,7 @@ class SymbolPrimitive:
             function name.
         arity: int
             input parameters numbers of function.
-            such as ``+`` with 2, ``ln` with 1.
+            such as ``+`` with 2, ``ln`` with 1.
 
         """
         self.name = str(name)
@@ -218,9 +219,9 @@ class SymbolPrimitiveDetail(SymbolPrimitive):
         """
         Parameters
         ----------
+
         func: Callable
             function. better using sympy.Function Type.\n
-
             For Maintainer:
                 If self function and can not be simplified to sympy.Function or elementary function, 
                 the function for function.np_map() and dim.dim_map() should be defined.
@@ -258,7 +259,6 @@ class SymbolSet(object):
         ----------
         name: str
             name.
-
         """
         self.arguments = []  # for translate
         self.name = name
@@ -415,7 +415,7 @@ class SymbolSet(object):
 
     def register(self, primitives_dict="all", dispose_dict="all", ter_con_dict="all"):
         """
-        Register and capsule for simpify.
+        Register and capsule for simplify.
         
         Parameters
         ----------
@@ -536,55 +536,54 @@ class SymbolSet(object):
 
         Parameters
         ----------
-
         power_categories: Sized, tuple, None
-            Examples:(0.5, 2, 3)
+            Examples:
+                (0.5, 2, 3)
         categories: tuple of str
             map table:
-                    {"Add": sympy.Add, 'Sub': Sub, 'Mul': sympy.Mul, 'Div': Div}
-                    {"sin": sympy.sin, 'cos': sympy.cos, 'exp': sympy.exp, 'ln': sympy.ln, }
-                    {'Abs': sympy.Abs, "Neg": functools.partial(sympy.Mul, -1.0), }
-                    "Rec": functools.partial(sympy.Pow, e=-1.0)}
+                {'Add': sympy.Add, 'Sub': Sub, 'Mul': sympy.Mul, 'Div': Div}
+                {"sin": sympy.sin, 'cos': sympy.cos, 'exp': sympy.exp, 'ln': sympy.ln, }
+                {'Abs': sympy.Abs, "Neg": functools.partial(sympy.Mul, -1.0), }
+                "Rec": functools.partial(sympy.Pow, e=-1.0)}
 
-                    Others:  \n
-                    "Rem":  f(x)=1-x, if x true \n
-                    "Self":  f(x)=x, if x true \n
-
-        power_categories_prob:"balance", float
-            float in (0, 1]
-
-            probability of power categories, "balance" is 1/n_power_cat.
-
+                Others:  \n
+                "Rem":  f(x)=1-x, if x true \n
+                "Self":  f(x)=x, if x true \n
         categories_prob: "balance", float
-            float in (0, 1]
-
-            probabilityty of categories, except (+, -*, /), "balance" is 1/n_categories.
-
-            Notes: the  (+, -*, /) are set as 1 to be a standard.
-        special_prob: None or dict
-            Examples: {"Mul":0.6, "Add":0.4, "exp":0.1}
+            probability of categories, except (+, -*, /), in (0, 1].
+            "balance" is 1/n_categories.
+            The (+, -*, /) are set as 1 to be a standard.
+        special_prob: None, dict
+            prob for special name.\n
+            Examples:{"Mul":0.6, "Add":0.4, "exp":0.1}
+        power_categories_prob: "balance", float
+            float in (0, 1].
+            probability of power categories, "balance" is 1/power_categories_prob.
         self_categories:list of dict, None
-            the dict can be generate from newfuncV or defination self.
-
+            the dict can be generate from newfuncV or definition self.\n
             the function at least containing:
-
             {"func": func, "name": name, "arity":2, "np_func": npf, "dim_func": dimf, "sym_func": gsymf}
 
-            func:sympy.Function(name) object
+            1.func:sympy.Function(name) object
 
-            name:name
+            2.name:name
 
-            arity:int, the number of parameter
+            3.arity:int, the number of parameter
 
-            np_func:numpy function
+            4.np_func:numpy function
 
-            dim_func:dimension function
+            5.dim_func:dimension function
 
-            sym_func:NewArray function. (unpack the group, used just for shown)
+            6.sym_func:NewArray function. (unpack the group, used just for shown)
 
             See Also bgp.newfunc.newfuncV
-
         """
+
+        """        
+
+
+
+"""
         if categories is None:
             categories = ("Add", "Mul", "Self", "exp")
 
@@ -648,13 +647,14 @@ class SymbolSet(object):
         categories: tuple of str
             categories=("Self", "MAdd", "MSub", "MMul", "MDiv")
         categories_prob: None, "balance" or float.
-            probility of categories  (0, 1], except ("Self", "MAdd", "MSub", "MMul", "MDiv"), 
+            probility of categories in (0, 1], except ("Self", "MAdd", "MSub", "MMul", "MDiv"),
 
             "balance" is 1/n_categories.
 
-            "MSub", "MMul", "MDiv" only work on the size of group is 2, else work like "Self".
+            "MSub", "MMul", "MDiv" are only worked on the size of group is 2, else work like "Self".
 
-            Notes: the  ("Self", "MAdd", "MSub", "MMul", "MDiv") are set as 1 and 0.1 to be a standard.
+            Notes:
+                the  ("Self", "MAdd", "MSub", "MMul", "MDiv") are set as 1 to be a standard.
         self_categories:list of dict, None
             the dict can be generate from newfuncD or defination self.
 
@@ -662,20 +662,21 @@ class SymbolSet(object):
 
             {"func": func, "name": name, "np_func": npf, "dim_func": dimf, "sym_func": gsymf}
 
-            func:sympy.Function(name) object, which need add attributes: is_jump, keep.
+            1.func:sympy.Function(name) object, which need add attributes: is_jump, keep.
 
-            name:name
+            2.name:name
 
-            np_func:numpy function
+            3.np_func:numpy function
 
-            dim_func:dimension function
+            4.dim_func:dimension function
 
-            sym_func:NewArray function. (unpack the group, used just for shown)
+            5.sym_func:NewArray function. (unpack the group, used just for shown)
 
             See Also bgp.newfunc.newfuncV
 
         special_prob: None or dict
-            Examples: {"MAdd":0.5, "Self":0.5}
+            Examples:
+                {"MAdd":0.5, "Self":0.5}
         """
 
         def change(n, pp):
@@ -736,7 +737,7 @@ class SymbolSet(object):
     def add_tree_to_features(self, Tree, prob=0.3):
         """
         Add the individual as a new feature to initial features.
-        not sure add seccess, because the value and name should be check and
+        not sure add success, because the value and name should be check and
         different to exist.
 
         Parameters
@@ -898,7 +899,7 @@ class SymbolSet(object):
         c: float, list
             list of float.
         c_prob: None, float, list of float
-            the same size wih c.
+            the same size with c.
         """
         if isinstance(c, float):
             c = [c, ]
@@ -940,7 +941,7 @@ class SymbolSet(object):
         ----------
         pers : list of list
             Examples:
-                [[index1, index2, prob]]
+                [[index1, index2, prob]],
                 the prob in [0, 1).
         """
         for i in pers:
@@ -948,10 +949,10 @@ class SymbolSet(object):
 
     def bonding_personal_maps(self, pers):
         """
-        Personal preference add to permap. more control can be found by pset.premap.***\n
+        Personal preference add to permap more control can be found by pset.premap\n
         Bond the points with ratio. the others would be penalty.\n
         For example set the [1, 2, 0.9], 
-        the others bond such as (1, 2), (1, 3), (1, 4)...(2, 3), (2, 4)...would be with small prob.
+        the others bond such as (1, 2), (1, 3), (1, 4),...,(2, 3), (2, 4)...would be with small prob.
 
         Parameters
         ----------
@@ -1190,7 +1191,9 @@ class _ExprTree(list):
 
 
 class SymbolTree(_ExprTree):
-    """ Individual Tree, each tree is one expression"""
+    """ Individual Tree, each tree is one expression.
+    The SymbolTree is only generated by method: ``genGrow`` and ``genFull``.
+    """
 
     def __init__(self, *arg, **kwargs):
         super(SymbolTree, self).__init__(*arg, **kwargs)
