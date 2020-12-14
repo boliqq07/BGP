@@ -116,14 +116,14 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                    "integer":  dim is integer, \n
                    ...
                    }
-            if stats is None, default is :\n
 
-                for cal_dim=True:
-                    stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+            if stats is None, default is :
 
-                for cal_dim=False:
-                    stats = {"fitness": ("max",)}
+            for cal_dim=True:
+                stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
 
+            for cal_dim=False:
+                stats = {"fitness": ("max",)}
 
             if self-definition, the key is func to get attribute of each ind.
 
@@ -131,7 +131,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
                 def func(ind):
                     return ind.fitness[0]
-                stats = {func: ("mean",), "dim_is_target": ("sum",)}
+                stats = { func: ("mean",), "dim_is_target":("sum",)}
 
         verbose:bool
             print verbose logbook or not.
@@ -155,6 +155,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         classification: bool
             classification or not.
         """
+
         self.args = args
         self.kwargs = kwargs
         if loop is None:
@@ -237,6 +238,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             warm_start generation.
 
         """
+
         # try to find pest form args,kwargs
         psets = [i for i in self.args if isinstance(i, SymbolSet)]
         if len(psets) > 0:

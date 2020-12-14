@@ -7,6 +7,8 @@ sphinx-apidoc -f -o ./source/src ../bgp
 
 make clean
 
+make html
+
 pause
 
 exit

@@ -12,14 +12,11 @@ def newfuncV(operation, arity=1, name="Fc"):
     Parameters
     ----------
     operation:callable
-        the detail of opearation only accept +,-,*,/,abs,-(negative),x^n
+        the detail of operation only accept +,-,*,/,abs,-(negative),x^n.
     arity: int
-        the arity of opeaation
+        the arity of operation.
     name:str
-        name
-    Returns
-    -------
-    dict
+        name.
     """
     func = Function(name)
 

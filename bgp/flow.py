@@ -176,13 +176,14 @@ class BaseLoop(Toolbox):
                    "integer":  dim is integer, \n
                    ...
                    }
-            if stats is None, default is:\n
 
-                for cal_dim=True:
-                    stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+            if stats is None, default is:
 
-                for cal_dim=False
-                    stats = {"fitness": ("max",)}
+            for cal_dim=True:
+                stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+
+            for cal_dim=False
+                stats = {"fitness": ("max",)}
 
             if self-definition, the key is func to get attribute of each ind.
 
@@ -206,6 +207,7 @@ class BaseLoop(Toolbox):
                 def func(ind):
                     c = ind.fitness.values[0]>=0.90
                     return c
+
         details:bool
             return expr and predict_y or not.
 
