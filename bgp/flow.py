@@ -54,7 +54,7 @@ from bgp.gp import cxOnePoint, varAnd, genGrow, staticLimit, selKbestDim, \
 
 class BaseLoop(Toolbox):
     """
-    Base loop for BGP
+    Base loop for BGP.
 
     Examples::
 

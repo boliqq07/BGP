@@ -9,7 +9,8 @@ from bgp.flow import MultiMutateLoop
 
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
-    """One simplify Guide for flow.\n
+    """
+    One simplify Guide for flow.\n
     1. The SymbolLearning is time-costing and not suit for ``GridSearchCV``,
     the cross_validate are embedded.\n
     2. For the classification problems, please using ``classification`` =True,
