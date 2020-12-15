@@ -51,6 +51,7 @@ def general_expr(self, pset, simplifying=False):
 def group_str(self, pset, feature_name=False):
     """
     return expr just build by input feature name.
+
     Parameters
     ----------
     self:sympy.Expr or SymbolTree
@@ -134,6 +135,7 @@ def simple(expr01, groups):
     str to sympy.Expr function.
     add conv to MMdd and MMul.
     the calcualte conv need conform with np_func()!!
+    
     is_jump: jump the calculate >= 3 (group_size).
     keep: the calculate is return then input group_size or 1.
     """

@@ -523,12 +523,10 @@ def selKbestDim(pop, K_best=10, dim_type=None, fuzzy=False, fit_attr="fitness", 
     fuzzy:bool
         the dim or the dim with same base. such as m,m^2,m^3
     fit_attr:str
-        The attribute of individuals to use as selection criterion
-    force_number:
-        return the number the same with K
-    .. note::
-        default attr is "fitness"
-        
+        The attribute of individuals to use as selection criterion, default attr is "fitness".
+    force_number:False
+        return the number the same with K.
+
     Returns
     -------
     A list of selected individuals.

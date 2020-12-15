@@ -344,7 +344,7 @@ def inner_add_f(expr01, cof_list, cof_dict, vector_add):
 
 def add_coefficient(expr01, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False):
     """
-    try add placeholder coefficient to sympy expression.
+    Try add placeholder coefficient to sympy expression.
     add to Wi,A,B normal coefficient to expression.
     add V, Vi vecotr coefficient to expression, for this type of coefficent ,
     there should be expr01.conu for Function("MAdd"), Function("MSub").
@@ -477,6 +477,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
     """
     try calculate predict y by sympy expression with coef.
     if except error return expr self.
+
     Parameters
     ----------
     flat_add:bool
@@ -491,7 +492,6 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
         list of xi
     y: np.ndarray
         y value
-
     grid_x:
         new x to predict
     terminals: list of sympy.Symbol
