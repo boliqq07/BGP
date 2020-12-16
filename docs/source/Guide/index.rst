@@ -37,9 +37,11 @@ If you want to know more math principles and code structure,
 Turn to `Developer Manual.pdf <https://boliqq07.github.io/BGPdocument/doc.pdf)>`_,
 Or  `Developer Manual.ppt <https://boliqq07.github.io/BGPdocument/symbol.pptx>`_.
 
-.. image:: .\relation.png
+where you can see:
 
-.. image:: .\flow.png
+.. image:: relation.png
 
-.. image:: .\dim.png
+.. image:: flow.png
+
+.. image:: dim.png
 
