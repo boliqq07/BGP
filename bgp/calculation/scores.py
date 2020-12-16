@@ -197,6 +197,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
 def calculate_derivative_y(expr01, x, terminals, np_maps=None):
     """
     Something error for reference:
+
     M. Schmidt, H. Lipson, Distilling free-form natural laws from experimental data, Science, 324 (2009),
     81–85.
 
@@ -284,12 +285,12 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
                        inner_add=False, vector_add=False, out_add=False, flat_add=False, np_maps=None,
                        classification=False, score_object="y", details=False):
     """
-    use cv spilt for score,return the mean_test_score.
-    use cv spilt for predict,return the cv_predict_y.(not be used)
+    Use cv spilt for score, return the mean_test_score.
+    Use cv spilt for predict, return the cv_predict_y.(have not be used)
 
     Notes:
-        if cv and refit, all the data is refit to determination the coefficients.
-        Thus the expression is not compact with the this scores, when re-calculated by this expression
+        if cv and refit, all the data is refit to determine the coefficients.
+        Thus the expression is not compact with the this scores, when re-calculated by this expression.
 
     Parameters
     ----------

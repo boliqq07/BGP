@@ -7,7 +7,7 @@
 # @License: GNU Lesser General Public License v3.0
 
 """
-Base objects for to symbolic regression.
+Base objects for symbolic regression.
 
 Contains:
   - Class: ``SymbolSet``

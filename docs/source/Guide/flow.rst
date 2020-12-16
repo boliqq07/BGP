@@ -3,7 +3,7 @@ flow
 
 .. _flow:
 
-Some definition loop for genetic algorithm.
+Some definitions loop for genetic algorithm.
 
 contains:
   - Class: ``BaseLoop``
@@ -34,7 +34,7 @@ contains:
                         personal_map=False)
         bl.run()
 
-The **Parameters**, **Methods**, and **Attributes** for all loop is same.
+The **Parameters**, **Methods**, and **Attributes** for all loops are same.
 
 * Parameters
 
@@ -42,7 +42,7 @@ The **Parameters**, **Methods**, and **Attributes** for all loop is same.
 
 * Methods
 
-run
+run:
     run the loop.
     The ``flow.BaseLoop.run`` is the base of  ``skflow.SymbolicLearning.fit``
 

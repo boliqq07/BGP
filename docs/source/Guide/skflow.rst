@@ -44,7 +44,7 @@ The ``skflow.SymbolLearning`` could implement most of the functions and without 
 * user-defined probability of operation occurrence
 * user-defined probability of features mutual influence
 
-For these realization, we could customer the pset (base.SymbolSet) in advance and pass to "pset" parameters.
+For these realizations, we could customer the pset (base.SymbolSet) in advance and pass to "pset" parameters.
 For in-depth customization, please refer to ``base`` part and ``flow`` part.
 
 The call relationship(correspondence) is as follows:
@@ -60,15 +60,15 @@ The call relationship(correspondence) is as follows:
 
 **Attributes**
 
-.loop: str
+loop: str
     the running loop in flow part.
-.best_one:  SymbolTree
+best_one:  SymbolTree
     the best one of expressions.
-.expr:  sympy.Expr
+expr:  sympy.Expr
     the best one of expressions.
-.y_dim:  Dim
+y_dim:  Dim
     dim of calculate y.
-.fitness: float
+fitness: float
     score
 
 

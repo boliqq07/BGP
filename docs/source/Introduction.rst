@@ -13,14 +13,14 @@ by combined the ``blocks``, which is including
 and ``numerical term`` (1,0.5,0.16).
 
 **Dimension calculation** and **Artificial binding** are embedded in this tool.
-These added module are aimed to reduce the invalid search space, especially in
+These added modules are aimed to reduce the invalid search space, especially in
 specific physical domain knowledge.
 
 The numerical terms (coefficient,and intercept) in expressions are added
 by **coefficient fitting**.
 which is different to most of Genetic Programming packages.
 We offered different methods to site the numerical terms,
-to control the expressions to generate the best suitable ones near the expected outcome.
+to control the expressions to generate the best suitable one near the expected outcome.
 
 Some helpful code can be copied from others package and adapt to new environment.
 Infringement contents would be removed.

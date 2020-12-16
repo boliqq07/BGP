@@ -3,7 +3,7 @@ base
 
 .. _base:
 
-Base objects for to symbolic regression.
+Base objects for symbolic regression.
 
 contains:
   - Class: ``SymbolSet``
@@ -18,7 +18,7 @@ contains:
 SymbolSet
 >>>>>>>>>>>>
 
-For example, the data can be import from sklearn.
+For example, the data can be imported from sklearn.
 ::
 
     if __name__ == "__main__":
@@ -29,11 +29,11 @@ For example, the data can be import from sklearn.
         y = data["target"]
         c = [1, 2, 3]
 
-The ``SymbolSet`` is a presentation set contain the blocks, which is including
+The ``SymbolSet`` is a presentation set contains some 'blocks', which are including
 features ( x\ :sub:`1`, x\ :sub:`2` .etc)
 operators (+ - * / .etc) ,
 and numerical term (2, 3, 0.5).
-which is added by ``add_features``,``add_operations``,
+which can be added by ``add_features``,``add_operations``,
 ``add_constants``  "respectively"
 
 ::
@@ -47,7 +47,7 @@ which is added by ``add_features``,``add_operations``,
                  special_prob =  {"Mul": 0.5,"Add": 0.4,"exp": 0.1}
                  power_categories_prob = "balance")
 
-Then the mode can be built the same with ``skflow``, just replace the fit parameters: 'pset'.
+Then the mode can be built with ``skflow``, just replace the fit parameters: 'pset'.
 ::
 
         from bgp.skflow import SymbolLearning
@@ -85,7 +85,7 @@ For example:
 
     cp = CalculatePrecisionSet(pset, scoring=[r2_score, ],score_pen=[1, ], filter_warning=True)
 
-The cp could could calculate the individual by:
+The cp could calculate the individual by:
 ::
 
     result = cp.calculate_detail(individual)

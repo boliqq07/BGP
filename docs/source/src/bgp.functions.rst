@@ -4,6 +4,9 @@ bgp.functions package
 Submodules
 ----------
 
+.. image:: dim.png
+
+
 bgp.functions.dimfunc module
 ----------------------------
 

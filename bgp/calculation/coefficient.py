@@ -344,11 +344,11 @@ def inner_add_f(expr01, cof_list, cof_dict, vector_add):
 
 def add_coefficient(expr01, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False):
     """
-    Try add placeholder coefficient to sympy expression.
-    add to Wi,A,B normal coefficient to expression.
-    add V, Vi vecotr coefficient to expression, for this type of coefficent ,
-    there should be expr01.conu for Function("MAdd"), Function("MSub").
-    more detial can be found in ..translate.simple
+    Try add the placeholder coefficient to sympy expression.
+    1. Add Wi,A,B normal coefficients to expression.
+    2. Add V, Vi vector coefficients to expression, for this type of coefficient ,
+    there should be with expr01.conu for Function("MAdd"), Function("MSub").
+    more details can be found in ..translate.simple
 
     Parameters
     ----------
@@ -475,17 +475,17 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
                  filter_warning=True, inter_add=True, inner_add=False, vector_add=False, out_add=False, flat_add=False,
                  np_maps=None, classification=False):
     """
-    try calculate predict y by sympy expression with coef.
-    if except error return expr self.
+    Try calculate predict y by sympy expression with coefficients.
+    if except error return expr itself.
 
     Parameters
     ----------
     flat_add:bool
-        add flat coefficent or not
+        add flat coefficient or not
     out_add:
-        add out coefficent or not
+        add outcoefficientt or not
     vector_add: bool
-        add vector coefficent or not
+        add vectorcoefficientt or not
     expr01: sympy.Expr
         sympy expressions
     x: list of np.ndarray
