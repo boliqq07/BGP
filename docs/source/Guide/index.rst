@@ -12,13 +12,13 @@ Guide
 
 **Suggested Using**
 
-``skflow``: One sklearn-type implement to run symbol learning.
+``skflow``: One sklearn-type implement to run symbol learning
 
 **Advanced Using**
 
-``base``:  The storage form of expression (tree-style), integration calculate methods, and define the present set for features and operations.
+``base``:  The storage form of expression (tree-style), integration calculate methods, and define the present set for features and operations
 
-``flow``:  Genetic algorithm loop.
+``flow``:  Genetic algorithm loop
 
 **For developers**
 
