@@ -5,6 +5,8 @@ This is a classification sample.
 ::
 
     if __name__ == "__main__":
+        from sklearn import metrics
+        from sklearn.utils import shuffle
         from sklearn.datasets import load_iris
         from bgp.skflow import SymbolLearning
 
