@@ -1,6 +1,8 @@
 Introduction
 ==================
 
+.. image:: img.jpg
+
 BGP (Binding Genetic Programming)
 
 Binding Genetic Programming is developed on Genetic Programming.

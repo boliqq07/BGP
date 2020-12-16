@@ -80,7 +80,7 @@ class BaseLoop(Toolbox):
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False,
-                 score_object="y", sub_mu_max=1):
+                 score_object="y", sub_mu_max=1, limi_type="h_bgp"):
         """
 
         Parameters
@@ -101,6 +101,8 @@ class BaseLoop(Toolbox):
             min initial size of expression when first producing.
         max_value:int
             max size of expression.
+        limi_type: "height" or "length",","h_bgp"
+            limitation type for max_value, but don't affect initial_max, initial_min.
         hall:int,>=1
             number of HallOfFame (elite) to maintain.
         re_hall:None or int>=2
@@ -236,6 +238,7 @@ class BaseLoop(Toolbox):
         self.re_hall = re_hall
         self.re_Tree = re_Tree
         self.store = store
+        self.limi_type = limi_type
         self.data_all = []
         self.personal_map = personal_map
         self.stop_condition = stop_condition
@@ -279,14 +282,20 @@ class BaseLoop(Toolbox):
 
         self.register("mutate", mutUniform, expr=self.gen_mu, pset=self.cpset)
 
-        self.decorate("mate", staticLimit(key=operator.attrgetter("height"), max_value=2 * (max_value + 1)))
-        self.decorate("mutate", staticLimit(key=operator.attrgetter("height"), max_value=2 * (max_value + 1)))
+        self.decorate("mate", staticLimit(key=operator.attrgetter(limi_type), max_value=self.max_value))
+        self.decorate("mutate", staticLimit(key=operator.attrgetter(limi_type), max_value=self.max_value))
 
         if stats is None:
             if cal_dim:
-                stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+                if score_pen[0] > 0:
+                    stats = {"fitness_dim_max": ("max",), "dim_is_target": ("sum",)}
+                else:
+                    stats = {"fitness_dim_min": ("min",), "dim_is_target": ("sum",)}
             else:
-                stats = {"fitness": ("max",)}
+                if score_pen[0] > 0:
+                    stats = {"fitness": ("max",)}
+                else:
+                    stats = {"fitness": ("min",)}
 
         self.stats = Statis_func(stats=stats)
         logbook = Logbook()
@@ -427,9 +436,14 @@ class BaseLoop(Toolbox):
 
         return data
 
-    def check_height(self, pop, site=""):
+    def check_height_length(self, pop, site=""):
         old = len(pop)
-        pop = [i for i in pop if i.height <= 2 * (self.max_value + 1)]
+        if self.limi_type == 'height':
+            pop = [i for i in pop if i.height <= self.max_value]
+        elif self.limi_type == 'length':
+            pop = [i for i in pop if i.length <= self.max_value]
+        else:
+            pop = [i for i in pop if i.h_bgp <= self.max_value]
         new = len(pop)
         if old == new:
             pass
@@ -524,7 +538,7 @@ class BaseLoop(Toolbox):
             migrate_pop = [self.PTree(self.genFull()) for _ in range(int(self.migrate_prob * len(population)))]
             population[:] = offspring + migrate_pop
 
-            population = self.check_height(population)
+            population = self.check_height_length(population)
 
             # 5.break#######################################################
             if self.stop_condition is not None:

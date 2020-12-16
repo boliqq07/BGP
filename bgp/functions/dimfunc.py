@@ -128,6 +128,11 @@ class Dim(numeric.ndarray):
         from sympy.physics.units import N
         scale,dim = Dim.convert_to_Dim(N)
 
+    Examples::
+
+        dim=[1,0,1,0,1,0,0]
+        dim = Dim(dim)
+
     Notes:
         self.unit = [str(i) for i in SI._base_units]\n
         self.unit_map = {'meter': "m", 'kilogram': "kg", 'second': "s",

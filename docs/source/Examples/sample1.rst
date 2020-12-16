@@ -12,7 +12,7 @@ This is a regression, Max-problem sample.
       x = data["data"]
       y = data["target"]
 
-      sl = SymbolLearning(loop="MutilMutateLoop", pop=500, gen=2, random_state=1)
+      sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=2, random_state=1)
       sl.fit(x, y)
       score = sl.score(x, y, "r2")
       print(sl.expr)

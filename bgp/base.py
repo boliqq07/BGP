@@ -1158,6 +1158,14 @@ class _ExprTree(list):
         return max_depth
 
     @property
+    def length(self):
+        return self.__len__()
+
+    @property
+    def h_bgp(self):
+        return (self.height - 1) / 2
+
+    @property
     def root(self):
         """Root of the tree, the element 0 of the list.
         """

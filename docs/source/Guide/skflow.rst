@@ -1,10 +1,13 @@
 skflow
 ==================
 
-One "sklearn-type" implement to run symbol learning.
-We recommend this approach when rapid modeling.
-The SymbolLearning could implement most of the
-functions and without other assistance functions.
+Contains:
+  - Class: :py:class:`bgp.skflow.SymbolLearning`
+
+    One "sklearn-type" implement to run symbol learning.
+    We recommend this approach when rapid modeling.
+    The SymbolLearning could implement most of the
+    functions and without other assistance functions.
 
 For example, the data can be import from sklearn.
 ::
@@ -29,14 +32,16 @@ with random state = 1).
                                 re_hall=2, add_coef=True, random_state=1
                                 )
 
-Fitting data and  add the binding with ``x_group``.
+Fitting data and add the binding with ``x_group``.
 ::
 
           sl.fit(x, y, c=c,x_group=[[1, 3], [0, 2], [4, 7]]))
           score = sl.score(x, y, "r2")
           print(sl.expr)
 
-The ``skflow.SymbolLearning`` could implement most of the functions and without other assistance functions.
+The detail of ``x_group`` can be found in :doc:`remarks`.
+
+The ``SymbolLearning`` could implement most of the functions and without other assistance functions.
 
 :Except:
 
@@ -47,16 +52,12 @@ The ``skflow.SymbolLearning`` could implement most of the functions and without 
 For these realizations, we could customer the pset (base.SymbolSet) in advance and pass to "pset" parameters.
 For in-depth customization, please refer to ``base`` part and ``flow`` part.
 
-The call relationship(correspondence) is as follows:
+More Examples:
 
-``flow.loop`` --> ``skflow.SymbolLearning``
-
-``base.pset.add_features_and_constants`` --> ``skflow.SymbolLearning.fit``
-
-``base.pset.add_operations`` --> ``skflow.SymbolLearning.fit``
+:doc:`../Examples/index`
 
 
-**Parameters** and **Methods** can be found in Index.
+**Parameters** and **Methods** can be found in :py:mod:`bgp.skflow.SymbolLearning`.
 
 **Attributes**
 
@@ -71,4 +72,11 @@ y_dim:  Dim
 fitness: float
     score
 
+The call relationship(correspondence) is as follows:
+
+``flow.loop`` --> ``skflow.SymbolLearning``
+
+``base.pset.add_features_and_constants`` --> ``skflow.SymbolLearning.fit``
+
+``base.pset.add_operations`` --> ``skflow.SymbolLearning.fit``
 

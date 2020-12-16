@@ -12,7 +12,7 @@ This is a Min Problem sample.
         x = data["data"]
         y = data["target"]
 
-        sl = SymbolLearning(loop="MutilMutateLoop", pop=500, gen=2, random_state=1,
+        sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=2, random_state=1,
                           scoring=[metrics.mean_absolute_error,],
                           score_pen=[-1,],
                           stats = {"fitness_dim_min": ("min",), "dim_is_target": ("sum",)},

@@ -1,16 +1,14 @@
 base
 ==================
 
-.. _base:
-
 Base objects for symbolic regression.
 
-contains:
-  - Class: ``SymbolSet``
+Contains:
+  - Class: :py:class:`bgp.base.SymbolSet`
 
-  - Class: ``CalculatePrecisionSet``
+  - Class: :py:class:`bgp.base.CalculatePrecisionSet`
 
-  - Class: ``SymbolTree``
+  - Class: :py:class:`bgp.base.SymbolTree`
 
   - others
 
@@ -33,8 +31,9 @@ The ``SymbolSet`` is a presentation set contains some 'blocks', which are includ
 features ( x\ :sub:`1`, x\ :sub:`2` .etc)
 operators (+ - * / .etc) ,
 and numerical term (2, 3, 0.5).
-which can be added by ``add_features``,``add_operations``,
-``add_constants``  "respectively"
+which can be added by ``add_features``, ``add_operations``, ``add_constants`` respectively.
+
+The detail of ``add_features``,``add_operations`` can be found in :doc:`remarks`.
 
 ::
 
@@ -47,7 +46,7 @@ which can be added by ``add_features``,``add_operations``,
                  special_prob =  {"Mul": 0.5,"Add": 0.4,"exp": 0.1}
                  power_categories_prob = "balance")
 
-Then the mode can be built with ``skflow``, just replace the fit parameters: 'pset'.
+Then the mode can be built with ``skflow.SymbolLearning``, just replace the fit parameters: 'pset'.
 ::
 
         from bgp.skflow import SymbolLearning

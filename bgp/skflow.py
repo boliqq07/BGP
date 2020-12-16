@@ -210,7 +210,13 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         x_group:list of list
             Group of x.
 
-            See Also pset.add_features_and_constants
+            Examples:
+
+                x_group=[[1,2],]
+                or
+                x_group=2
+
+            See Also :py:func:`bgp.base.SymbolSet.add_features`
 
         power_categories: Sized,tuple, None
             Examples:(0.5,2,3)

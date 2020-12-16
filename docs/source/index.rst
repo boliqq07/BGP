@@ -17,7 +17,6 @@ Welcome to BGP's documentation!
 
 .. image:: img.jpg
 
-
 This tool is a symbol regression tool with dimension calculation,
 which is aimed to establish expressions with physical limitation.
 

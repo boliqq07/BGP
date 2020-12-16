@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # # try with different random_state.
     # for i in range(20):
     #     stop = lambda ind: ind.fitness.values[0] >= 0.95
-    #     sl = SymbolLearning(loop="MutilMutateLoop", pset=pset0, gen=30, pop=1000, hall=1, batch_size=40, re_hall=5,
+    #     sl = SymbolLearning(loop="MultiMutateLoop", pset=pset0, gen=30, pop=1000, hall=1, batch_size=40, re_hall=5,
     #                         n_jobs=12, mate_prob=0.9, max_value=h_bgp, initial_min=2, initial_max=h_bgp,
     #                         mutate_prob=0.8, tq=False, dim_type="coef", stop_condition=stop,
     #                         re_Tree=0, store=False, random_state=1, verbose=True,

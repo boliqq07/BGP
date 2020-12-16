@@ -30,3 +30,10 @@ And return the results::
 
     **When the result of one problem is not stable, the final expression is changed with random_state (random seed).
     The random seeds between window and linux are different.**
+
+More Examples:
+
+:doc:`Guide/skflow`
+
+:doc:`Examples/index`
+

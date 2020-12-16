@@ -1,6 +1,6 @@
 中文文档
 =========
-bgp.skflow.SymbolLearning 使用"sklearn-type" 的方式实现符号回归，在快速建模时，我们推荐使用此方法。
+:py:class:`bgp.skflow.SymbolLearning` 使用"sklearn-type" 的方式实现符号回归，在快速建模时，我们推荐使用此方法。
   
 默认参数针对最大值回归问题，您可以自定义参数以应用到其他方面。
 
@@ -8,7 +8,7 @@ bgp.skflow.SymbolLearning 使用"sklearn-type" 的方式实现符号回归，在
 
 :关注点: 参数名称
 
-:基础: loop, pop,gen, random_state, mutate_prob, mate_prob
+:基础: loop, pop, gen, random_state, mutate_prob, mate_prob
 
 :效率控制: random_state, batch_size, random_state
 
@@ -22,7 +22,7 @@ bgp.skflow.SymbolLearning 使用"sklearn-type" 的方式实现符号回归，在
 
 :量纲计算: dim_type, cal_dim, fuzzy, fit(x_dim,y_dim,c_dim)
 
-:分类问题: classification, scoring,score_pen
+:分类问题: classification, scoring, score_pen
 
 :最小值问题: stats, scoring, score_pen
 
@@ -45,14 +45,14 @@ bgp.skflow.SymbolLearning 使用"sklearn-type" 的方式实现符号回归，在
         y = data["target"]
         c = [1, 2, 3]
 
-        sl = SymbolLearning(loop="MutilMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
+        sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
                     )
         sl.fit(x, y, c=c,x_group=[[1, 3], [0, 2], [4, 7]]))
         score = sl.score(x, y, "r2")
         print(sl.expr)
 
-2.如果想更加需要定义功能细节（自定义特殊运算符，自定义运算符出现概率，自定义特征互影响概率）,
-我们可以预先建立 ``SymbolSet`` 对象(base.SymbolSet) 并传递给 ``SymbolLearning`` 的fit函数的pset参数。
+2.如果想更加需要定义功能细节（自定义特殊运算符，自定义运算符出现概率， 定义特征互影响概率）,
+我们可以预先建立 ``SymbolSet`` 对象:py:doc:`bap.base.SymbolSet` 并传递给 ``SymbolLearning`` 的fit函数的pset参数。
 
 此深度定制细节，请参考**base**部分和**flow**部分。
 ::
@@ -76,7 +76,7 @@ bgp.skflow.SymbolLearning 使用"sklearn-type" 的方式实现符号回归，在
                  power_categories_prob = "balance"
                  )
 
-        sl = SymbolLearning(loop="MutilMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
+        sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
                     )
         sl.fit(pset=pset0)
         score = sl.score(x, y, "r2")
@@ -87,11 +87,14 @@ SL参数
 :::::::::::::::::
 
 loop: str
-    （默认为'MutilMutateLoop'），
-    不同的符号回归循环方式。
+    不同的符号回归循环方式（默认为'MultiMutateLoop'）.
+
     'BaseLoop'：基本循环，
-    'MutilMutateLoop'：多变异方式循环，
+
+    'MultiMutateLoop'：多变异方式循环，
+
     'OnePointMutateLoop'：单点变异循环，适合某固定长度公式的问题，
+
     'DimForceLoop'：量纲锁定循环，所有个体必须都有量纲。（请保证输入量纲有足够的能力计算出目标量纲）。
 
 pop:int
@@ -127,7 +130,9 @@ re_Tree: int
 personal_map:bool or "auto"
     互作用系数
     "auto" 根据表达式出现的特征自动调节特征的概率。
+
     True 使用等同的互作用概率。
+
     False 不使用互作用系数，使用独立的概率。
 
 scoring: list of Callbale, default is [sklearn.metrics.r2_score,]
@@ -135,17 +140,20 @@ scoring: list of Callbale, default is [sklearn.metrics.r2_score,]
 
 score_pen: tuple of  1, - 1 or float but 0.
     >0 : 求最大值问题, 下限为 - np.inf，（适合r2_score，accuracy等）
+
     <0 : 求最小值问题, 上限为 np.inf，（适合MAE,MSE等）
+
     Notes:
     如果采用多重评价，则必须预先将分值转换为相同的量级及正负，或者直接用score_pen表示权重。
+
     因为最终分值为均值 mean(w_i * score_i)
+
     Examples: [r2_score] is [1]。
 
 cv:sklearn.model_selection._split._BaseKFold,int
-    交叉验证。
-    这里不建议打乱数据，建议预处理提前打乱数据。
-    默认不使用 cv
+    交叉验证(默认不使用 cv)。
 
+    这里不建议打乱数据，建议预处理提前打乱数据。
 filter_warning:bool
     是否过滤warning。
 
@@ -172,6 +180,7 @@ n_jobs:int
 
 batch_size:int
     并行分批数。
+
     数值根据机器性能调节。
 
 random_state:int
@@ -288,15 +297,22 @@ c_prob: None,list of float
 
 x_group:int, list of list
     绑定条件，默认不绑定，退化为普通GP问题。
+
     绑定方式可以直接定义分组大小：
+
     如：x_group=2
+
     绑定方式可以自定义分组：
+
     如：x_group=[[1,2][3,4]],为x1，x2绑定，为x3，x4绑定。
+
     See Also pset.add_features_and_constants
 
 pset:SymbolSet
    （默认为None）
+
     准备序列，同初始化参数中的pset，并将其覆盖, 这里的再次输入可以用来做自定义的功能调整工作。
+
     若两处的pset均为None, 默认使用fit方法中的其他参数自动建立简单的pset。
 
     Note:

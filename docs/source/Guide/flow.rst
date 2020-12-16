@@ -1,22 +1,20 @@
 flow
 ==================
 
-.. _flow:
-
 Some definitions loop for genetic algorithm.
 
-contains:
-  - Class: ``BaseLoop``
+Contains:
+  - Class: :py:class:`bgp.flow.BaseLoop`
 
     one node mate and one tree mutate.
 
-  - Class: ``MultiMutateLoop``
+  - Class: :py:class:`bgp.flow.BaseLoop`
 
     one node mate and (one tree mutate, one node Replacement mutate, shrink mutate, difference mutate).
-  - Class: ``OnePointMutateLoop``
+  - Class: :py:class:`bgp.flow.BaseLoop`
 
     one node Replacement mutate: (keep height of tree)
-  - Class: ``DimForceLoop``
+  - Class: :py:class:`bgp.flow.BaseLoop`
 
     Select with dimension : (keep dimension of tree)
 
@@ -38,15 +36,14 @@ The **Parameters**, **Methods**, and **Attributes** for all loops are same.
 
 * Parameters
 
-    The Parameters is the same with ``skflow``, except the 'loop' parameter in ``skflow``.
+    The Parameters is the same with ``skflow.SymbolLearning``, except the 'loop' parameter in ``skflow.SymbolLearning``.
 
 * Methods
 
 run:
     run the loop.
+
     The ``flow.BaseLoop.run`` is the base of  ``skflow.SymbolicLearning.fit``
 
-* Attributes
-    None
 
 

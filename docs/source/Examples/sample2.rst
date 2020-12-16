@@ -14,7 +14,7 @@ This is a classification sample.
         y = data["target"][:98]
         c = None
 
-        sl = SymbolLearning(loop="MutilMutateLoop", pop=500, gen=2, random_state=1,
+        sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=2, random_state=1,
         classification=True, scoring=[metrics.accuracy_score,], score_pen=[1,])
         sl.fit(x, y)
 
