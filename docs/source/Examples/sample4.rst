@@ -20,3 +20,4 @@ This is a Dimension calculation sample.
           score = sl.score(x, y, "r2")
           print(sl.expr)
 
+The details of `Dim` can be found in :doc:`../Guide/remarks`

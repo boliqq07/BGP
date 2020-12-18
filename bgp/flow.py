@@ -389,7 +389,10 @@ class BaseLoop(Toolbox):
 
     def top_n(self, n=10, gen=-1, key="value", filter_dim=True, ascending=False):
         """
-        return the best n results.
+        Return the best n results.
+
+        Note:
+            Only valid in ``store=True``.
 
         Parameters
         ----------
@@ -411,7 +414,10 @@ class BaseLoop(Toolbox):
 
         """
         import pandas as pd
+        if self.store == "False":
+            raise TypeError("Only valid with store=True")
         data = self.data_all
+
         data = pd.DataFrame(data)
         if gen == -1:
             gen = max(data["gen"])
