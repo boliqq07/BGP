@@ -1308,7 +1308,7 @@ class CalculatePrecisionSet(SymbolSet):
     def __init__(self, pset, scoring=None, score_pen=(1,), filter_warning=True, cv=1,
                  cal_dim=True, dim_type=None, fuzzy=False, add_coef=True, inter_add=True,
                  inner_add=False, vector_add=False, out_add=False, flat_add=False, n_jobs=1, batch_size=20,
-                 tq=True, details=False, classification=False, score_object="y"):
+                 tq=True, details=False, classification=False, score_object="y", batch_para=False):
         """
 
         Parameters
@@ -1377,6 +1377,7 @@ class CalculatePrecisionSet(SymbolSet):
         self.flat_add = flat_add
         self.n_jobs = n_jobs
         self.batch_size = batch_size
+        self.batch_para = batch_para
         self.tq = tq
         self.fuzzy = fuzzy
         self.dim_type = dim_type if dim_type is not None else self.y_dim
@@ -1651,7 +1652,7 @@ class CalculatePrecisionSet(SymbolSet):
                                   details=self.details
                                   )
 
-        if isinstance(self.batch_size, int):
+        if isinstance(self.batch_size, int) and self.batch_para:
             score_dim_list = batch_parallelize(func=calls, iterable=indss, n_jobs=self.n_jobs,
                                                respective=False,
                                                tq=self.tq, batch_size=self.batch_size)
