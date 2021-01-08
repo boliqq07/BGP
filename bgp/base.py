@@ -820,11 +820,11 @@ class SymbolSet(object):
         n = X.shape[1]
         self.y = y.ravel()
 
-        if y_dim is 1:
+        if y_dim == 1:
             y_dim = dless
         self.y_dim = y_dim
 
-        if x_dim is 1:
+        if x_dim == 1:
             x_dim = [dless for _ in range(n)]
 
         if x_prob is None:
@@ -906,7 +906,7 @@ class SymbolSet(object):
 
         n = len(c)
 
-        if c_dim is 1:
+        if c_dim == 1:
             c_dim = [dless for _ in range(n)]
 
         if c_prob is None:

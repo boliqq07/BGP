@@ -28,7 +28,8 @@ if __name__ == "__main__":
                         scoring=[metrics.accuracy_score, ], score_pen=[1, ],
                         store=True,
                         n_jobs=4,
-                        batch_size=50
+                        batch_size=5,
+                        batch_para = False
 
                         )
     tt.t
