@@ -25,7 +25,7 @@ from collections.abc import Iterable
 
 import numpy as np
 import sympy
-from mgetool.tool import parallelize
+from mgetool.tool import parallelize, batch_parallelize
 from sklearn.metrics import r2_score
 from sklearn.utils import check_X_y, check_array
 
@@ -1651,8 +1651,13 @@ class CalculatePrecisionSet(SymbolSet):
                                   details=self.details
                                   )
 
-        score_dim_list = parallelize(func=calls, iterable=indss, n_jobs=self.n_jobs,
-                                     respective=False,
-                                     tq=self.tq, batch_size=self.batch_size)
+        if isinstance(self.batch_size, int):
+            score_dim_list = batch_parallelize(func=calls, iterable=indss, n_jobs=self.n_jobs,
+                                               respective=False,
+                                               tq=self.tq, batch_size=self.batch_size)
+        else:
+            score_dim_list = parallelize(func=calls, iterable=indss, n_jobs=self.n_jobs,
+                                         respective=False,
+                                         tq=self.tq, batch_size=self.batch_size)
 
         return score_dim_list

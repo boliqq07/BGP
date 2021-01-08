@@ -25,6 +25,7 @@ if __name__ == "__main__":
                         classification=True,
                         scoring=[metrics.accuracy_score, ], score_pen=[1, ],
                         store=True,
+                        n_jobs=4
                         )
 
     sl.fit(x, y, c=c,
