@@ -80,7 +80,7 @@ class BaseLoop(Toolbox):
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False,
-                 score_object="y", sub_mu_max=1, limi_type="h_bgp"):
+                 score_object="y", sub_mu_max=1, limi_type="h_bgp", batch_para=False):
         """
 
         Parameters
@@ -254,7 +254,8 @@ class BaseLoop(Toolbox):
                                            vector_add=vector_add, out_add=out_add, flat_add=flat_add, cv=cv,
                                            n_jobs=n_jobs, batch_size=batch_size, tq=tq,
                                            fuzzy=fuzzy, dim_type=dim_type, details=details,
-                                           classification=classification, score_object=score_object
+                                           classification=classification, score_object=score_object,
+                                           batch_para=batch_para
                                            )
 
         Fitness_ = newclass.create("Fitness_", Fitness, weights=score_pen)
