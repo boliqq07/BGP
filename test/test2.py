@@ -29,7 +29,7 @@ if __name__ == "__main__":
                         store=True,
                         n_jobs=4,
                         batch_size=5,
-                        batch_para = False
+                        batch_para=False
 
                         )
     tt.t

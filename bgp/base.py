@@ -1508,6 +1508,14 @@ class CalculatePrecisionSet(SymbolSet):
             expr = ind
         else:
             raise TypeError("must be SymbolTree or sympy.Expr")
+
+        if self.cal_dim:
+            dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
+                                                 self.dim_ter_con_list, self.dim_type,
+                                                 self.fuzzy, self.dim_map)
+        else:
+            dim, dim_score = dless, 1
+
         score, expr01, pre_y = calculate_cv_score(expr, self.data_x, self.y,
                                                   self.terminals_and_constants_repr,
                                                   cv=self.cv, refit=self.refit,
@@ -1517,12 +1525,6 @@ class CalculatePrecisionSet(SymbolSet):
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
                                                   score_object=self.score_object, details=True)
-        if self.cal_dim:
-            dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
-                                                 self.dim_ter_con_list, self.dim_type,
-                                                 self.fuzzy, self.dim_map)
-        else:
-            dim, dim_score = dless, 1
 
         ind.y_dim = dim
         ind.expr = expr01
@@ -1546,6 +1548,13 @@ class CalculatePrecisionSet(SymbolSet):
         else:
             raise TypeError("must be sympy.Expr")
 
+        if self.cal_dim:
+            dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
+                                                 self.dim_ter_con_list, self.dim_type,
+                                                 self.fuzzy, self.dim_map)
+        else:
+            dim, dim_score = dless, 1
+
         score, expr01, pre_y = calculate_cv_score(expr, self.data_x, self.y,
                                                   self.terminals_and_constants_repr,
                                                   cv=self.cv, refit=self.refit,
@@ -1555,12 +1564,6 @@ class CalculatePrecisionSet(SymbolSet):
                                                   filter_warning=self.filter_warning,
                                                   np_maps=self.np_map, classification=self.classification,
                                                   score_object=self.score_object, details=True)
-        if self.cal_dim:
-            dim, dim_score = calcualte_dim_score(expr, self.terminals_and_constants_repr,
-                                                 self.dim_ter_con_list, self.dim_type,
-                                                 self.fuzzy, self.dim_map)
-        else:
-            dim, dim_score = dless, 1
 
         result = {"score": score, "expr": expr01, "pre_y": pre_y, "dim": dim, "dim_score": dim_score}
 
