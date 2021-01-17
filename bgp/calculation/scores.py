@@ -532,6 +532,13 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                        details=False):
     expr01 = compile_context(ind, context, gro_ter_con)
 
+    if cal_dim:
+        dim, dim_score = calcualte_dim_score(expr01, terminals_and_constants_repr,
+                                             dim_ter_con_list, dim_type, fuzzy,
+                                             dim_maps=dim_maps)
+    else:
+        dim, dim_score = dless, 1
+
     score, expr01, pre_y = calculate_cv_score(expr01, x, y, terminals_and_constants_repr,
                                               cv=cv, refit=refit,
                                               add_coef=add_coef, inter_add=inter_add,
@@ -542,13 +549,6 @@ def calculate_collect_(ind, context, x, y, terminals_and_constants_repr, gro_ter
                                               np_maps=np_maps, classification=classification, score_object=score_object,
                                               details=details
                                               )
-
-    if cal_dim:
-        dim, dim_score = calcualte_dim_score(expr01, terminals_and_constants_repr,
-                                             dim_ter_con_list, dim_type, fuzzy,
-                                             dim_maps=dim_maps)
-    else:
-        dim, dim_score = dless, 1
 
     return score, dim, dim_score, expr01, pre_y
 

@@ -27,6 +27,7 @@ if __name__ == "__main__":
     pset0.add_features(x, y, x_dim=x_dim, y_dim=y_dim, x_group=x_g)
     pset0.add_constants(c, c_dim=c_dim, c_prob=0.05)
     pset0.add_operations(power_categories=(2, 3, 0.5, 1 / 3, 4, 1 / 4),
+                         # categories=("Mul",),
                          categories=("Add", "Mul", "Sub", "Div", "exp", "ln"),
                          self_categories=None)
 
@@ -40,6 +41,7 @@ if __name__ == "__main__":
                             n_jobs=12, mate_prob=0.9, max_value=h_bgp, initial_min=2, initial_max=h_bgp,
                             mutate_prob=0.8, tq=False, dim_type="coef", stop_condition=stop,
                             re_Tree=0, store=False, random_state=4, verbose=True,
+                            # stats=None,
                             stats={"fitness_dim_max": ["max"], "dim_is_target": ["sum"], "h_bgp": ["mean"]},
                             add_coef=True, inter_add=True, out_add=True, cal_dim=True, vector_add=True,
                             personal_map=False)

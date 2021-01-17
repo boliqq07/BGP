@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="iap13@192.9.200.239:10002">
+  <component name="PublishConfigData" autoUpload="Always" serverName="iap13@192.9.200.238:22 password">
     <serverData>
-      <paths name="gjj">
+      <paths name="MachineLearning@192.9.200.233:22">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
@@ -12,14 +12,14 @@
       <paths name="iap13@192.9.200.238:22 password">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/iap13/wcx" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home/iap13/wcx/BGP" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="iap13@192.9.200.239:10002">
+      <paths name="iap13@192.9.200.239:10002 password">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/iap13/wcx/BGP" local="$PROJECT_DIR$" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
@@ -30,7 +30,7 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="skk240">
+      <paths name="skk@192.9.200.240:22">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
@@ -38,5 +38,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
