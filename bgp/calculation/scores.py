@@ -440,6 +440,8 @@ def score_dim(dim_, dim_type, fuzzy=False):
             return 1 if dim_.isinteger() else 0
         elif dim_type == 'coef':
             return 1 if not dim_.anyisnan() else 0
+        elif dim_type == 'ignore':
+            return 1
         else:
             raise TypeError("dim_type should be None,'coef', 'integer', special Dim or list of Dim")
     elif isinstance(dim_type, list):
