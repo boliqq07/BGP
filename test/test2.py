@@ -7,12 +7,13 @@
 from mgetool.tool import tt
 
 if __name__ == "__main__":
-    from sklearn.datasets import load_iris
+    from sklearn.datasets import load_iris,load_boston
     from bgp.skflow import SymbolLearning
     from sklearn import metrics
     from sklearn.utils import shuffle
 
-    data = load_iris()
+    # data = load_iris()
+    data = load_boston()
     x = data["data"]
     y = data["target"]
     c = [1, 2, 3]
@@ -23,14 +24,18 @@ if __name__ == "__main__":
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=500,
                         re_hall=3,
-                        gen=2, random_state=1,
-                        classification=True,
-                        scoring=[metrics.accuracy_score, ], score_pen=[1, ],
-                        store=True,
-                        n_jobs=1,
-                        batch_size=5,
+                        gen=5, random_state=1,
+                        # classification=True,
+                        classification=False,
+                        # scoring=[metrics.accuracy_score, ], score_pen=[1, ],
+                        store=False,
+                        # store=True,
+                        n_jobs=4,
+
+                        batch_size=20,
                         batch_para=False,
-                        add_coef=False,
+
+                        # add_coef=False,
                         # out_add =True,
                         # vector_add=True,
                         )
