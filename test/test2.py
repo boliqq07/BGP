@@ -23,18 +23,20 @@ if __name__ == "__main__":
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=500,
                         re_hall=3,
-                        gen=4, random_state=1,
+                        gen=2, random_state=1,
                         classification=True,
                         scoring=[metrics.accuracy_score, ], score_pen=[1, ],
                         store=True,
-                        n_jobs=4,
+                        n_jobs=1,
                         batch_size=5,
-                        batch_para=False
-
+                        batch_para=False,
+                        add_coef=False,
+                        # out_add =True,
+                        # vector_add=True,
                         )
     tt.t
     sl.fit(x, y, c=c,
-           #           x_group=[[1, 3], [0, 2], [4, 7]]
+                     # x_group=[[0, 1], [2, 3]]
            )
     tt.t
     tt.p

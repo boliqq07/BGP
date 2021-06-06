@@ -62,7 +62,7 @@ def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None
             assert y.shape == pre_y.shape
             pre_y = check_array(pre_y, ensure_2d=False)
 
-    except (DataConversionWarning, AssertionError, ValueError, AttributeError, KeyError, ZeroDivisionError):
+    except (DataConversionWarning, TypeError,AssertionError, ValueError, AttributeError, KeyError, ZeroDivisionError):
         pre_y = None
 
     return pre_y, expr01

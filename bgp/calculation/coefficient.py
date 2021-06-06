@@ -5,6 +5,7 @@ import copy
 import warnings
 from collections import Counter
 
+import numba
 import numpy as np
 import sympy
 from scipy import optimize
@@ -425,8 +426,7 @@ class CheckCoef(object):
         lsa = list(range(len(self.cof_list)))
         n = len(lsa)
         for k in self.cof_dict_values:
-            lsi = list(range(k))
-            lsi = [lsii + n for lsii in lsi]
+            lsi = np.arange(k)+n
             lsa.append(lsi)
             n = lsi[-1] + 1
 
@@ -435,18 +435,14 @@ class CheckCoef(object):
     def group(self, p, decimals=False):
         """change the p to grpup"""
         p = np.array(p)
-        ls = []
-        for i in self.ind:
-            if isinstance(i, int):
-                ls.append(p[i])
-            else:
-                ps = p[i].reshape((-1, 1))
-                ls.append(ps)
+
+        ls = [p[i] if isinstance(i, int) else p[i].reshape((-1, 1)) for i in self.ind]
 
         if decimals:
             return self.dec(ls)
         else:
             return ls
+        # return ls
 
     def dec(self, ls):
         cof_ = []
@@ -459,12 +455,8 @@ class CheckCoef(object):
         return cof_
 
 
-def sigmoid(z):
-    return 1.0 / (1.0 + np.exp(-z))
-
-
 def cla(pre_y, cl=True):
-    pre_y = sigmoid(pre_y)
+    pre_y = 1.0 / (1.0 + np.exp(pre_y))
     if cl:
         pre_y[np.where(pre_y >= 0.5)] = 1
         pre_y[np.where(pre_y < 0.5)] = 0
@@ -515,7 +507,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
     if filter_warning:
         warnings.filterwarnings("ignore")
 
-    expr00 = copy.deepcopy(expr01)
+    expr00 = copy.copy(expr01)
 
     expr01, a_list, a_dict = add_coefficient(expr01, inter_add=inter_add, inner_add=inner_add, vector_add=vector_add,
                                              out_add=out_add, flat_add=flat_add)
@@ -532,23 +524,22 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
 
         def func(x_, p):
             """"""
-            num_list = []
-            num_list.extend(x_)
-            p = cc.group(p)
-            num_list.extend(p)
+            # num_list = []
+            # num_list.extend(x_)
+            if vector_add:
+                p = cc.group(p)
+            # num_list.extend(p)
 
-            return func0(*num_list)
+            return func0(*x_,*p)
 
         def res(p, x_, y_):
             """"""
-            ress = y_ - func(x_, p)
-            return ress
+            return y_ - func(x_, p)
 
         def res2(p, x_, y_):
             """"""
             pre_y = func(x_, p)
-            pre_y = cla(pre_y, cl=False)
-            ress = y_ - pre_y
+            ress = y_ - cla(pre_y, cl=False)
 
             return ress
 
@@ -587,7 +578,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
             else:
                 expr01 = expr01.xreplace({ai: choi})
 
-    except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError):
+    except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError,IndexError):
 
         expr01 = expr00
         pre_y = None
