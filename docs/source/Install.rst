@@ -27,7 +27,8 @@ Install with pip ::
 
 :Note:
 
-    If VC++ needed for windows, Please download the dependent packages from
+    If VC++ needed for windows wheel, such as `spblib <https://github.com/spglib/spglib>`_ ,
+    Please download the dependent packages named (spglib‑1.*‑cp3*‑*.whl) from
     `Python Extension Packages <https://www.lfd.uci.edu/~gohlke/pythonlibs/>`_ and install offline.
     please reference to Method 2.
 
@@ -49,6 +50,14 @@ Reference: https://www.sympy.org/en/index.html
 Reference: https://github.com/DEAP/deap
 
 3. pymatgen ::
+
+    conda install /your/local/path/spglib‑1.*‑cp3*‑*.whl
+    pip install pymatgen
+
+Reference: https://github.com/materialsproject/pymatgen,
+https://github.com/spglib/spglib/tree/develop/python
+
+3. pymatgen(options) ::
 
     conda install --channel conda-forge pymatgen
 

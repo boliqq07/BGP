@@ -125,7 +125,7 @@ if __name__ == "__main__":
                         add_coef=True, inter_add=True, cal_dim=False, inner_add=True,
                         personal_map=False)
 
-    sl.fit()
+    # sl.fit()
     print(sl.expr)
 
     y_pre = sl.predict(X)

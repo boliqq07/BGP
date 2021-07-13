@@ -12,7 +12,7 @@
       <paths name="iap13@192.9.200.238:22">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/iap13/wcx/BGP" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/wcx/BGP" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
