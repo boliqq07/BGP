@@ -23,7 +23,7 @@ setup(
                 'Some of code are non-originality, just copy for use. All the referenced code are marked,'
                 'details can be shown in their sources',
     install_requires=['pandas', 'numpy', 'sympy>=1.5.1', 'scipy', 'scikit-learn', 'joblib',
-                      'requests', 'tqdm', 'six', 'deap>=1.2', "mgetool", "featurebox>=0.0.850"],
+                      'requests', 'tqdm', 'six', 'deap>=1.2', "mgetool"],
     include_package_data=True,
     author='wangchangxin',
     author_email='986798607@qq.com',
