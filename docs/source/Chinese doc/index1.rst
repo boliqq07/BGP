@@ -47,7 +47,7 @@
 
         sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
                     )
-        sl.fit(x, y, c=c,x_group=[[1, 3], [0, 2], [4, 7]]))
+        sl.fit(x, y, c=c,x_group=[[1, 3], [0, 2], [4, 7]])
         score = sl.score(x, y, "r2")
         print(sl.expr)
 
@@ -72,7 +72,7 @@
         pset0.add_constants(c, c_dim=c_dim, c_prob=None)
         pset0.add_operations(power_categories=(2, 3, 0.5),
                  categories=("Add", "Mul", "exp"),
-                 special_prob =  {"Mul":0.5,"Add":0.4,"exp":0.1}
+                 special_prob =  {"Mul":0.5,"Add":0.4,"exp":0.1},
                  power_categories_prob = "balance"
                  )
 

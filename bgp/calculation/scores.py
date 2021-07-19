@@ -16,13 +16,14 @@ import itertools
 import warnings
 
 import numpy as np
-import sympy
+# import sympy
 from sklearn import metrics
 from sklearn.exceptions import DataConversionWarning
 from sklearn.metrics import r2_score
 from sklearn.model_selection import KFold
 from sklearn.utils import check_array
-from sympy import Function
+from sympy import utilities, Expr, diff
+from sympy.core import Function
 
 from bgp.calculation.coefficient import try_add_coef, cla
 from bgp.calculation.translate import compile_context
@@ -43,13 +44,13 @@ def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None
                                          vector_add=vector_add, out_add=out_add, flat_add=flat_add,
                                          np_maps=np_maps, classification=classification)
         else:
-            func0 = sympy.utilities.lambdify(terminals, expr01, modules=[np_maps, "numpy"])
+            func0 = utilities.lambdify(terminals, expr01, modules=[np_maps, "numpy"])
             pre_y = func0(*x)
             if classification:
                 pre_y = cla(pre_y)
 
         if x_test is not None and y_test is not None:
-            func0 = sympy.utilities.lambdify(terminals, expr01, modules=[np_maps, "numpy"])
+            func0 = utilities.lambdify(terminals, expr01, modules=[np_maps, "numpy"])
             pre_y = func0(*x_test)
             if classification:
                 pre_y = cla(pre_y)
@@ -70,7 +71,7 @@ def calculate_y(expr01, x, y, terminals, add_coef=True, x_test=None, y_test=None
 
 def calculate_y_unpack(expr01, x, terminals, classification=False):
     try:
-        func0 = sympy.utilities.lambdify(terminals, expr01)
+        func0 = utilities.lambdify(terminals, expr01)
         pre_y = func0(*x)
         if classification:
             pre_y = cla(pre_y)
@@ -220,7 +221,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
         dy
     """
     warnings.filterwarnings("ignore")
-    if not isinstance(expr01, (sympy.Expr, NewArray)):
+    if not isinstance(expr01, (Expr, NewArray)):
         return None, None
     if len(expr01.free_symbols) < 2:
         return None, None
@@ -250,7 +251,7 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
             subbb.update(subbb2)
             subb_re = dict(zip(subbb.values(), subbb.keys()))
 
-            fdv1 = sympy.diff(expr01.subs(subbb), i, evaluate=True)
+            fdv1 = diff(expr01.subs(subbb), i, evaluate=True)
             fdv1 = fdv1.subs(subb_re)
             subbb = {}
             subbb3 = {k: Function("{}f".format(k.name))(v) for k, v in free_symbols if k is not j and v is j}
@@ -258,14 +259,14 @@ def calculate_derivative_y(expr01, x, terminals, np_maps=None):
             subbb.update(subbb3)
             subbb.update(subbb4)
             subb_re = dict(zip(subbb.values(), subbb.keys()))
-            fdv2 = sympy.diff(expr01.subs(subbb), j, evaluate=True).subs(subb_re)
+            fdv2 = diff(expr01.subs(subbb), j, evaluate=True).subs(subb_re)
             fdv = fdv2 / fdv1
 
-            func0 = sympy.utilities.lambdify(terminals, fdv, modules=[np_maps, "numpy"])
+            func0 = utilities.lambdify(terminals, fdv, modules=[np_maps, "numpy"])
             pre_dy = func0(*x)
 
-            ff = sympy.diff(i, j, evaluate=False)
-            func0 = sympy.utilities.lambdify(terminals, ff, modules=[np_maps, "numpy"])
+            ff = diff(i, j, evaluate=False)
+            func0 = utilities.lambdify(terminals, ff, modules=[np_maps, "numpy"])
             dy = func0(*x)
 
             pre_dy_all.append(pre_dy)
@@ -481,7 +482,7 @@ def calcualte_dim(expr01, terminals, dim_list, dim_maps=None):
     terminals = [str(i) for i in terminals]
     if not dim_maps:
         dim_maps = dim_map()
-    func0 = sympy.utilities.lambdify(terminals, expr01, modules=[dim_maps])
+    func0 = utilities.lambdify(terminals, expr01, modules=[dim_maps])
     try:
         dim_ = func0(*dim_list)
     except (ValueError, TypeError, ZeroDivisionError, NameError):

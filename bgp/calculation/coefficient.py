@@ -5,14 +5,12 @@ import copy
 import warnings
 from collections import Counter
 
-import numba
 import numpy as np
 import sympy
 from scipy import optimize
 from sklearn.utils import resample
-from sympy import Function
-from sympy.core.function import UndefinedFunction
 from sympy.core.numbers import NegativeOne
+from sympy.core.function import UndefinedFunction, Function
 
 
 class Coef(UndefinedFunction):
