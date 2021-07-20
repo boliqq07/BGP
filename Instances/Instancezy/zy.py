@@ -45,18 +45,20 @@ if __name__ == "__main__":
     # 符号回归
 
     # 方式选择1，系数加在最外层
-    sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=2, random_state=1,pset=pset0,
-                        classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
-                        cal_dim=True, n_jobs = 10,
-                        )
+    # sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=2, random_state=1,pset=pset0,
+    #                     classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
+    #                     cal_dim=True, n_jobs = 10,
+    #                     store =True
+    #                     )
 
-    # 方式选择2，系数加在最外层,认定系数可以自动补全量纲
-    pset0.y_dim=None
-    sl = SymbolLearning(loop="MultiMutateLoop", pop=1000, gen=20, random_state=1,pset=pset0,
-                        classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
-                        cal_dim=True, n_jobs = 10,
+    # # 方式选择2，系数加在最外层,认定系数可以自动补全量纲
+    # pset0.y_dim=None
+    # sl = SymbolLearning(loop="MultiMutateLoop", pop=1000, gen=3, random_state=1,pset=pset0,
+    #                     classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
+    #                     cal_dim=True, n_jobs = 10, store=True,
+    #
+    #                     )
 
-                        )
 
     # # 方式选择3，系数加在公式内层,认定系数可以自动补全量纲
     # pset0.y_dim = None
@@ -65,11 +67,12 @@ if __name__ == "__main__":
     #                     cal_dim=True, inner_add=True, out_add=False,
     #                     n_jobs = 10,)
     #
-    # # 方式选择4，系数加在公式内层,不考虑量纲计算,
-    # sl = SymbolLearning(loop="MultiMutateLoop", pop=1000, gen=20, random_state=1,
-    #                     classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
-    #                     cal_dim=False, inner_add=True, out_add=False,
-    #                     n_jobs = 10,)
+    # 方式选择4，系数加在公式内层,不考虑量纲计算,
+    sl = SymbolLearning(loop="MultiMutateLoop", pop=200, gen=10, random_state=1,
+                        classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
+                        cal_dim=False,
+                        inner_add=False, out_add=False,
+                        n_jobs = 2,)
     #
     # # 方式选择5，,公式项全部展开，每一项前面加系数（非常复杂),不考虑量纲计算,
     # pset0.y_dim = None
@@ -80,7 +83,7 @@ if __name__ == "__main__":
     #
     # # 方式选择6，,公式项全部展开，每一项前面加系数（非常复杂),不考虑量纲计算, 公式复杂度不限制
     # pset0.y_dim = None
-    # sl = SymbolLearning(loop="MultiMutateLoop", pop=1000, gen=20, random_state=1, max_value=7,
+    # sl = SymbolLearning(loop="MultiMutateLoop", pop=1000, gen=10, random_state=1, max_value=7,
     #                     classification=True, scoring=[metrics.accuracy_score, ], score_pen=[1, ],
     #                     cal_dim=False, flat_add=True, out_add=False,
     #                     n_jobs = 10,)

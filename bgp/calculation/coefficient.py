@@ -454,7 +454,7 @@ class CheckCoef(object):
 
 
 def cla(pre_y, cl=True):
-    pre_y = 1.0 / (1.0 + np.exp(pre_y))
+    pre_y = 1.0 / (1.0 + np.exp(-pre_y))
     if cl:
         pre_y[np.where(pre_y >= 0.5)] = 1
         pre_y[np.where(pre_y < 0.5)] = 0
