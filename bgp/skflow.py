@@ -20,10 +20,10 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
     This code does not check and identity the certainty of data.
 
-    Parameters See Also:
+    Parameters:
+        `Web of SymbolLearning <https://bgp.readthedocs.io/en/latest/src/bgp.html#bgp.skflow.SymbolLearning>`_
 
-        https://bgp.readthedocs.io/en/latest/src/bgp.html#bgp.skflow.SymbolLearning
-
+    See Also:
         :class:`bgp.flow.BaseLoop`
 
     """
