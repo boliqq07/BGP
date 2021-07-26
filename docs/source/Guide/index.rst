@@ -35,8 +35,7 @@ Guide
 This API is aimed for user but not developer. Therefore some modules are just with brief introduction.
 If you want to know more math principles and code structure,
 
-Turn to `Developer Manual.pdf <https://boliqq07.github.io/BGPdocument/doc.pdf)>`_,
-Or  `Developer Manual.ppt <https://boliqq07.github.io/BGPdocument/symbol.pptx>`_.
+Turn to `Developer Manual.pdf <https://github.com/boliqq07/BGP/tree/master/docs/doc.pdf)>`_.
 
 where you can see:
 

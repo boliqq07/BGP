@@ -40,7 +40,7 @@ This is a part to equation complexity control from 3 aspect.
     only valid when x_group is True, add different coefficients on group x pair.
 
 
-2. Dimension limitation.
+3. Dimension limitation.
     (To some extent, the Dimension limitation could affects the complexity of the formula indirectly.)
 
     ``cal_dim``:
@@ -61,8 +61,7 @@ This is a part to equation complexity control from 3 aspect.
 
     None: f(x) == pset.y_dim
 
-:note:
-
+Note:
     From sample 4, The formula to be more and more complicated.
 
 1. Ordinary SL.::
@@ -109,8 +108,8 @@ This is a part to equation complexity control from 3 aspect.
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
 
 
-5. SL with add coefficients, with dimension calculation,
-but relax the requirement: just require that the dimension f(x) is not NaN for af(x)+b.::
+5. SL with add coefficients, with dimension calculation, but relax the requirement:
+just require that the dimension f(x) is not NaN for af(x)+b.::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,
@@ -152,7 +151,6 @@ but relax the requirement: just require that the dimension f(x) is not NaN for a
                         n_jobs = 10,add_coef=True,inter_add=True, inner_add=True, out_add=False, flat_add=False)
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
 
-
 10. SL with add coefficients, with dimension calculation, change max_value.::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
@@ -160,7 +158,6 @@ but relax the requirement: just require that the dimension f(x) is not NaN for a
                         initial_max=7, initial_min=3,max_value=7,limit_type="h_bgp",
                         n_jobs = 10,add_coef=True,inter_add=True, inner_add=True, out_add=False, flat_add=False)
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
-
 
 11. Complex equation(most complicated, slowest, unaccountably).::
 
@@ -171,3 +168,4 @@ but relax the requirement: just require that the dimension f(x) is not NaN for a
                         add_coef=True,
                         inner_add=True)
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
+

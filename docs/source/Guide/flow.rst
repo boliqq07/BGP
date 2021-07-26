@@ -8,13 +8,15 @@ Contains:
 
     one node mate and one tree mutate.
 
-  - Class: :py:class:`bgp.flow.BaseLoop`
+  - Class: :py:class:`bgp.flow.MultiMutateLoop`
 
     one node mate and (one tree mutate, one node Replacement mutate, shrink mutate, difference mutate).
-  - Class: :py:class:`bgp.flow.BaseLoop`
+
+  - Class: :py:class:`bgp.flow.OnePointMutateLoop`
 
     one node Replacement mutate: (keep height of tree)
-  - Class: :py:class:`bgp.flow.BaseLoop`
+
+  - Class: :py:class:`bgp.flow.DimForceLoop`
 
     Select with dimension : (keep dimension of tree)
 
