@@ -21,7 +21,11 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     This code does not check and identity the certainty of data.
 
     Parameters See Also:
-        :class:`flow.BaseLoop`
+
+        https://bgp.readthedocs.io/en/latest/src/bgp.html#bgp.skflow.SymbolLearning
+
+        :class:`bgp.flow.BaseLoop`
+
     """
 
     def __str__(self):
