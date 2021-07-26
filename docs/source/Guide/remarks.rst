@@ -2,6 +2,7 @@ Remarks
 ==================
 
 This part is not a module but some notes about key parameters and core problems.
+The examples in :doc:`../Examples/index`, :doc:`../Examples/sample7`
 
 Contains:
   - Binding: ``x_group`` in :py:func:`bgp.skflow.SymbolLearning.fit` or :py:func:`bgp.base.SymbolSet.add_features`.
@@ -126,19 +127,26 @@ Coefficients:
 
 Assume the initial expression is y=f(x)
 
-inner_add:
-    Add the coefficients inner of expression. such as y=cf(ax)
-
-out_add:
-    Add the coefficients inner of expression. such as y=a(x)
-
-flat_add:
-    Add the coefficients inner of expression. such as y=ag(x)+bk(x)
+add_coef:
+The main switch of coefficients. default:
+Add the coefficients of expression. such as y=cf(x).
 
 inter_add:
-    Add the coefficients inner of expression. such as y=f(x)+b
+Add the intercept of expression. such as y=f(x)+b.
+
+out_add:
+Add the coefficients of expression. such as y=a(x),
+but for polynomial join by ``+`` and ``-``,the coefficient would add before each term.
+such as y=af1(x)+bf2(x).
+
+flat_add:
+flatten the expression and add the coefficients out of expression. such as y=af`1(x)+bf`2(x)+ef`3(x),
+(the old expression: y = x*(f1(x)+f2(x)+f3(x))).
+
+inner_add:
+Add the coefficients inner of expression. such as y=cf(ax).
 
 vector_add:
-    only vaild when ``x_group`` is True.
+only valid when x_group is True, add different coefficients on group x pair.
 
 For the ``inner_add, inter_add, out_add, flat_add``, just only one can be selected.

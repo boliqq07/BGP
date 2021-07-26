@@ -25,7 +25,8 @@ Install with pip ::
 
     pip install BindingGP
 
-:Note:
+
+:note:
 
     If VC++ needed for windows wheel, such as `spblib <https://github.com/spglib/spglib>`_ ,
     Please download the dependent packages named (spglib‑1.*‑cp3*‑*.whl) from

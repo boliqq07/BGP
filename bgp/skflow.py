@@ -10,12 +10,18 @@ from bgp.flow import MultiMutateLoop
 
 class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     """
-    One simplify Guide for flow.\n
+    One simplify Guide for flow.
+
     1. The SymbolLearning is time-costing and not suit for ``GridSearchCV``,
-    the cross_validate are embedded.\n
+    the cross_validate are embedded.
+
     2. For the classification problems, please using ``classification`` =True,
-    and set the suit classification metrics for ``scoring`` and ``score_pen`` carefully.\n
+    and set the suit classification metrics for ``scoring`` and ``score_pen`` carefully.
+
     This code does not check and identity the certainty of data.
+
+    Parameters See Also:
+        :class:`flow.BaseLoop`
     """
 
     def __str__(self):
@@ -23,6 +29,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
     def __init__(self, loop, *args, **kwargs):
         """
+
         Parameters
         ----------
         loop: str,None
