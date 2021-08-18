@@ -61,8 +61,8 @@ if __name__ == "__main__":
     #             annot=True, annot_kws={'size': 3})
     # plt.show()
     #
-    plt0 = corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill", right_top="pie", threshold_right=0,
-                     front_raito=0.4)
+    plt0 = corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill", right_top="pie", threshold_right=0.8,
+                     front_raito=0.5)
 
     plt0.savefig("corr.pdf")
 
@@ -92,4 +92,4 @@ if __name__ == "__main__":
     # store.to_txt(select, "list_name_select")
     # store.to_txt(select_abbr, "list_abbr_select")
     #
-    corr_plot(cov_select, select_abbr, title="", left_down="fill", right_top="pie", threshold_right=0, front_raito=0.6)
+    # corr_plot(cov_select, select_abbr, title="", left_down="circle", right_top="pie", threshold_right=0, front_raito=0.8)
