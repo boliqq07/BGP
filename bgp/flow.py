@@ -80,7 +80,7 @@ class BaseLoop(Toolbox):
                  cal_dim=False, dim_type=None, fuzzy=False, n_jobs=1, batch_size=40,
                  random_state=None, stats=None, verbose=True, migrate_prob=0,
                  tq=True, store=False, personal_map=False, stop_condition=None, details=False, classification=False,
-                 score_object="y", sub_mu_max=1, limi_type="h_bgp", batch_para=False):
+                 score_object="y", sub_mu_max=1, limit_type="h_bgp", batch_para=False):
         """
 
         Parameters
@@ -101,7 +101,7 @@ class BaseLoop(Toolbox):
             min initial size of expression when first producing.
         max_value:int
             max size of expression.
-        limi_type: "height" or "length",","h_bgp"
+        limit_type: "height" or "length",","h_bgp"
             limitation type for max_value, but don't affect initial_max, initial_min.
         hall:int,>=1
             number of HallOfFame (elite) to maintain.
@@ -238,7 +238,7 @@ class BaseLoop(Toolbox):
         self.re_hall = re_hall
         self.re_Tree = re_Tree
         self.store = store
-        self.limi_type = limi_type
+        self.limit_type = limit_type
         self.data_all = []
         self.personal_map = personal_map
         self.stop_condition = stop_condition
@@ -283,8 +283,8 @@ class BaseLoop(Toolbox):
 
         self.register("mutate", mutUniform, expr=self.gen_mu, pset=self.cpset)
 
-        self.decorate("mate", staticLimit(key=operator.attrgetter(limi_type), max_value=self.max_value))
-        self.decorate("mutate", staticLimit(key=operator.attrgetter(limi_type), max_value=self.max_value))
+        self.decorate("mate", staticLimit(key=operator.attrgetter(limit_type), max_value=self.max_value))
+        self.decorate("mutate", staticLimit(key=operator.attrgetter(limit_type), max_value=self.max_value))
 
         if stats is None:
             if cal_dim:
@@ -445,9 +445,9 @@ class BaseLoop(Toolbox):
 
     def check_height_length(self, pop, site=""):
         old = len(pop)
-        if self.limi_type == 'height':
+        if self.limit_type == 'height':
             pop = [i for i in pop if i.height <= self.max_value]
-        elif self.limi_type == 'length':
+        elif self.limit_type == 'length':
             pop = [i for i in pop if i.length <= self.max_value]
         else:
             pop = [i for i in pop if i.h_bgp <= self.max_value]

@@ -5,14 +5,12 @@ import copy
 import warnings
 from collections import Counter
 
-import numba
 import numpy as np
 import sympy
 from scipy import optimize
 from sklearn.utils import resample
-from sympy import Function
-from sympy.core.function import UndefinedFunction
 from sympy.core.numbers import NegativeOne
+from sympy.core.function import UndefinedFunction, Function
 
 
 class Coef(UndefinedFunction):
@@ -456,7 +454,7 @@ class CheckCoef(object):
 
 
 def cla(pre_y, cl=True):
-    pre_y = 1.0 / (1.0 + np.exp(pre_y))
+    pre_y = 1.0 / (1.0 + np.exp(-pre_y))
     if cl:
         pre_y[np.where(pre_y >= 0.5)] = 1
         pre_y[np.where(pre_y < 0.5)] = 0

@@ -633,7 +633,7 @@ class SymbolSet(object):
                 prob = change(i, 0.2)
                 i["prob"] = prob
                 i["arity"] = 1
-                self._add_dispose(*i)
+                self._add_primitive(**i)
         self.register(primitives_dict="all", dispose_dict=None, ter_con_dict=None)
         return self
 
