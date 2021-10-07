@@ -20,9 +20,9 @@ if __name__ == "__main__":
 
     x, x_dim, y, y_dim, c, c_dim, X, Y = SL_data
     x_g = np.arange(x.shape[1])
-    x_g = x_g.reshape(-1, 2)
     x_g = list(x_g[1:])
 
+    x_g = x_g.reshape(-1, 2)
     pset0 = SymbolSet()
     pset0.add_features(x, y, x_dim=x_dim, y_dim=y_dim, x_group=x_g)
     pset0.add_constants(c, c_dim=c_dim, c_prob=0.05)

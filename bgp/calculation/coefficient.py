@@ -556,7 +556,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
         if grid_x is None:
             grid_x = x
 
-        pre_y = func0(*grid_x + cof)
+        pre_y = func0(*grid_x, *cof)
         if classification:
             pre_y = cla(pre_y, cl=True)
 

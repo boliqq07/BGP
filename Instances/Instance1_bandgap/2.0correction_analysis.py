@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # plt.show()
     #
     plt0 = corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill", right_top="pie", threshold_right=0.8,
-                     front_raito=0.5)
+                     front_raito=0.6)
 
     plt0.savefig("corr.pdf")
 
