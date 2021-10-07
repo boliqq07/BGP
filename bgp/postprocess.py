@@ -5,15 +5,16 @@
 # @Software: PyCharm
 # @License: BSD 3-Clause
 
-import pandas as pd
 import copy
 import warnings
 from collections.abc import Callable
 
 import numpy as np
+import pandas as pd
 import sympy
 from scipy.optimize import least_squares
 from sympy import Expr
+
 warnings.filterwarnings("ignore")
 
 
@@ -110,7 +111,7 @@ def format_input(expr01, x, y, init_c=None, terminals=None, c_terminals=None, np
 
     if terminals is None:
         terminals = [i for i in list(expr01.free_symbols) if x_mark in i.name]
-        terminals.sort(key=lambda x:x.name)
+        terminals.sort(key=lambda x: x.name)
     else:
         assert set(terminals) & set(expr01.free_symbols) == set(terminals)
         assert len(terminals) == len(x)
@@ -118,7 +119,7 @@ def format_input(expr01, x, y, init_c=None, terminals=None, c_terminals=None, np
     if c_terminals is None:
 
         c_terminals = [i for i in list(expr01.free_symbols) if c_mark in i.name]
-        c_terminals.sort(key=lambda x:x.name)
+        c_terminals.sort(key=lambda x: x.name)
     else:
         assert set(c_terminals) & set(expr01.free_symbols) == set(c_terminals)
 
@@ -140,7 +141,7 @@ def format_input(expr01, x, y, init_c=None, terminals=None, c_terminals=None, np
 
 
 def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None, np_maps=None,
-                     classification=False,built_format_input=False):
+                     classification=False, built_format_input=False):
     """
     Try calculate predict y by sympy expression with coefficients.
     if except error return expr itself.
@@ -155,9 +156,9 @@ def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None
         real data of target.
     init_c: list of float or float,None
         default 1.
-    terminals: list of sympy.Symbol,None
+    terminals: List of sympy.Symbol,None
         placeholder for xi, with the same features in expr01.
-    c_terminals:list of sympy.Symbol,None
+    c_terminals:List of sympy.Symbol,None
         placeholder for ci, with the same coefficients/constants in expr01.
     np_maps: dict,default is None
         for self-definition.
@@ -190,6 +191,9 @@ def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None
     expr01: Expr
         New expr.
     """
+    if built_format_input:
+        expr01, x, y, init_c, terminals, c_terminals, np_maps = format_input(expr01, x, y, init_c, terminals,
+                                                                             c_terminals, np_maps, )
 
     if np_maps is None:
         np_maps = {}
@@ -198,12 +202,12 @@ def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None
 
     try:
 
-        func0 = sympy.utilities.lambdify(terminals+c_terminals, expr01, modules=[np_maps, "numpy"])
+        func0 = sympy.utilities.lambdify(terminals + c_terminals, expr01, modules=[np_maps, "numpy"])
 
         def func(x_, p):
             """"""
 
-            return func0(*x_,*p)
+            return func0(*x_, *p)
 
         def res(p, x_, y_):
             """"""
@@ -219,14 +223,14 @@ def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None
         if not classification:
             result = least_squares(res, x0=init_c, args=(x, y),
                                    # xtol=1e-4, ftol=1e-5, gtol=1e-5,
-                                            # long
-                                            jac='3-point', loss='linear')
+                                   # long
+                                   jac='3-point', loss='linear')
         else:
             result = least_squares(res2, x0=init_c, args=(x, y),
                                    # xtol=1e-4, ftol=1e-5, gtol=1e-5,
-                                            # long
-                                            jac='3-point', loss='linear')
-        cof = np.round(result.x,3)
+                                   # long
+                                   jac='3-point', loss='linear')
+        cof = np.round(result.x, 3)
 
         pre_y = func0(*x, *cof)
         if classification:
@@ -235,15 +239,15 @@ def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None
         for ai, choi in zip(c_terminals, cof):
             expr01 = expr01.xreplace({ai: choi})
 
-        if isinstance(pre_y,float):
+        if isinstance(pre_y, float):
             pre_y = None
         elif all(np.isfinite(pre_y)):
             pass
         else:
-            pre_y=None
+            pre_y = None
 
-    except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError,IndexError):
-    # except ImportError:
+    except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError, IndexError):
+        # except ImportError:
 
         expr01 = expr00
         pre_y = None
@@ -261,8 +265,3 @@ def add_coef_fitting(expr01, x, y, init_c=None, terminals=None, c_terminals=None
 # expr01, x, y, init_c, terminals, c_terminals, np_maps = format_input(expr, x, y)
 #
 # pre_y, expr02 = add_coef(expr01, x, y, init_c, terminals, c_terminals)
-
-
-
-
-
