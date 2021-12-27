@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics
 from sklearn.metrics import r2_score, mean_squared_error
-
+import pandas as pd
 from bgp.skflow import SymbolLearning
 
 
@@ -47,6 +47,9 @@ bp = BasePlot()
 plt = bp.scatter_45_line(y,pre_y, strx='Real Target', stry='Predict Target')
 # plt.show()
 plt.savefig("total.pdf")
+
+data2 = np.concatenate((data2,pre_y.reshape(-1,1)),axis=1)
+data2 = pd.DataFrame(data2,columns=["x0","x1","real","predict"])
 
 r2_s = r2_score(y,pre_y)
 MSE2_s = mean_squared_error(y,pre_y)
