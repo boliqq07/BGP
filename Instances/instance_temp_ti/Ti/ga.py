@@ -130,6 +130,7 @@ def fitness_func(ind, model, x, y, return_model=False):
         else:
             return 0,
 
+
 #
 # def filt(ind, min_=2, max_=None):
 #     indd = [0]*len(ind)
@@ -183,8 +184,7 @@ def filt(ind, min_=2, max_=None):
     return ind
 
 
-
-def GA(x,y,fit_func, n_jobs=2, pop_n=1000, hof_n=1, cxpb=0.6, mutpb=0.3, ngen=40, max_or_min="max", mut_indpb=0.05,
+def GA(x, y, fit_func, n_jobs=2, pop_n=1000, hof_n=1, cxpb=0.6, mutpb=0.3, ngen=40, max_or_min="max", mut_indpb=0.05,
        max_=None,
        min_=2):
     x_space = x.shape[1]

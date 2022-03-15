@@ -11,20 +11,22 @@ BGP
 ----------------------
 Welcome to BGP.
 
-BGP (Binding Genetic Programming) is an open python library that implements a comprehensive set of symbolic regression tools for materials informatics.
+BGP (Binding Genetic Programming) is an open python library that implements a comprehensive set of symbolic regression
+tools for materials informatics.
 
-This tool contains a symbol regression tool with dimension calculation,
-which is aimed at establish expressions with physical limitation.
+This tool contains a symbol regression tool with dimension calculation, which is aimed at establish expressions with
+physical limitation.
 
 BGP inspired by:
 
-  [XenonPy](https://github.com/yoshida-lab/XenonPy),
-  [matminer](https://hackingmaterials.github.io/matminer/ ),
-  [deap](https://github.com/DEAP/deap),
-  [sympy](https://www.sympy.org/en/index.html)
+[XenonPy](https://github.com/yoshida-lab/XenonPy),
+[matminer](https://hackingmaterials.github.io/matminer/ ),
+[deap](https://github.com/DEAP/deap),
+[sympy](https://www.sympy.org/en/index.html)
 
 Quick Install
 ----------------------
+
 ```bash
 pip install BindingGP
 ```

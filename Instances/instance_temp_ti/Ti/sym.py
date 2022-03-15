@@ -29,11 +29,11 @@ ind = [0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 index = np.where(np.array(ind) == 1)[0]
 x = x[:, index]
 
-sl = SymbolLearning(loop='MultiMutateLoop',pop=1000, gen=10, random_state=1,n_jobs=1,
-                    add_coef=True,initial_max=2,initial_min=1,
-                    max_value=2, store=False,)
+sl = SymbolLearning(loop='MultiMutateLoop', pop=1000, gen=10, random_state=1, n_jobs=1,
+                    add_coef=True, initial_max=2, initial_min=1,
+                    max_value=2, store=False, )
 tt.t
-sl.fit(x,y)
+sl.fit(x, y)
 tt.t
 tt.p
 print(sl.expr)
@@ -41,12 +41,11 @@ print(sl.fitness)
 
 # y_pre = sl.predict(x)
 
-x0=x[:,0]
-x1=x[:,1]
-y_pre2= x1/x0**3
-s1 = r2_score(y,y_pre2)
+x0 = x[:, 0]
+x1 = x[:, 1]
+y_pre2 = x1 / x0 ** 3
+s1 = r2_score(y, y_pre2)
 lr = LinearRegression()
-lr.fit(y_pre2.reshape(-1,1),y)
-s2 = lr.score(y_pre2.reshape(-1,1),y)
-e1 = mean_absolute_error(y,y_pre2)
-
+lr.fit(y_pre2.reshape(-1, 1), y)
+s2 = lr.score(y_pre2.reshape(-1, 1), y)
+e1 = mean_absolute_error(y, y_pre2)

@@ -7,7 +7,7 @@
 from mgetool.tool import tt
 
 if __name__ == "__main__":
-    from sklearn.datasets import load_iris,load_boston
+    from sklearn.datasets import load_iris, load_boston
     from bgp.skflow import SymbolLearning
     from sklearn import metrics
     from sklearn.utils import shuffle
@@ -41,7 +41,7 @@ if __name__ == "__main__":
                         )
     tt.t
     sl.fit(x, y, c=c,
-                     # x_group=[[0, 1], [2, 3]]
+           # x_group=[[0, 1], [2, 3]]
            )
     tt.t
     tt.p

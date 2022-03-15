@@ -30,18 +30,19 @@ def fitness_func_cv(ind, model, x, y, return_model=False):
     else:
         return sc,
 
+
 def score_fitness(ind, model, x, y, scoring="r2"):
     index = np.where(np.array(ind) == 1)[0]
     x = x[:, index]
-    X_train, X_test, y_train, y_test= train_test_split(x,y,test_size=0.33)
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.33)
     svr = model.best_estimator_
     svr.fit(X_train, y_train)
     pre_y_test = svr.predict(X_test)
     pre_y_train = svr.predict(X_train)
-    if scoring =="r2":
-        return r2_score(y_train,pre_y_train),r2_score(y_test,pre_y_test)
-    elif scoring =='neg_root_mean_squared_error':
-        return mean_squared_error(y_train,pre_y_train)**0.5,mean_squared_error(y_test,pre_y_test)**0.5
+    if scoring == "r2":
+        return r2_score(y_train, pre_y_train), r2_score(y_test, pre_y_test)
+    elif scoring == 'neg_root_mean_squared_error':
+        return mean_squared_error(y_train, pre_y_train) ** 0.5, mean_squared_error(y_test, pre_y_test) ** 0.5
     else:
         raise NotImplementedError
 
@@ -73,11 +74,13 @@ if __name__ == "__main__":
 
     ####GA
     size = 5
+
+
     def ga():
         fitn = partial(fitness_func, model=gd2, x=x, y=y)
-        best = GA(x,y, fitn, pop_n=500, hof_n=1, cxpb=0.8, mutpb=0.4,
+        best = GA(x, y, fitn, pop_n=500, hof_n=1, cxpb=0.8, mutpb=0.4,
                   ngen=10, max_or_min="max",
-                  mut_indpb=0.1, n_jobs=12, min_=size, max_=size+1)
+                  mut_indpb=0.1, n_jobs=12, min_=size, max_=size + 1)
 
         names = np.array((dataTi.columns))[1:]
 
@@ -90,22 +93,23 @@ if __name__ == "__main__":
             gd2.scoring = 'neg_root_mean_squared_error'
             fitn = partial(fitness_func, model=gd2, x=x, y=y)
             score = fitn(ind=i)
-            print("RMSE:",score)
+            print("RMSE:", score)
             gd2.scoring = 'r2'
             fitn = partial(fitness_func, model=gd2, x=x, y=y)
             score = fitn(ind=i)
-            print("R2:",score)
+            print("R2:", score)
 
             gd2.scoring = 'neg_root_mean_squared_error'
-            fitn = partial(score_fitness, model=gd2, x=x, y=y,scoring="neg_root_mean_squared_error")
+            fitn = partial(score_fitness, model=gd2, x=x, y=y, scoring="neg_root_mean_squared_error")
 
             score = fitn(ind=i)
-            print("RMSE:",score)
+            print("RMSE:", score)
 
             gd2.scoring = 'r2'
             fitn = partial(score_fitness, model=gd2, x=x, y=y)
             score = fitn(ind=i)
-            print("R2:",score)
+            print("R2:", score)
+
 
     ga()
     # for i in range(100):

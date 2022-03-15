@@ -19,7 +19,6 @@ from sklearn.tree import DecisionTreeRegressor
 
 warnings.filterwarnings("ignore")
 
-
 kernel = 1.0 * RBF(1.0)
 kernel2 = Matern(nu=0.5)
 kernel3 = Matern(nu=1.5)
@@ -29,7 +28,6 @@ kernel6 = Matern(nu=1.5, length_scale=0.8)
 kernel7 = Matern(nu=2.5, length_scale=0.8)
 
 ker = [kernel, kernel2, kernel3, kernel4, kernel5, kernel6, kernel7]
-
 
 
 def dict_method_reg():
@@ -114,7 +112,7 @@ def dict_method_reg():
         max_leaf_nodes=None,
         min_impurity_decrease=0.,
         min_impurity_split=None,
-        )
+    )
     cv10 = 5
     scoring10 = 'r2'
     param_grid10 = [
@@ -208,4 +206,3 @@ def method_pack(method_all, me="reg", scoreing=None, gd=True, cv=10):
             # gd2 = cross_val_score(me2, cv=cv2, scoring=scoring2)
             estimator.append(gd2)
         return estimator
-

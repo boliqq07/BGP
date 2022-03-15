@@ -424,7 +424,7 @@ class CheckCoef(object):
         lsa = list(range(len(self.cof_list)))
         n = len(lsa)
         for k in self.cof_dict_values:
-            lsi = np.arange(k)+n
+            lsi = np.arange(k) + n
             lsa.append(lsi)
             n = lsi[-1] + 1
 
@@ -528,7 +528,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
                 p = cc.group(p)
             # num_list.extend(p)
 
-            return func0(*x_,*p)
+            return func0(*x_, *p)
 
         def res(p, x_, y_):
             """"""
@@ -576,7 +576,7 @@ def try_add_coef(expr01, x, y, terminals, grid_x=None,
             else:
                 expr01 = expr01.xreplace({ai: choi})
 
-    except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError,IndexError):
+    except (ValueError, KeyError, NameError, TypeError, ZeroDivisionError, IndexError):
 
         expr01 = expr00
         pre_y = None
