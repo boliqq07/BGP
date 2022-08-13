@@ -362,7 +362,7 @@ class PreMap(numeric.ndarray):
 #    # import copy
 #    # from bgp.gp import mutNodeReplacementVerbose, mutDifferentReplacementVerbose
 #    # from numpy import random
-#    # from sklearn.datasets import load_boston
+#    # from sklearn.datasets import fetch_california_housing
 #    #
 #    # from bgp.base import SymbolSet
 #    # from bgp.base import SymbolTree
@@ -370,9 +370,9 @@ class PreMap(numeric.ndarray):
 #    #
 #    # random.seed(3)
 #    # # data
-#    # data = load_boston()
-#    # x = data["data"]
-#    # y = data["target"]
+#    # data = fetch_california_housing()
+#    # x = data["data"][:100]
+#    # y = data["target"][:100]
 #    # c = [6, 3, 4]
 #    # # unit
 #    # from sympy.physics.units import kg

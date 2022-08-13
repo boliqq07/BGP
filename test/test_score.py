@@ -1,7 +1,7 @@
 import time
 
 from numpy import random
-from sklearn.datasets import load_boston
+from sklearn.datasets import fetch_california_housing
 
 from bgp.base import SymbolSet, SymbolTree, CalculatePrecisionSet
 from bgp.calculation.scores import calculate_y
@@ -11,9 +11,9 @@ from bgp.functions.npfunc import np_map
 
 if __name__ == "__main__":
     # data
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100,:8]
+    y = data["target"][:100]
     c = [6, 3, 4]
     # unit
     from sympy.physics.units import kg
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # symbolset
     pset0 = SymbolSet()
     pset0.add_features(x, y, x_dim=x_dim, y_dim=y_dim, x_group=[[1, 2], [3, 4, 5], [6, 7]],
-                       feature_name=["Ss%i" % i for i in range(13)])
+                       feature_name=["Ss%i" % i for i in range(8)])
     pset0.add_constants(c, c_dim=c_dim, c_prob=None)
     pset0.add_operations(power_categories=(2, 3, 0.5),
                          categories=("Add", "Mul", "Sub", "Div", "ln"),
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     random.seed(2)
     z = time.time()
-    sl = [SymbolTree.genGrow(pset0, 3, 4) for _ in range(500)]
+    sl = [SymbolTree.genGrow(pset0, 3, 4) for _ in range(50)]
     a = time.time()
     # sli =" MAdd(Sub(Add(Mul(x0, gx1), exp(x10)), Mul(Conv(Add(x0, gx0)), Mul(x6, MAdd(x10)))))"
     # sl =["MAdd(gx1 * x11 * (-x0 + x11) * MAdd(gx1))"]
@@ -75,7 +75,7 @@ if __name__ == "__main__":
             c = c + 1
 
         r3 = time.time()
-    #     print(r2 - b, "com")
-    #     print(r3-r2,"cal")
-    # e = time.time()
-    # print(e-a)
+        print(r2 - b, "com")
+        print(r3-r2,"cal")
+    e = time.time()
+    print(e-a)

@@ -8,12 +8,12 @@ from sklearn import metrics
 from sklearn.utils import shuffle
 
 if __name__ == "__main__":
-    from sklearn.datasets import load_boston
+    from sklearn.datasets import fetch_california_housing
     from bgp.skflow import SymbolLearning
 
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=50, gen=2, random_state=1)
     sl.fit(x, y)
@@ -35,13 +35,13 @@ if __name__ == "__main__":
 
     print(sl.expr)
 
-    from sklearn.datasets import load_boston
+    from sklearn.datasets import fetch_california_housing
     from bgp.skflow import SymbolLearning
     from sklearn import metrics
 
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=50, gen=2, random_state=1,
                         scoring=[metrics.mean_absolute_error, ],
@@ -51,12 +51,12 @@ if __name__ == "__main__":
     sl.fit(x, y)
     print(sl.expr)
 
-    from sklearn.datasets import load_boston
+    from sklearn.datasets import fetch_california_housing
     from bgp.skflow import SymbolLearning
 
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100,:8]
+    y = data["target"][:100]
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=50, gen=2, random_state=1)
     sl.fit(x, y, x_group=[[1, 2], [3, 4], [6, 7]])
@@ -64,13 +64,13 @@ if __name__ == "__main__":
     print(sl.expr)
 
     from bgp.functions.dimfunc import dless
-    from sklearn.datasets import load_boston
+    from sklearn.datasets import fetch_california_housing
     from bgp.skflow import SymbolLearning
 
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
-    x_dim = [dless, dless, dless, dless, dless, dless, dless, dless, dless, dless, dless, dless, dless]
+    data = fetch_california_housing()
+    x = data["data"][:100,:8]
+    y = data["target"][:100]
+    x_dim = [dless, dless, dless, dless, dless, dless, dless, dless, ]
     y_dim = dless
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=50, gen=2, random_state=1, cal_dim=True, dim_type="coef")

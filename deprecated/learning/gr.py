@@ -1,9 +1,10 @@
 import numpy as np
-from sklearn.datasets import load_boston
+from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import GridSearchCV, cross_val_score
 from sklearn.svm import SVR
 
-x, y = load_boston(return_X_y=True)
+x, y = fetch_california_housing(return_X_y=True)
+x=x[:100]
 
 method = SVR(gamma="scale")
 gd2 = GridSearchCV(method, cv=5,

@@ -12,7 +12,7 @@ from bgp.calculation.scores import calculate_score
 #         self.SymbolTree = SymbolTree
 #         self.pset = SymbolSet()
 #
-#         from sklearn.datasets import load_boston
+#         from sklearn.datasets import fetch_california_housing
 #
 #         import numpy as np
 #         x=np.array([[1,2,3,4,5,6,7,8,9,9,10,9,7,5,3,1],

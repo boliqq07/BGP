@@ -13,12 +13,12 @@ For example, the data can be import from sklearn.
 ::
 
       if __name__ == "__main__":
-          from sklearn.datasets import load_boston
+          from sklearn.datasets import fetch_california_housing
           from bgp.skflow import SymbolLearning
 
-          data = load_boston()
-          x = data["data"]
-          y = data["target"]
+          data = fetch_california_housing()
+          x = data["data"][:100]
+          y = data["target"][:100]
           c = [1, 2, 3]
 
 Import ``SymbolLearning`` and add the parameter (such as, with 500 population each generation,

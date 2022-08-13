@@ -14,6 +14,8 @@ Notes:
 from __future__ import division
 
 import numbers
+from functools import reduce
+from typing import Iterable
 
 import numpy as np
 import numpy.core.numeric as numeric
@@ -21,7 +23,7 @@ import sympy
 from numpy.linalg import matrix_rank
 from sklearn.utils import check_array
 from sympy import Add, Mul, Pow, Tuple, sympify
-from sympy.core.compatibility import reduce, Iterable
+
 from sympy.physics.units import Dimension
 from sympy.physics.units.quantities import Quantity
 

@@ -409,11 +409,11 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
 if __name__ == "__main__":
     # data
-    from sklearn.datasets import load_boston
+    from sklearn.datasets import fetch_california_housing
 
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
     c = [6, 3, 4]
 
     sl = SymbolLearning(loop=None, pop=50, gen=3, cal_dim=False, re_hall=2, add_coef=True, cv=1, random_state=2,

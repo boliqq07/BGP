@@ -6,12 +6,12 @@ This is a Dimension calculation sample.
 
       if __name__ == "__main__":
           from bgp.functions.dimfunc import dless
-          from sklearn.datasets import load_boston
+          from sklearn.datasets import fetch_california_housing
           from bgp.skflow import SymbolLearning
 
-          data = load_boston()
-          x = data["data"]
-          y = data["target"]
+          data = fetch_california_housing()
+          x = data["data"][:100]
+          y = data["target"][:100]
           x_dim = [dless, dless, dless, dless, dless, dless, dless, dless,dless, dless, dless, dless, dless]
           y_dim = dless
 

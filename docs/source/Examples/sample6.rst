@@ -15,8 +15,8 @@ Note:
         from sklearn.utils import shuffle
 
         data = load_iris()
-        x = data["data"]
-        y = data["target"]
+        x = data["data"][:100]
+        y = data["target"][:100]
         c = [1, 2, 3]
 
         sl = SymbolLearning(loop="MultiMutateLoop", pop=50,

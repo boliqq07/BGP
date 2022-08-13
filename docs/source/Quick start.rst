@@ -8,12 +8,12 @@ The symbol are conformed with the ''sklearn-style'' type, which can be easily to
 
     if __name__ == "__main__":
         # data
-        from sklearn.datasets import load_boston
+        from sklearn.datasets import fetch_california_housing
         from bgp.skflow import SymbolLearning
 
-        data = load_boston()
-        x = data["data"]
-        y = data["target"]
+        data = fetch_california_housing()
+        x = data["data"][:100]
+        y = data["target"][:100]
         c = [6, 3, 4]
 
         # start->
@@ -24,7 +24,7 @@ The symbol are conformed with the ''sklearn-style'' type, which can be easily to
 
 And return the results::
 
-    >>>62.33 - 2.156*x10
+    >>>a - b*xi...
 
 :Note:
 

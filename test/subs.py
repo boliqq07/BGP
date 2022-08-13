@@ -8,7 +8,7 @@ z = sympy.Symbol("z")
 m = sympy.Symbol("m")
 n = sympy.Symbol("n")
 d1 = sympy.Symbol("d1")
-d1.copy()
+
 a = time.time()
 expss = (m - n) ** 3 + z * ((x - 1) * m + y)
 b = time.time()

@@ -14,11 +14,11 @@ class MyTestbase(unittest.TestCase):
         self.SymbolTree = SymbolTree
         self.pset = SymbolSet()
 
-        from sklearn.datasets import load_boston
+        from sklearn.datasets import fetch_california_housing
 
-        data = load_boston()
-        x = data["data"]
-        y = data["target"]
+        data = fetch_california_housing()
+        x = data["data"][:100]
+        y = data["target"][:100]
         # No = Normalizer()
         # y=y/max(y)
         # x = No.fit_transform(x)

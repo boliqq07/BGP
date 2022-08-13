@@ -1,7 +1,7 @@
 import time
 
 from numpy import random
-from sklearn.datasets import load_boston
+from sklearn.datasets import fetch_california_housing
 
 from bgp.base import SymbolSet, SymbolTree
 from bgp.calculation.translate import compile_context
@@ -9,9 +9,9 @@ from bgp.functions.dimfunc import dless, Dim
 
 if __name__ == "__main__":
     # data
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
     c = [6, 3, 4]
     # unit
     from sympy.physics.units import kg

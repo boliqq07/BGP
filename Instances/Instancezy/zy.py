@@ -9,7 +9,6 @@ from sklearn import metrics
 from bgp.skflow import SymbolLearning
 from bgp.base import SymbolSet
 from bgp.functions.dimfunc import dless
-from sklearn.datasets import load_boston
 from bgp.skflow import SymbolLearning
 
 if __name__ == "__main__":

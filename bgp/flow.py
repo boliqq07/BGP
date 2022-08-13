@@ -39,7 +39,7 @@ from mgetool import newclass
 from mgetool.exports import Store
 from mgetool.packbox import Toolbox
 from numpy import random
-from sklearn.datasets import load_boston
+
 from sklearn.metrics import r2_score
 
 from bgp.base import CalculatePrecisionSet
@@ -652,9 +652,10 @@ class DimForceLoop(MultiMutateLoop):
 
 if __name__ == "__main__":
     # data
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    from sklearn.datasets import fetch_california_housing
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
     c = [6, 3, 4]
     # unit
     from sympy.physics.units import kg

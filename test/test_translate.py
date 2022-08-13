@@ -1,7 +1,7 @@
 import time
 
 from sklearn import preprocessing
-from sklearn.datasets import load_boston
+from sklearn.datasets import fetch_california_housing
 
 from bgp.base import SymbolSet, SymbolTree, CalculatePrecisionSet
 from bgp.calculation.coefficient import try_add_coef
@@ -11,14 +11,14 @@ from bgp.functions.npfunc import np_map
 
 if __name__ == "__main__":
     # data
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
     c = [6, 3, 4]
     # unit
     from sympy.physics.units import kg
 
-    x_u = [kg] * 13
+    x_u = [kg] * 8
     y_u = kg
     c_u = [dless, dless, dless]
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     # symbolset
     pset0 = SymbolSet()
     pset0.add_features(x, y, x_dim=x_dim, y_dim=y_dim, x_group=2,
-                       feature_name=["Ss%i" % i for i in range(13)])
+                       feature_name=["Ss%i" % i for i in range(8)])
     pset0.add_constants(c, c_dim=c_dim, c_prob=None)
     pset0.add_operations(power_categories=(2, 3, 4),
                          categories=("Add", "Mul", "Sub", "Div", "ln", "exp"),

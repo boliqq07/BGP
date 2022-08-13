@@ -8,7 +8,6 @@ from deap import creator
 from deap import tools
 from deap.algorithms import varAnd
 from deap.tools import mutShuffleIndexes
-from sklearn.datasets import load_boston
 from sklearn.svm import SVR
 from mgetool.tool import parallelize, batch_parallelize
 
@@ -223,8 +222,9 @@ def GA(x, y, fit_func, n_jobs=2, pop_n=1000, hof_n=1, cxpb=0.6, mutpb=0.3, ngen=
 
 
 if __name__ == "__main__":
-    data = load_boston()
-    x = data.data
+    from sklearn.datasets import fetch_california_housing
+    data = fetch_california_housing()
+    x = data.data[:100]
     y = data.target
     svr = SVR(gamma="scale")
     fitn = partial(fitness_func, model=svr, x=x, y=y)

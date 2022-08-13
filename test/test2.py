@@ -7,15 +7,15 @@
 from mgetool.tool import tt
 
 if __name__ == "__main__":
-    from sklearn.datasets import load_iris, load_boston
+    from sklearn.datasets import load_iris, fetch_california_housing
     from bgp.skflow import SymbolLearning
     from sklearn import metrics
     from sklearn.utils import shuffle
 
     # data = load_iris()
-    data = load_boston()
-    x = data["data"]
-    y = data["target"]
+    data = fetch_california_housing()
+    x = data["data"][:100]
+    y = data["target"][:100]
     c = [1, 2, 3]
 
     #    data = pd.read_csv(r"..data/a.csv")
