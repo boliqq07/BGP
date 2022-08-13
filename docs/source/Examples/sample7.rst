@@ -64,27 +64,31 @@ This is a part to equation complexity control from 3 aspect.
 Note:
     From sample 4, The formula to be more and more complicated.
 
-1. Ordinary SL.::
+1. Ordinary SL.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=False, n_jobs = 10,add_coef=False)
     sl.fit(x,y)
 
 
-2. SL with add coefficients: af(x).::
+2. SL with add coefficients: af(x).
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=False, n_jobs = 10,add_coef=True,inter_add=False)
     sl.fit(x,y)
 
 
-3. SL with add coefficients (default,if do not change the default parameters): af(x)+b.::
+3. SL with add coefficients (default,if do not change the default parameters): af(x)+b.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=False, n_jobs = 10,add_coef=True,inter_add=True)
     sl.fit(x,y)
 
-4. SL with add coefficients, with dimension calculation (default): af(x)+b.::
+4. SL with add coefficients, with dimension calculation (default): af(x)+b.
+::
 
     from sympy.physics.units import kg, m, pa, J, mol, K
     from bgp.functions.dimfunc import Dim, dless
@@ -109,7 +113,8 @@ Note:
 
 
 5. SL with add coefficients, with dimension calculation, but relax the requirement:
-just require that the dimension f(x) is not NaN for af(x)+b.::
+just require that the dimension f(x) is not NaN for af(x)+b.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,
@@ -119,7 +124,8 @@ just require that the dimension f(x) is not NaN for af(x)+b.::
 
 
 6. SL with add coefficients, with dimension calculation,
-but relax the requirement: just require that the dimension f(x) is not NaN for af(x)+b or af(x)+cf(x)+b.::
+but relax the requirement: just require that the dimension f(x) is not NaN for af(x)+b or af(x)+cf(x)+b.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,dim_type="coef"
@@ -128,7 +134,8 @@ but relax the requirement: just require that the dimension f(x) is not NaN for a
 
 
 7. SL with add coefficients, with dimension calculation,
-but relax the requirement: just require that the dimension f(x) is not NaN for flattened af(x)+cf(x)+b.::
+but relax the requirement: just require that the dimension f(x) is not NaN for flattened af(x)+cf(x)+b.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,dim_type="coef"
@@ -136,7 +143,8 @@ but relax the requirement: just require that the dimension f(x) is not NaN for f
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
 
 8. SL with add coefficients, with dimension calculation,
-but relax the requirement: just require that the dimension f(x) is not NaN for af(cx)+b.::
+but relax the requirement: just require that the dimension f(x) is not NaN for af(cx)+b.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,dim_type="coef"
@@ -144,14 +152,16 @@ but relax the requirement: just require that the dimension f(x) is not NaN for a
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
 
 9. SL with add coefficients, with dimension calculation,
-but relax the requirement: just require that the dimension f(x) is not NaN for af(cx)+b.::
+but relax the requirement: just require that the dimension f(x) is not NaN for af(cx)+b.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,dim_type="coef"
                         n_jobs = 10,add_coef=True,inter_add=True, inner_add=True, out_add=False, flat_add=False)
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
 
-10. SL with add coefficients, with dimension calculation, change max_value.::
+10. SL with add coefficients, with dimension calculation, change max_value.
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=True,dim_type="coef",
@@ -159,7 +169,8 @@ but relax the requirement: just require that the dimension f(x) is not NaN for a
                         n_jobs = 10,add_coef=True,inter_add=True, inner_add=True, out_add=False, flat_add=False)
     sl.fit(x,y,x_dim=x_dim,y_dim=y_dim)
 
-11. Complex equation(most complicated, slowest, unaccountably).::
+11. Complex equation(most complicated, slowest, unaccountably).
+::
 
     sl = SymbolLearning(loop="MultiMutateLoop", pop=100, gen=10, random_state=1,
                         cal_dim=False,

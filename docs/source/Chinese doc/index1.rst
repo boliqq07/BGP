@@ -31,7 +31,8 @@
 :自定义概率: fit(x_prob, c_prob)
 
 :热启动: fit.(warm_start), fit(new_gen)
----
+
+
 1.最简单的使用可以参考
 此 ``SymbolLearning`` 封装可以在不借助其他辅助功能的情况下实现大部分功能。
 ::

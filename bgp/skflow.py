@@ -20,8 +20,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
     This code does not check and identity the certainty of data.
 
-    Parameters:
-        `Web of SymbolLearning <https://bgp.readthedocs.io/en/latest/src/bgp.html#bgp.skflow.SymbolLearning>`_
+    `Web of Symbolic Learning <https://bgp.readthedocs.io/en/latest/src/bgp.html#bgp.skflow.SymbolLearning>`_ .
 
     See Also:
         :class:`bgp.flow.BaseLoop`
@@ -37,9 +36,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         Parameters
         ----------
         loop: str,None
-            bgp.flow.BaseLoop
-
-            ['BaseLoop', 'MultiMutateLoop', 'OnePointMutateLoop', 'DimForceLoop' ...].
+            bgp.flow.BaseLoop or ['BaseLoop', 'MultiMutateLoop', 'OnePointMutateLoop', 'DimForceLoop' ...].
         pop: int
             number of population.
         gen: int
