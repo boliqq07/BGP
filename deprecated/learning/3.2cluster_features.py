@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     discorr = cal_dor(X)
 
-    co = Corr(muti_index=[1, len(X)])
+    co = Corr(multi_index=[1, len(X)])
     co.fit(X, pre_cal=discorr, method="max")
     discorr_shirnk = 1 - co.cov_shrink
     X_frame_name = co.transform(X_frame.columns.values)

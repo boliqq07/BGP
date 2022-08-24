@@ -336,7 +336,7 @@ def method_pack(method_all, me="reg", gd=True):
         return estimator
 
 
-def score_muti(x_select, y, me="reg", paras=True, method_name=None, shrink=2, str_name=False, param_grid=None):
+def score_multi(x_select, y, me="reg", paras=True, method_name=None, shrink=2, str_name=False, param_grid=None):
     """score with different method
     :param param_grid: user's param_grid
     :param str_name:
@@ -519,7 +519,7 @@ x = st.fit_transform(x)
 
 method = ["SVR-set", "AdaBR-em", 'GBR-em', "LinearSVR-set"]
 
-result = score_muti(x, y, me="reg", paras=True, method_name=method, shrink=1, str_name=False, param_grid=None)
+result = score_multi(x, y, me="reg", paras=True, method_name=method, shrink=1, str_name=False, param_grid=None)
 
 from sklearn.model_selection import cross_val_predict
 

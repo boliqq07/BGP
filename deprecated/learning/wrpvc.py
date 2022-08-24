@@ -23,7 +23,7 @@ minmax = MinMaxScaler()
 x = minmax.fit_transform(x)
 
 x, y = shuffle(x, y)
-# m_corr = Corr(threshold=0.85, muti_grade=None, muti_index=None, must_index=None)
+# m_corr = Corr(threshold=0.85, multi_grade=None, multi_index=None, must_index=None)
 # m_corr.fit(x)
 # corr = m_corr.cov
 

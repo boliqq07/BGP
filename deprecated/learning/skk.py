@@ -74,7 +74,7 @@ x = minmax.fit_transform(x)
 
 # corr = np.corrcoef(x)
 # corr2 = DataFrame(x).corr()
-m_corr = Corr(threshold=0.85, muti_grade=2, muti_index=None, must_index=None)
+m_corr = Corr(threshold=0.85, multi_grade=2, multi_index=None, must_index=None)
 m_corr.fit(x)
 corr = m_corr.cov
 result_list = m_corr.count_cof(cof=None)

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y = y_frame.values
 
     """calculate corr"""
-    corr = Corr(threshold=0.90, muti_grade=2, muti_index=[2, len(X)])
+    corr = Corr(threshold=0.90, multi_grade=2, multi_index=[2, len(X)])
     corr.fit(X_frame)
     cof_list = corr.count_cof()
 
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     select = ['cell volume', 'electron density', ] + [j + "_%i" % i for j in select[2:] for i in range(2)]
 
-    corr = Corr(threshold=0.90, muti_grade=2, muti_index=[2, len(X)])
+    corr = Corr(threshold=0.90, multi_grade=2, multi_index=[2, len(X)])
     corr.fit(X_frame[select].values, method="mean", pre_cal="mic", alpha=0.55, c=15)
     # cof_mic = corr.count_cof()
     cof_mic = corr.cov_shrink

@@ -68,7 +68,7 @@ if __name__ == "__main__":
     estimator = GridSearchCV(me1, cv=cv1, scoring=scoring1, param_grid=param_grid1, n_jobs=1)
     # n_select = [1,]
     n_select = (2, 3)
-    clf = Exhaustion(estimator, n_select=n_select, muti_grade=2, muti_index=[2, X.shape[1]], must_index=None,
+    clf = Exhaustion(estimator, n_select=n_select, multi_grade=2, multi_index=[2, X.shape[1]], must_index=None,
                      n_jobs=1, refit=True).fit(X, y)
 
     name_ = name_to_name(X_frame.columns.values, search=[i[0] for i in clf.score_ex[:10]], search_which=0,

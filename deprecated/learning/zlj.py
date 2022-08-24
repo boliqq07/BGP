@@ -39,7 +39,7 @@ me4 = svm.SVR(kernel='rbf', gamma='auto', degree=3, tol=1e-3, epsilon=0.1, shrin
 param_grid4 = [{'C': [10000000, 100000000], "epsilon": [1000, 0.1, 0.0001]}]
 gd = GridSearchCV(me4, cv=LeaveOneOut(), param_grid=param_grid4, scoring='neg_root_mean_squared_error', n_jobs=1)
 # 前进后退
-ba = BackForward(gd, n_type_feature_to_select=3, primary_feature=None, muti_grade=2, muti_index=None,
+ba = BackForward(gd, n_type_feature_to_select=3, primary_feature=None, multi_grade=2, multi_index=None,
                  must_index=None, tolerant=0.01, verbose=0, random_state=2)
 # x_add = np.concatenate((x, xtest), axis=0)
 # y_add = np.concatenate((y, ytest), axis=0)

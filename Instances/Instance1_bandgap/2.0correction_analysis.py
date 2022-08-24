@@ -36,7 +36,7 @@ if __name__ == "__main__":
     y = y_frame.values
     #
     # """calculate corr"""
-    corr = Corr(threshold=0.90, muti_grade=2, muti_index=[2, len(X)])
+    corr = Corr(threshold=0.90, multi_grade=2, multi_index=[2, len(X)])
     corr.fit(X_frame)
     cof_list = corr.count_cof()
     #

@@ -412,8 +412,8 @@ def mutDifferentReplacementVerbose(individual, pset, personal_map=False):
     ters = [repr(i) for i in individual.terminals()]
     pset_ters = [repr(i) for i in pset.terminals_and_constants]
     cou = Counter(ters)
-    cou_mutil = {i: j for i, j in cou.items() if j >= 2}
-    ks = list(cou_mutil.keys())
+    cou_multil = {i: j for i, j in cou.items() if j >= 2}
+    ks = list(cou_multil.keys())
     nks = list(set(pset_ters) - (set(ks)))
     if len(nks) <= 1:
         return individual,
@@ -424,9 +424,9 @@ def mutDifferentReplacementVerbose(individual, pset, personal_map=False):
     p_nks = p_nks.astype(float)
     p_nks /= np.sum(p_nks)
 
-    if cou_mutil:
+    if cou_multil:
         indexs = []
-        for k, v in cou_mutil.items():
+        for k, v in cou_multil.items():
             indi = []
             for i in np.arange(1, len(individual), 2):
                 if repr(individual[i]) == k:
@@ -576,7 +576,7 @@ def Statis_func(stats=None):
         "height": lambda ind: ind.height,
         "h_bgp": lambda ind: ind.h_bgp,
 
-        # mutil-target
+        # multil-target
         "weight_fitness": lambda ind: ind.fitness.wvalues,
         "weight_fitness_dim": lambda ind: ind.fitness.wvalues if ind.dim_score else -np.inf,
         # weight have mul the "-"
