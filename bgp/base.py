@@ -656,7 +656,7 @@ class SymbolSet(object):
             Notes:
                 the  ("Self", "MAdd", "MSub", "MMul", "MDiv") are set as 1 to be a standard.
         self_categories:list of dict, None
-            the dict can be generate from newfuncD or defination self.
+            the dict can generate from newfuncD or defination self.
 
             the function at least containing:
 

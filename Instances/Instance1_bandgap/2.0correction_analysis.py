@@ -13,7 +13,7 @@ this is a description
 from featurebox.selection.corr import Corr
 from mgetool.exports import Store
 from mgetool.imports import Call
-from mgetool.show import corr_plot
+from mgetool.show import BasePlot
 from mgetool.tool import name_to_name
 
 # import seaborn as sns
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     #             annot=True, annot_kws={'size': 3})
     # plt.show()
     #
-    plt0 = corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill", right_top="pie", threshold_right=0.8,
+    plt0 = BasePlot().corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill", right_top="pie", threshold_right=0.8,
                      front_raito=0.6)
 
     plt0.savefig("corr.pdf")

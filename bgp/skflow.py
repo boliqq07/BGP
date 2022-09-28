@@ -96,7 +96,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         n_jobs:int
             default 1, advise 6.
         batch_size:int
-            default 40, depend of machine.
+            default 40, depend on machine.
         random_state:int
             None,int.
         cal_dim:bool
@@ -149,7 +149,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         store:bool or path
             bool or path.
         stop_condition:callable
-            stop condition on the best ind of hall, which return bool,the true means stop loop.
+            stop condition on the best individual of hall, which return bool,the true means stop loop.
 
             Examples::
 
@@ -185,7 +185,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             sl = SymbolLearning()
             sl..fit(x,y,...)
 
-        Method 2. fit with customized pset. If need more self-definition, use one defined SymbolSet object to ``pset``.
+        Method 2. fit with customized pset. If you need more self-definition, use one defined SymbolSet object to ``pset``.
 
         Examples::
 
@@ -206,8 +206,8 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             constants.
         x_dim: 1 or list of Dim
             the same size wih x.shape[1], default 1 is dless for all x.
-        y_dim: 1,Dim
-            dim of y.
+        y_dim: 1, Dim
+            Dim of y.
         c_dim: 1,list of Dim
             the same size wih c.shape, default 1 is dless for all c.
 
