@@ -1,22 +1,31 @@
 import numpy as np
 import pandas as pd
 import sklearn
-from featurebox.featurizers.compositionfeaturizer import DepartElementFeaturizer
-from mgetool.exports import Store
-from pymatgen import Composition
 
+from featurebox.featurizers.atom.mapper import AtomTableMap
+from featurebox.featurizers.state.statistics import DepartElementFeature
+
+from mgetool.exports import Store
+from pymatgen.core import Composition
+
+"""
+this is a description
+"""
 if __name__ == "__main__":
 
     import os
 
-    store = Store()
-
     os.chdir(r'band_gap')
 
-    com_data = pd.read_excel(r'initial_band_gap_data.xlsx')
+    store = Store()
+
+    com_data = pd.read_csv('initial_band_gap_data.csv')
     #
     # """for element site"""
-    from bgp.data.impot_element_table import element_table
+    element_table = pd.read_csv("ele_table.csv",index_col=0)
+
+    name_and_abbr = element_table.iloc[[0, 1], :]
+    element_table = element_table.iloc[2:, :]
 
     name_and_abbr = element_table.iloc[[0, 1], :]
     element_table = element_table.iloc[2:, :]
@@ -80,7 +89,9 @@ if __name__ == "__main__":
     # #
     # #
     """get departed element feature"""
-    departElementProPFeature = DepartElementFeaturizer(elem_data=select_element_table, n_composition=2, n_jobs=1, )
+    data_map = AtomTableMap(search_tp="name", tablename=select_element_table, n_jobs=1)
+    departElementProPFeature = DepartElementFeature(data_map=data_map, n_composition=2, n_jobs=1, )
+    departElementProPFeature.set_feature_labels(data_map.feature_labels)
     departElement = departElementProPFeature.fit_transform(composition_mp)
     # """join"""
     depart_elements_table = departElement.set_axis(com_data.index.values, axis='index', inplace=False)

@@ -7,9 +7,12 @@
 # @Software: PyCharm
 import numpy as np
 import pandas as pd
-from featurebox.featurizers.compositionfeaturizer import DepartElementFeaturizer
+
+from featurebox.featurizers.atom.mapper import AtomTableMap
+from featurebox.featurizers.state.statistics import DepartElementFeature
+
 from mgetool.exports import Store
-from pymatgen import Composition
+from pymatgen.core import Composition
 
 """
 this is a description
@@ -22,49 +25,38 @@ if __name__ == "__main__":
 
     store = Store()
 
-    com_data = pd.read_excel(r'initial_band_gap_data.xlsx')
+    com_data = pd.read_csv('initial_band_gap_data.csv')
     #
     # """for element site"""
-    from featurebox.data.impot_element_table import element_table
+    element_table = pd.read_csv("ele_table.csv",index_col=0)
 
     name_and_abbr = element_table.iloc[[0, 1], :]
     element_table = element_table.iloc[2:, :]
 
     feature_select = [
-        'lattice constants a',
-        'lattice constants b',
-        'lattice constants c',
-        'atomic radii(empirical)',
-        'atomic radii(clementi)',
-        'ionic radii(pauling)',
-        'ionic radii(shannon)',
-        'covalent radii',
-        'metal radii(waber)',
-        'valence electron distance(schubert)',
-        'core electron distance(schubert)',
-        'pseudo-potential radii(zunger)',
-
-        'first ionization energy',
-        'second ionization energy',
-        'third ionization energy',
-        'atomization enthalpy',
-        'vaporization enthalpy',
-        'fusion enthalpy',
-
-        'cohesive energy(Brewer)',
-        'total energy',
-
-        'electron number',
-        'valence electron number',
-        'effective nuclear charge(slater)',
-        'effective nuclear charge(clementi)',
-        "periodic number",
-        "group number",
-        'electronegativity(martynov&batsanov)',
-        'electronegativity(pauling)',
-        'electronegativity(alfred-rochow)',
-
-        'atomic volume(villars,daams)',
+        'lattice constants a', 'lattice constants b',
+        'lattice constants c', 'atomic radii (empirical)',
+        'atomic radii (clementi)', 'ionic radii (pauling)',
+        'ionic radii (shannon)', 'covalent radii',
+        'covalent radii (sigle bond)', 'covalent radii (double bond)',
+        'Van der Waals radius', 'metal radii (waber)',
+        'valence electron distance (schubert)',
+        'core electron distance (schubert)', 'pseudo-potential radii (zunger)',
+        'first ionization energy', 'second ionization energy',
+        'third ionization energy', 'electronic affinity',
+        'atomization enthalpy', 'vaporization enthalpy', 'fusion enthalpy',
+        'cohesive energy (Brewer)', 'total energy', 'electron number',
+        'valence electron number', 's', 'p', 'd', 'f',
+        'effective nuclear charge (slater)',
+        'effective nuclear charge (clementi)', 'periodic number',
+        'group number', 'electronegativity (martynov&batsanov)',
+        'electronegativity (pauling)', 'electronegativity (alfred-rochow)',
+        'modulus compression', 'thermal conductivity', 'specific heat',
+        'temperature melting', 'temperature boiling',
+        'atomic volume(villars,daams)', 'atomic weight(villars,daams)',
+        'atomic density',
+        'lowest energy of the atomic orbitals',
+        '2nd lowest energy of the atomic orbitals'
 
     ]
     #
@@ -93,8 +85,11 @@ if __name__ == "__main__":
     # #
     # #
     """get departed element feature"""
-    departElementProPFeature = DepartElementFeaturizer(elem_data=select_element_table, n_composition=2, n_jobs=1, )
+    data_map = AtomTableMap(search_tp="name", tablename=select_element_table, n_jobs=1)
+    departElementProPFeature = DepartElementFeature(data_map=data_map, n_composition=2, n_jobs=1, )
+    departElementProPFeature.set_feature_labels(data_map.feature_labels)
     departElement = departElementProPFeature.fit_transform(composition_mp)
+
     # """join"""
     depart_elements_table = departElement.set_axis(com_data.index.values, axis='index', inplace=False)
     ele_ratio = ele_ratio.set_axis(com_data.index.values, axis='index', inplace=False)
@@ -119,7 +114,7 @@ if __name__ == "__main__":
     all_import = all_import.iloc[np.where(all_import['group_number'] == 225)[0]]
     all_import = all_import.drop(['group_number'], axis=1)
 
-    store.to_csv(all_import, "all_import", transposition=False)
+    # store.to_csv(all_import, "all_import", transposition=False)
 
 
     def get_abbr():
@@ -133,4 +128,4 @@ if __name__ == "__main__":
 
     get_abbr()
 
-    store.to_csv(name_and_abbr, "name_and_abbr", transposition=False)
+    # store.to_csv(name_and_abbr, "name_and_abbr", transposition=False)
