@@ -28,35 +28,46 @@ if __name__ == "__main__":
     com_data = pd.read_csv('initial_band_gap_data.csv')
     #
     # """for element site"""
-    element_table = pd.read_csv("ele_table.csv",index_col=0)
+    element_table = pd.read_csv("ele_table.csv", index_col=0)
 
     name_and_abbr = element_table.iloc[[0, 1], :]
     element_table = element_table.iloc[2:, :]
 
     feature_select = [
-        'lattice constants a', 'lattice constants b',
-        'lattice constants c', 'atomic radii (empirical)',
-        'atomic radii (clementi)', 'ionic radii (pauling)',
-        'ionic radii (shannon)', 'covalent radii',
-        'covalent radii (sigle bond)', 'covalent radii (double bond)',
-        'Van der Waals radius', 'metal radii (waber)',
+        'lattice constants a',
+        'lattice constants b',
+        'lattice constants c',
+        'atomic radii (empirical)',
+        'atomic radii (clementi)',
+        'ionic radii (pauling)',
+        'ionic radii (shannon)',
+        'covalent radii',
+        'metal radii (waber)',
         'valence electron distance (schubert)',
-        'core electron distance (schubert)', 'pseudo-potential radii (zunger)',
-        'first ionization energy', 'second ionization energy',
-        'third ionization energy', 'electronic affinity',
-        'atomization enthalpy', 'vaporization enthalpy', 'fusion enthalpy',
-        'cohesive energy (Brewer)', 'total energy', 'electron number',
-        'valence electron number', 's', 'p', 'd', 'f',
+        'core electron distance (schubert)',
+        'pseudo-potential radii (zunger)',
+
+        'first ionization energy',
+        'second ionization energy',
+        'third ionization energy',
+        'atomization enthalpy',
+        'vaporization enthalpy',
+        'fusion enthalpy',
+
+        'cohesive energy (Brewer)',
+        'total energy',
+
+        'electron number',
+        'valence electron number',
         'effective nuclear charge (slater)',
-        'effective nuclear charge (clementi)', 'periodic number',
-        'group number', 'electronegativity (martynov&batsanov)',
-        'electronegativity (pauling)', 'electronegativity (alfred-rochow)',
-        'modulus compression', 'thermal conductivity', 'specific heat',
-        'temperature melting', 'temperature boiling',
-        'atomic volume(villars,daams)', 'atomic weight(villars,daams)',
-        'atomic density',
-        'lowest energy of the atomic orbitals',
-        '2nd lowest energy of the atomic orbitals'
+        'effective nuclear charge (clementi)',
+        "periodic number",
+        "group number",
+        'electronegativity (martynov&batsanov)',
+        'electronegativity (pauling)',
+        'electronegativity (alfred-rochow)',
+
+        'atomic volume(villars,daams)',
 
     ]
     #
