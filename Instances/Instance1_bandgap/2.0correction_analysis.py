@@ -44,6 +44,7 @@ if __name__ == "__main__":
 
     X_frame_name = corr.transform(X_frame.columns.values)
     X_frame_name = [i.replace("_0", "") for i in X_frame_name]
+    X_frame_name = [i.replace("_1", "") for i in X_frame_name]
 
     X_frame_abbr = name_to_name(name_and_abbr.columns.values, list(name_and_abbr.iloc[0, :]),
                                 search=X_frame_name, search_which=1,
@@ -61,8 +62,8 @@ if __name__ == "__main__":
     #             annot=True, annot_kws={'size': 3})
     # plt.show()
     #
-    plt0 = BasePlot().corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill", right_top="pie", threshold_right=0.8,
-                     front_raito=0.6)
+    plt0 = BasePlot().corr_plot(corr.cov_shrink, X_frame_abbr, title="", left_down="fill",
+                                right_top="pie", threshold_right=0.8, front_raito=0.6)
 
     plt0.savefig("corr.pdf")
 
@@ -76,11 +77,11 @@ if __name__ == "__main__":
 
     # 2
     select = ['cell volume', 'electron density', 'lattice constants a', 'lattice constants c', 'covalent radii',
-              'ionic radii(shannon)',
-              'core electron distance(schubert)', 'fusion enthalpy', 'cohesive energy(Brewer)', 'total energy',
-              'effective nuclear charge(slater)', "electron number", 'valence electron number',
-              'electronegativity(martynov&batsanov)',
-              'atomic volume(villars,daams)']  # human select
+              'ionic radii (shannon)',
+              'core electron distance (schubert)', 'fusion enthalpy', 'cohesive energy (Brewer)', 'total energy',
+              'effective nuclear charge (slater)', "electron number", 'valence electron number',
+              'electronegativity (martynov&batsanov)',
+              'atomic volume (villars,daams)']  # human select
 
     select_index, select_abbr = name_to_name(X_frame_name, X_frame_abbr, search=select, search_which=1,
                                              return_which=(0, 2),

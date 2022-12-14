@@ -27,9 +27,6 @@ if __name__ == "__main__":
     name_and_abbr = element_table.iloc[[0, 1], :]
     element_table = element_table.iloc[2:, :]
 
-    name_and_abbr = element_table.iloc[[0, 1], :]
-    element_table = element_table.iloc[2:, :]
-
     feature_select = [
         'lattice constants a',
         'lattice constants b',
@@ -64,7 +61,7 @@ if __name__ == "__main__":
         'electronegativity (pauling)',
         'electronegativity (alfred-rochow)',
 
-        'atomic volume(villars,daams)',
+        'atomic volume (villars,daams)',
 
     ]
     #

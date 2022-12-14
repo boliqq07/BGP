@@ -67,7 +67,7 @@ if __name__ == "__main__":
         'electronegativity (pauling)',
         'electronegativity (alfred-rochow)',
 
-        'atomic volume(villars,daams)',
+        'atomic volume (villars,daams)',
 
     ]
     #
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     all_import = all_import.iloc[np.where(all_import['group_number'] == 225)[0]]
     all_import = all_import.drop(['group_number'], axis=1)
 
-    # store.to_csv(all_import, "all_import", transposition=False)
+    store.to_csv(all_import, "all_import", transposition=False)
 
 
     def get_abbr():
@@ -139,4 +139,4 @@ if __name__ == "__main__":
 
     get_abbr()
 
-    # store.to_csv(name_and_abbr, "name_and_abbr", transposition=False)
+    store.to_csv(name_and_abbr, "name_and_abbr", transposition=False)

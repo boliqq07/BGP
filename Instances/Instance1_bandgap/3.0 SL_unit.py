@@ -19,12 +19,12 @@ if __name__ == "__main__":
     data225_import = data_import
 
     select = ['cell volume', 'electron density',
-              'lattice constants a', 'lattice constants c', 'covalent radii', 'ionic radii(shannon)',
-              'core electron distance(schubert)',
-              'fusion enthalpy', 'cohesive energy(Brewer)', 'total energy',
-              'effective nuclear charge(slater)', "electron number", 'valence electron number',
-              'electronegativity(martynov&batsanov)',
-              'atomic volume(villars,daams)']
+              'lattice constants a', 'lattice constants c', 'covalent radii', 'ionic radii (shannon)',
+              'core electron distance (schubert)',
+              'fusion enthalpy', 'cohesive energy (Brewer)', 'total energy',
+              'effective nuclear charge (slater)', "electron number", 'valence electron number',
+              'electronegativity (martynov&batsanov)',
+              'atomic volume (villars,daams)']
 
     from sympy.physics.units import eV, pm, nm
 
