@@ -32,7 +32,7 @@ if __name__ == "__main__":
                         # store=True,
                         n_jobs=4,
 
-                        batch_size=20,
+                        batch_size=10,
                         batch_para=False,
 
                         # add_coef=False,
@@ -51,17 +51,17 @@ if __name__ == "__main__":
 
     # top_n.to_csv(r"./re.csv")
 
-if __name__ == "__main__":
-    from sklearn.datasets import fetch_california_housing
-    from bgp.skflow import SymbolLearning
-
-    data = fetch_california_housing()
-    x = data["data"][:100]
-    y = data["target"][:100]
-    c = [1, 2, 3]
-
-    sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
-                )
-    sl.fit(x, y, c=c,x_group=[[1, 3], [0, 2], [4, 7]])
-    score = sl.score(x, y, "r2")
-    print(sl.expr)
+# if __name__ == "__main__":
+#     from sklearn.datasets import fetch_california_housing
+#     from bgp.skflow import SymbolLearning
+#
+#     data = fetch_california_housing()
+#     x = data["data"][:100]
+#     y = data["target"][:100]
+#     c = [1, 2, 3]
+#
+#     sl = SymbolLearning(loop="MultiMutateLoop", pop=500, gen=3, cal_dim=True, re_hall=2, add_coef=True, cv=1, random_state=1
+#                 )
+#     sl.fit(x, y, c=c,x_group=[[1, 3], [0, 2], [4, 7]])
+#     score = sl.score(x, y, "r2")
+#     print(sl.expr)
