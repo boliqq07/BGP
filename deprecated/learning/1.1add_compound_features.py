@@ -45,7 +45,7 @@ data_tail = all_import.drop(
     ['name_number', "x_name", "structure", "structure_type", "space_group", "reference", 'material_id', 'composition',
      'exp_gap', 'group_number'], axis=1)
 
-data_import = data_title._join(vor[["face_dist0", "vor_area0", "face_dist1", "vor_area1"]])
-data_import = data_import._join(data_tail)
+data_import = data_title.join(vor[["face_dist0", "vor_area0", "face_dist1", "vor_area1"]])
+data_import = data_import.join(data_tail)
 
 store.to_csv(data_import, "all_import")

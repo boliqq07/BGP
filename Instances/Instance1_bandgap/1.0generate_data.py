@@ -105,8 +105,8 @@ if __name__ == "__main__":
     depart_elements_table = departElement.set_axis(com_data.index.values, axis='index', inplace=False)
     ele_ratio = ele_ratio.set_axis(com_data.index.values, axis='index', inplace=False)
     # #
-    all_import_title = com_data._join(ele_ratio)
-    all_import_title = all_import_title._join(depart_elements_table)
+    all_import_title = com_data.join(ele_ratio)
+    all_import_title = all_import_title.join(depart_elements_table)
 
     """add ele density"""
     select2 = ['electron number_0', 'electron number_1', 'cell volume']
