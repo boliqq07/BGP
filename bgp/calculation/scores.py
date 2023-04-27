@@ -84,7 +84,7 @@ def calculate_y_unpack(expr01, x, terminals, classification=False):
 
 
 def uniform_score(score_pen=1):
-    """return the worse score"""
+    """return the worst score"""
     if score_pen >= 0:
         return -np.inf
     elif score_pen <= 0:
@@ -119,7 +119,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
         -1 : best is negative, worse np.inf
         0 : best is positive , worse 0
     add_coef: bool
-        bool
+        bool.
     filter_warning: bool
         bool
     inter_add: bool
@@ -136,7 +136,7 @@ def calculate_score(expr01, x, y, terminals, scoring=None, score_pen=(1,),
     expr01: Expr
         New expr.
     pre_y: np.ndarray or float
-        np.array or None
+        np.ndarray or None
     """
     if filter_warning:
         warnings.filterwarnings("ignore")
@@ -291,7 +291,7 @@ def calculate_cv_score(expr01, x, y, terminals, scoring=None, score_pen=(1,), cv
 
     Notes:
         if cv and refit, all the data is refit to determine the coefficients.
-        Thus the expression is not compact with the this scores, when re-calculated by this expression.
+        Thus, the expression is not compact with the this scores, when re-calculated by this expression.
 
     Parameters
     ----------

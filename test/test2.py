@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import sympy
 
+from bgp.postprocess import pprint
 # @Time    : 2020/12/17 17:29
 # @Email   : 986798607@qq.com
 # @Software: PyCharm
@@ -28,8 +30,8 @@ if __name__ == "__main__":
                         # classification=True,
                         classification=False,
                         # scoring=[metrics.accuracy_score, ], score_pen=[1, ],
-                        store=False,
-                        # store=True,
+                        # store=False,
+                        store=True,
                         n_jobs=4,
 
                         batch_size=10,
@@ -40,13 +42,15 @@ if __name__ == "__main__":
                         # vector_add=True,
                         )
     tt.t
-    sl.fit(x, y, c=c,
+    sl.fit(x, y, c=c,categories=("Mul", "Sub", "exp", "ln")
            # x_group=[[0, 1], [2, 3]]
            )
     tt.t
     tt.p
     # score = sl.score(x, y, "r2")
-    # top_n = sl.loop.top_n(10)
+    top_n = sl.loop.top_n(10)
+    pprint(top_n["expr"].values[4])
+
     # print(sl.expr)
 
     # top_n.to_csv(r"./re.csv")

@@ -414,9 +414,10 @@ class BaseLoop(Toolbox):
         pd.DataFrame
 
         """
+        if self.store is False:
+            raise TypeError("Only valid with parameter: store=True")
+
         import pandas as pd
-        if self.store == "False":
-            raise TypeError("Only valid with store=True")
         data = self.data_all
 
         data = pd.DataFrame(data)
@@ -514,7 +515,7 @@ class BaseLoop(Toolbox):
                 print(self.logbook.stream)
             # 3.2.log-store##############################
             if self.store:
-                datas = [{"gen": gen_i, "name": str(pop_i), "expr": str([pop_i.coef_expr]),
+                datas = [{"gen": gen_i, "name": str(pop_i), "expr": pop_i.coef_expr,
                           "value": str(pop_i.fitness.values),
                           "dimension": str(pop_i.y_dim),
                           "dim_score": pop_i.dim_score} for pop_i in population]

@@ -18,8 +18,6 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
     2. For the classification problems, please using ``classification`` =True,
     and set the suit classification metrics for ``scoring`` and ``score_pen`` carefully.
 
-    This code does not check and identity the certainty of data.
-
     `Web of Symbolic Learning <https://bgp.readthedocs.io/en/latest/src/bgp.html#bgp.skflow.SymbolLearning>`_ .
 
     See Also:
@@ -35,7 +33,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
         Parameters
         ----------
-        loop: str,None
+        loop: str, None
             bgp.flow.BaseLoop or ['BaseLoop', 'MultiMutateLoop', 'OnePointMutateLoop', 'DimForceLoop' ...].
         pop: int
             number of population.
@@ -65,12 +63,13 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             False is just use the prob of terminals.
         scoring: list of Callable, default is [sklearn.metrics.r2_score,]
             See Also ``sklearn.metrics``
+            See Also ``bgp.calculation.scores.score_collection``.
         score_pen: tuple of  1, -1 or float but 0.
-            >0 : max problem, best is positive, worse -np.inf.
-            <0 : min problem, best is negative, worse np.inf.
+            >0 : max problem, best is positive, worst is -np.inf.
+            <0 : min problem, best is negative, worst is np.inf.
 
             Notes:
-            if multiply score method, the scores must be turn to same dimension in prepossessing
+            if multiply score method, the scores must turn to same dimension in prepossessing,
             or weight by score_pen. Because the all the selection are stand on the mean(w_i*score_i)
 
             Examples::
@@ -79,8 +78,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                 score_pen= [1,]
 
         cv:sklearn.model_selection._split._BaseKFold,int
-            the shuffler must be False,
-            default=1 means no cv.
+            default=1 means no cv. (the shuffler must be False)
         filter_warning:bool
             filter warning or not.
         add_coef:bool
@@ -148,7 +146,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             print progress bar or not.
         store:bool or path
             bool or path.
-        stop_condition:callable
+        stop_condition:callable, float
             stop condition on the best individual of hall, which return bool,the true means stop loop.
 
             Examples::
@@ -183,7 +181,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         Examples::
 
             sl = SymbolLearning()
-            sl..fit(x,y,...)
+            sl.fit(x,y,...)
 
         Method 2. fit with customized pset. If you need more self-definition, use one defined SymbolSet object to ``pset``.
 
@@ -194,7 +192,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
             pset.add_operations(...)
             ...
             sl = SymbolLearning()
-            sl..fit(pset=pset)
+            sl.fit(pset=pset)
 
         Parameters
         ----------
@@ -380,7 +378,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
                 sc_all.append(sc)
 
         # except (ValueError, RuntimeWarning):
-        except (RuntimeWarning):
+        except RuntimeWarning:
 
             sc_all = None
 
@@ -388,7 +386,7 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
 
     def cv_result(self, refit=False):
         """
-        return the cv_result of best expression.
+        return the cv_result best expression.
         Only valid when ``cv`` !=1.
 
         Parameters

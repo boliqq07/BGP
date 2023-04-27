@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
         for i in best:
             indexes = np.array(i)
-            indexes = indexes.astype(np.bool)
+            indexes = indexes.astype(bool)
             print(names[indexes])
             print(i, i.fitness)
 

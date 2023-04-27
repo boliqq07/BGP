@@ -8,14 +8,16 @@
 import copy
 import warnings
 from collections.abc import Callable
+from typing import Sequence
 
 import numpy as np
 import pandas as pd
 import sympy
-from mgetool.tool import parallelize
 from scipy.optimize import least_squares
 from sklearn import metrics
-from sympy import Expr
+
+
+from mgetool.tool import parallelize
 
 warnings.filterwarnings("ignore")
 
@@ -268,35 +270,18 @@ def acf(expr01, x, y, init_c=None, terminals=None, c_terminals=None, np_maps=Non
         expr01 = expr00
         pre_y = None
 
-    return pre_y, expr01,
-
-
-def acfs(expr01, x, y, init_c=None, terminals=None, c_terminals=None, np_maps=None,
-         classification=False, built_format_input=False, scoring="r2"):
-    """
-    Add coefficients and score.
-
-    See also add_coef_fitting (acf)."""
-    pre_y, expr01 = acf(expr01, x, y, init_c, terminals, c_terminals, np_maps,
-                        classification, built_format_input, )
-
-    scoring = score_collection[scoring]
-    if pre_y is None:
-        score = np.nan
-    else:
-        score = scoring(y, pre_y)
-    return score
+    return pre_y, expr01
 
 
 def acfng(expr01, x, y, init_c=None, terminals=None, c_terminals=None,
           np_maps=None, classification=False,
-          no_gradient_coef=-1, no_gradient_coef_range=np.arange(-1, 1, 1), n_jobs=1,
+          no_gradient_coef=-1, no_gradient_coef_candidate=np.arange(-1, 1, 1), n_jobs=1,
           scoring="r2"
           ):
     """
     Add coefficients with no gradient coefficient.
 
-    Try calculate predict y by sympy expression with coefficients.
+    Try to calculate predict y by sympy expression with coefficients.
     if except error return expr itself.
 
 
@@ -307,11 +292,11 @@ def acfng(expr01, x, y, init_c=None, terminals=None, c_terminals=None,
     n_jobs: int
         parallize number
     no_gradient_coef: int,sympy.Symbol
-        coefficient in no gradient function, default the last one.
+        coefficient in no gradient function, default the last one. (just accept one)
         Examples:
         no_gradient_coef=sympy.Symbol("c2")
         no_gradient_coef=0
-    no_gradient_coef_range:
+    no_gradient_coef_candidate:
         range of the special coef.
     expr01:sympy.Expr
         expr for fitting.
@@ -352,17 +337,27 @@ def acfng(expr01, x, y, init_c=None, terminals=None, c_terminals=None,
     expr01: Expr
         New expr.
     """
-    expr01, x, y, init_c, terminals, c_terminals, np_maps = format_input(expr01, x, y, init_c, terminals,
+    expr01, x, y, init_c, terminals, c_terminals, np_maps = format_input(expr01, x, y, init_c,
+                                                                         terminals,
                                                                          c_terminals, np_maps)
+    scorings = score_collection[scoring]
+
     if isinstance(no_gradient_coef, int):
+        assert isinstance(c_terminals, Sequence)
         no_gradient_coef = c_terminals[no_gradient_coef]
 
-    exprs = [expr01.xreplace({no_gradient_coef: i}) for i in no_gradient_coef_range]
+    exprs = [expr01.xreplace({no_gradient_coef: i}) for i in no_gradient_coef_candidate]
 
     def func(expr):
-        return acfs(expr, x, y, init_c, terminals, c_terminals, np_maps,
-                    classification=classification,
-                    built_format_input=False)
+        pre_y, expr01 = acf(expr, x, y, init_c, terminals, c_terminals, np_maps,
+                            classification=classification,
+                            built_format_input=False)
+
+        if pre_y is None:
+            score = np.nan
+        else:
+            score = scorings(y, pre_y)
+        return score
 
     scores = parallelize(n_jobs, func=func, iterable=exprs)
 
@@ -374,36 +369,131 @@ def acfng(expr01, x, y, init_c=None, terminals=None, c_terminals=None,
     index = np.argmax(scores) if maxp else np.argmin(scores)
     score = scores[index]
     print(score)
-    i = list(no_gradient_coef_range)[index]
+    i = list(no_gradient_coef_candidate)[index]
 
     return acf(exprs[i], x, y, init_c, terminals, c_terminals, np_maps,
                classification=classification,
                built_format_input=False)
 
 
-def acfsng(expr01, x, y, init_c=None, terminals=None, c_terminals=None,
-           np_maps=None, classification=False,
-           no_gradient_coef=-1, no_gradient_coef_range=np.arange(-1, 1, 1),
-           n_jobs=1, scoring="r2"):
+def fit_coef(expr, x, y, init_c=None, terminals=None, c_terminals=None,
+             np_maps=None, classification=False, no_gradient_coef=None,
+             no_gradient_coef_candidate=np.arange(-1, 1, 1),
+             n_jobs=1, scoring="r2"):
     """
-    Add coefficients and score with no gradient coefficient.
+    Add coefficients.
 
-    See also add_coef_fitting (acf)."""
-    pre_y, expr01 = acfng(expr01, x, y, init_c, terminals,
-                          c_terminals, np_maps,
-                          classification, no_gradient_coef=no_gradient_coef,
-                          no_gradient_coef_range=no_gradient_coef_range,
-                          n_jobs=n_jobs, scoring=scoring)
+    Try to calculate predict y by sympy expression with coefficients.
+    if except error return expr itself.
+
+    Examples
+    ----------
+    >>> x1, x2, x3, c1, c2, c3 = sympy.symbols("x1,x2,x3,c1,c2,c3")
+
+    >>> x = np.array([[1, 2, 3, 4, 5, 4, 2, 3], [9, 8, 7, 6, 5, 5, 1, 8], [4, 5, 6, 5, 4, 7, 4, 9]]).T
+    >>> y = np.array([3, 3, 5, 6, 5, 2, 2, 3])
+
+    >>> expr = 0.047 * sympy.Mul(x3, c3) + c1 * x2 / (x1 - 1.47) + c2
+
+    >>> score = fit_coef(expr, x, y)
+
+
+    Parameters
+    ----------
+    scoring:str
+        score in sklearn.metrics
+    n_jobs: int
+        parallize number
+    no_gradient_coef: int, sympy.Symbol
+        coefficient with no gradient function, default the None. (just accept one)
+        caaept index in c_terminals or element in c_terminals.
+        Examples:
+            no_gradient_coef = sympy.Symbol("c2") or
+            no_gradient_coef = 0
+    no_gradient_coef_candidate:
+        range of the no_gradient_coef.
+    expr:sympy.Expr
+        expr for fitting.
+    x: list of np.ndarray or np.ndarray
+        real data with: [x1,x2,x3,...,x_n_feature].
+    y: np.ndarray with shape (n_sample,)
+        real data of target.
+    init_c: list of float or float,None
+        default 1.
+    terminals: List of sympy.Symbol,None
+        placeholder for xi, with the same features in expr01.
+    c_terminals:List of sympy.Symbol,None
+        placeholder for ci, with the same coefficients/constants in expr01.
+    np_maps: dict,default is None
+        for self-definition.
+        1. make your function with sympy.Function and arrange in in expr01.
+        >>> x1, x2, x3, c1,c2,c3,c4 = sympy.symbols("x1,x2,x3,c1,c2,c3,c4")
+        >>> Seg = sympy.Function("Seg")
+        >>> expr01 = Seg(x1*x2)
+
+        2. write the numpy calculation method for this function.
+        >>> def np_seg(x):
+        ...     res = x
+        ...     res[res>1]=-res[res>1]
+        ...     return res
+
+        3. pass the np_maps parameters.
+        >>> np_maps = {"Seg":np_seg}
+
+        In total, when parse the expr01, find the numpy function in sequence by:
+        (np_maps -> numpy's function -> system -> Error)
+
+    classification:bool
+        classfication or not, default False.
+
+    Returns
+    -------
+    pre_y:
+        np.array or None
+    expr01: Expr
+        New expr.
+    """
+    expr, x, y, init_c, terminals, c_terminals, np_maps = format_input(expr, x, y, init_c,
+                                                                       terminals,
+                                                                       c_terminals, np_maps)
+
+    if no_gradient_coef is None:
+        pre_y, expr01 = acf(expr, x, y, init_c, terminals, c_terminals, np_maps,
+                            classification, built_format_input=False)
+    else:
+        pre_y, expr01 = acfng(expr, x, y, init_c, terminals,
+                              c_terminals, np_maps,
+                              classification, no_gradient_coef=no_gradient_coef,
+                              no_gradient_coef_candidate=no_gradient_coef_candidate,
+                              n_jobs=n_jobs, scoring=scoring)
 
     scoring = score_collection[scoring]
     if pre_y is None:
         score = np.nan
     else:
         score = scoring(y, pre_y)
-    return score
+    return score, expr01
+
+def pprint(expr , fontsize=15, fig_l=8, fig_h=0.7):
+    if isinstance(expr, str):
+        expr = sympy.simplify(expr)
+    from sympy import latex
+    import matplotlib.pyplot as plt
+    st = latex(expr)
+    fig,ax = plt.subplots()
+    plt.figure(figsize=(fig_l, fig_h))
+    plt.axis('off')
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    plt.text(0.0, fig_h/2, f"${st}$", fontsize=fontsize)
+
+    plt.show()
 
 
 if __name__ == "__main__":
+    from sympy import Expr, latex
     x1, x2, x3, c1, c2, c3 = sympy.symbols("x1,x2,x3,c1,c2,c3")
 
     x = np.array([[1, 2, 3, 4, 5, 4, 2, 3], [9, 8, 7, 6, 5, 5, 1, 8], [4, 5, 6, 5, 4, 7, 4, 9]]).T
@@ -411,20 +501,22 @@ if __name__ == "__main__":
 
     Seg = sympy.Function("Seg")
 
-
     def np_seg(x, c):
         res = -x
         res[res > -c] = 0
         return res
 
-
     expr = 0.047 * Seg(x3, c3) + c1 * x2 / (x1 - 1.47) + c2
 
     expr01, x, y, init_c, terminals, c_terminals, _ = format_input(expr, x, y)
     np_maps = {"Seg": np_seg}
-    score = acfsng(expr01, x, y, init_c, terminals, c_terminals,
-                   np_maps=np_maps,
-                   no_gradient_coef=-1,
-                   no_gradient_coef_range=np.arange(-1, 1, 1),
-                   n_jobs=1, scoring="r2"
-                   )
+
+    score = fit_coef(expr01, x, y, init_c, terminals, c_terminals,
+                     np_maps=np_maps, no_gradient_coef=-1,
+                     no_gradient_coef_candidate=np.arange(-1, 1, 1),
+                     n_jobs=1, scoring="r2")
+
+    expr = 1e-4 * sympy.exp(x3) + c1 * x2 / (x1 - 1.47) + c2
+
+    print(latex(expr))
+    pprint(expr)
