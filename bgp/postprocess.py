@@ -15,7 +15,7 @@ import pandas as pd
 import sympy
 from scipy.optimize import least_squares
 from sklearn import metrics
-
+from sympy import Expr
 
 from mgetool.tool import parallelize
 
@@ -474,21 +474,22 @@ def fit_coef(expr, x, y, init_c=None, terminals=None, c_terminals=None,
         score = scoring(y, pre_y)
     return score, expr01
 
-def pprint(expr , fontsize=15, fig_l=8, fig_h=0.7):
+
+def pprint(expr, fontsize=15, fig_l=8, fig_h=0.7):
     if isinstance(expr, str):
         expr = sympy.simplify(expr)
     from sympy import latex
     import matplotlib.pyplot as plt
     st = latex(expr)
-    fig,ax = plt.subplots()
+    # fig,ax = plt.subplots()
     plt.figure(figsize=(fig_l, fig_h))
+    ax = plt.axes()
     plt.axis('off')
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
     ax.spines["left"].set_visible(False)
     ax.spines["top"].set_visible(False)
     plt.text(0.0, fig_h/2, f"${st}$", fontsize=fontsize)
-
     plt.show()
 
 
@@ -518,5 +519,4 @@ if __name__ == "__main__":
 
     expr = 1e-4 * sympy.exp(x3) + c1 * x2 / (x1 - 1.47) + c2
 
-    print(latex(expr))
     pprint(expr)

@@ -173,7 +173,8 @@ class SymbolLearning(BaseEstimator, MultiOutputMixin, TransformerMixin):
         self.loop = loop
 
     def fit(self, X=None, y=None, c=None, x_group=None, x_dim=1, y_dim=1, c_dim=1, x_prob=None,
-            c_prob=None, pset=None, power_categories=(2, 3, 0.5), categories=("Add", "Mul", "Sub", "Div"),
+            c_prob=None, pset=None, power_categories=(2, 3, 0.5),
+            categories=("Add", "Mul", "Sub", "Div"),
             warm_start=False, new_gen=None):
         """
         Method 1. fit with x, y.
